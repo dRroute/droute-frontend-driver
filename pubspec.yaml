@@ -13,7 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   http: ^1.3.0
   provider: ^6.0.1
-  # google_maps_flutter: ^2.10.0  # Uncomment if needed
+  google_maps_flutter: ^2.10.0
 
 dev_dependencies:
   flutter_test:
@@ -32,3 +32,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/droute_logo.png
+    - assets/images/MapMarker.png
