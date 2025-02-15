@@ -20,10 +20,10 @@ class _MapPageState extends State<MapPage> {
 
   void _loadCustomMarker() async {
     customIcon = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(20, 20)), // Adjust size
-      'assets/images/MapMarker.png',
+      const ImageConfiguration(size: Size(48, 48)),
+      'assets/image/MapMarker.png',
     );
-    setState(() {}); // Refresh UI
+    setState(() {});
   }
 
   @override
@@ -31,6 +31,7 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       body: GoogleMap(
         initialCameraPosition: CameraPosition(target: vanLocation, zoom: 13),
+        // mapType: MapType.satellite, // 🌍 Set Satellite View
         markers:
             customIcon == null
                 ? {}
@@ -43,9 +44,7 @@ class _MapPageState extends State<MapPage> {
                   Marker(
                     markerId: MarkerId("destination_marker"),
                     position: destLocation,
-                    icon:
-                        BitmapDescriptor
-                            .defaultMarker, // Default marker for destination
+                    icon: BitmapDescriptor.defaultMarker,
                   ),
                 },
       ),

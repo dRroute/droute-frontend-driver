@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:droute_driver_frontend/styles/color/app_color.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 class SearchOnMap extends StatefulWidget {
   const SearchOnMap({super.key});
@@ -10,103 +11,134 @@ class SearchOnMap extends StatefulWidget {
 
 class _SearchOnMapState extends State<SearchOnMap> {
   final TextEditingController _searchController = TextEditingController();
-  List<String> _dummyLocations = [
-    "123 Main Street, Springfield, IL 62704",
-    "45 Elmwood Avenue, Brooklyn, NY 11215",
-    "678 Oak Lane, Dallas, TX 75204",
-    "89 Maple Drive, Los Angeles, CA 90001",
-    "27 King Street, London, UK SW1A 1AA",
-    "555 Silicon Valley Blvd, San Jose, CA 95134",
-    "302 Palm Grove Road, Miami, FL 33101",
-  ]; // Dummy data
+  GoogleMapController? _mapController;
+  LatLng? _currentLocation;
+  LatLng? _searchedLocation;
+  bool _locationPermissionGranted = false;
 
-  List<String> _filteredLocations = [];
+  final List<String> _dummyLocations = [
+    "New York, NY",
+    "Los Angeles, CA",
+    "Chicago, IL",
+    "San Francisco, CA",
+  ];
 
-  void _filterSearchResults(String query) {
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  Future<void> _getCurrentLocation() async {
+    LocationPermission permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      return;
+    }
+    _locationPermissionGranted = true;
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
     setState(() {
-      _filteredLocations = query.isEmpty
-          ? []
-          : _dummyLocations
-          .where((location) =>
-          location.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      _currentLocation = LatLng(position.latitude, position.longitude);
     });
+  }
+
+  void _onLocationSelected(String location) {
+    // Mock coordinates (Replace this with actual geocoding API results)
+    Map<String, LatLng> locationCoordinates = {
+      "New York, NY": LatLng(40.7128, -74.0060),
+      "Los Angeles, CA": LatLng(34.0522, -118.2437),
+      "Chicago, IL": LatLng(41.8781, -87.6298),
+      "San Francisco, CA": LatLng(37.7749, -122.4194),
+    };
+
+    setState(() {
+      _searchedLocation = locationCoordinates[location];
+      _searchController.text = location;
+    });
+
+    if (_mapController != null && _searchedLocation != null) {
+      _mapController!.animateCamera(CameraUpdate.newLatLng(_searchedLocation!));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.primaryColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: _searchController,
-                onChanged: _filterSearchResults, // Calls function when typing
-                decoration: InputDecoration(
-                  hintText: "Search location...",
-                  prefixIcon: const Icon(Icons.search, color: Colors.black54),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
-                    borderSide: BorderSide.none,
+      body: Stack(
+        children: [
+          // Google Map
+          Positioned.fill(
+            child: GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: _currentLocation ?? LatLng(37.7749, -122.4194),
+                // Default SF
+                zoom: 500,
+              ),
+              onMapCreated: (controller) => _mapController = controller,
+              myLocationEnabled: _locationPermissionGranted,
+              myLocationButtonEnabled: true,
+              mapType: MapType.satellite,
+              // Set satellite view
+              markers: {
+                if (_searchedLocation != null)
+                  Marker(
+                    markerId: MarkerId("searched_location"),
+                    position: _searchedLocation!,
+                    icon: BitmapDescriptor.defaultMarker,
+                  ),
+              },
+            ),
+          ),
+
+          // Search Box
+          Positioned(
+            top: 40,
+            left: 15,
+            right: 15,
+            child: Column(
+              children: [
+                TextField(
+                  controller: _searchController,
+                  onChanged: (query) => setState(() {}),
+                  decoration: InputDecoration(
+                    hintText: "Search location...",
+                    prefixIcon: Icon(Icons.search, color: Colors.black54),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: BorderSide.none,
+                    ),
                   ),
                 ),
-              ),
+                if (_searchController.text.isNotEmpty)
+                  Container(
+                    margin: const EdgeInsets.only(top: 5),
+                    height: 150,
+                    color: Colors.white,
+                    child: ListView(
+                      children:
+                          _dummyLocations
+                              .where(
+                                (loc) => loc.toLowerCase().contains(
+                                  _searchController.text.toLowerCase(),
+                                ),
+                              )
+                              .map(
+                                (location) => ListTile(
+                                  title: Text(location),
+                                  onTap: () => _onLocationSelected(location),
+                                ),
+                              )
+                              .toList(),
+                    ),
+                  ),
+              ],
             ),
-            if (_filteredLocations.isNotEmpty)
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _filteredLocations.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white, // White background
-                        borderRadius: BorderRadius.circular(4), // Rounded corners
-                        border: Border.all(color: Colors.grey.shade300, width: 1), // Light border
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 3,
-                            spreadRadius: 1,
-                          ),
-                        ],
-                      ),
-                      child: ListTile(
-                        leading: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.location_on, color: Colors.redAccent, size: 24), // Location icon
-                            const SizedBox(height: 2), // Small spacing
-                            Text(
-                              "5 km", // Dummy distance
-                              style: TextStyle(fontSize: 12, color: Colors.grey[600]), // Small font
-                            ),
-                          ],
-                        ),
-                        title: Text(
-                          _filteredLocations[index],
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        onTap: () {
-                          _searchController.text = _filteredLocations[index];
-                          setState(() {
-                            _filteredLocations = []; // Hide suggestions
-                          });
-                        },
-                      ),
-                    );
-
-                  },
-                ),
-              ),
-
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
