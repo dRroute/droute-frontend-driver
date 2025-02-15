@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'dRoute Driver App',
       debugShowCheckedModeBanner: false,
-      // home: SplashScreen(),// Set SplashScreen as the initial screen
-      home: SearchOnMap(),
+     // home: SplashScreen(),// Set SplashScreen as the initial screen
+      home:MapPage(),
       routes: appRoutes, // Define app routes
     );
   }
