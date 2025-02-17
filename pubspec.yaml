@@ -36,9 +36,20 @@ flutter:
     - assets/images/droute_logo.png
     - assets/images/MapMarker.png
     - assets/images/enableLocation.png
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins/Poppins-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Poppins/Poppins-Italic.ttf
+          style: italic
 
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/images/app_icon.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
+
+
+
