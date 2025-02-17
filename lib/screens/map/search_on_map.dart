@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_place/google_place.dart';
 
 class SearchOnMap extends StatefulWidget {
   const SearchOnMap({super.key});
@@ -15,17 +16,14 @@ class _SearchOnMapState extends State<SearchOnMap> {
   LatLng? _currentLocation;
   LatLng? _searchedLocation;
   bool _locationPermissionGranted = false;
+  List<AutocompletePrediction> _searchResults = [];
 
-  final List<String> _dummyLocations = [
-    "New York, NY",
-    "Los Angeles, CA",
-    "Chicago, IL",
-    "San Francisco, CA",
-  ];
+  late GooglePlace _googlePlace;
 
   @override
   void initState() {
     super.initState();
+    _googlePlace = GooglePlace("AIzaSyCzA7Sa70D3EnqD8aNMTM-vZC7byX3bFCU");
     _getCurrentLocation();
   }
 
@@ -33,6 +31,7 @@ class _SearchOnMapState extends State<SearchOnMap> {
     LocationPermission permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
+      Navigator.pop(context); // Go back if permission is denied
       return;
     }
     _locationPermissionGranted = true;
@@ -44,22 +43,39 @@ class _SearchOnMapState extends State<SearchOnMap> {
     });
   }
 
-  void _onLocationSelected(String location) {
-    // Mock coordinates (Replace this with actual geocoding API results)
-    Map<String, LatLng> locationCoordinates = {
-      "New York, NY": LatLng(40.7128, -74.0060),
-      "Los Angeles, CA": LatLng(34.0522, -118.2437),
-      "Chicago, IL": LatLng(41.8781, -87.6298),
-      "San Francisco, CA": LatLng(37.7749, -122.4194),
-    };
+  void _searchPlaces(String query) async {
+    if (query.isEmpty) {
+      setState(() {
+        _searchResults = [];
+      });
+      return;
+    }
 
-    setState(() {
-      _searchedLocation = locationCoordinates[location];
-      _searchController.text = location;
-    });
+    var result = await _googlePlace.autocomplete.get(query);
+    if (result != null && result.predictions != null) {
+      setState(() {
+        _searchResults = result.predictions!;
+      });
+    }
+  }
 
-    if (_mapController != null && _searchedLocation != null) {
-      _mapController!.animateCamera(CameraUpdate.newLatLng(_searchedLocation!));
+  void _selectLocation(AutocompletePrediction prediction) async {
+    String? placeId = prediction.placeId;
+    if (placeId == null) return;
+
+    var details = await _googlePlace.details.get(placeId);
+    if (details != null && details.result != null) {
+      double lat = details.result!.geometry!.location!.lat!;
+      double lng = details.result!.geometry!.location!.lng!;
+      LatLng newLocation = LatLng(lat, lng);
+
+      setState(() {
+        _searchedLocation = newLocation;
+        _searchController.text = prediction.description!;
+        _searchResults = [];
+      });
+
+      _mapController?.animateCamera(CameraUpdate.newLatLng(newLocation));
     }
   }
 
@@ -73,14 +89,13 @@ class _SearchOnMapState extends State<SearchOnMap> {
             child: GoogleMap(
               initialCameraPosition: CameraPosition(
                 target: _currentLocation ?? LatLng(37.7749, -122.4194),
-                // Default SF
+                // Default SF if location unavailable
                 zoom: 500,
               ),
               onMapCreated: (controller) => _mapController = controller,
               myLocationEnabled: _locationPermissionGranted,
               myLocationButtonEnabled: true,
               mapType: MapType.satellite,
-              // Set satellite view
               markers: {
                 if (_searchedLocation != null)
                   Marker(
@@ -101,7 +116,7 @@ class _SearchOnMapState extends State<SearchOnMap> {
               children: [
                 TextField(
                   controller: _searchController,
-                  onChanged: (query) => setState(() {}),
+                  onChanged: _searchPlaces,
                   decoration: InputDecoration(
                     hintText: "Search location...",
                     prefixIcon: Icon(Icons.search, color: Colors.black54),
@@ -113,23 +128,18 @@ class _SearchOnMapState extends State<SearchOnMap> {
                     ),
                   ),
                 ),
-                if (_searchController.text.isNotEmpty)
+                if (_searchResults.isNotEmpty)
                   Container(
                     margin: const EdgeInsets.only(top: 5),
-                    height: 150,
+                    height: 200,
                     color: Colors.white,
                     child: ListView(
                       children:
-                          _dummyLocations
-                              .where(
-                                (loc) => loc.toLowerCase().contains(
-                                  _searchController.text.toLowerCase(),
-                                ),
-                              )
+                          _searchResults
                               .map(
-                                (location) => ListTile(
-                                  title: Text(location),
-                                  onTap: () => _onLocationSelected(location),
+                                (prediction) => ListTile(
+                                  title: Text(prediction.description ?? ""),
+                                  onTap: () => _selectLocation(prediction),
                                 ),
                               )
                               .toList(),
