@@ -15,15 +15,17 @@ class _SearchOnMapState extends State<SearchOnMap> {
   GoogleMapController? _mapController;
   LatLng? _currentLocation;
   LatLng? _searchedLocation;
+  LatLng? _selectedByUser;
   bool _locationPermissionGranted = false;
   List<AutocompletePrediction> _searchResults = [];
+  Marker? selectedMarker;
 
   late GooglePlace _googlePlace;
 
   @override
   void initState() {
     super.initState();
-    _googlePlace = GooglePlace("AIzaSyCzA7Sa70D3EnqD8aNMTM-vZC7byX3bFCU");
+    _googlePlace = GooglePlace("AIzaSyAEqA9xxuXpegQ98gpVjkOis3xYMAzPNQI");
     _getCurrentLocation();
   }
 
@@ -39,7 +41,10 @@ class _SearchOnMapState extends State<SearchOnMap> {
       desiredAccuracy: LocationAccuracy.high,
     );
     setState(() {
-      _currentLocation = LatLng(position.latitude, position.longitude);
+      _currentLocation = LatLng(position.latitude!, position.longitude!);
+
+     print("This is current position $_currentLocation");
+
     });
   }
 
@@ -70,13 +75,41 @@ class _SearchOnMapState extends State<SearchOnMap> {
       LatLng newLocation = LatLng(lat, lng);
 
       setState(() {
+        _selectedByUser=newLocation;
         _searchedLocation = newLocation;
         _searchController.text = prediction.description!;
         _searchResults = [];
       });
-
+         // print(newLocation);
       _mapController?.animateCamera(CameraUpdate.newLatLng(newLocation));
     }
+  }
+  void _onMapTapped(LatLng tappedPoint) {
+    setState(() {
+      // _searchedLocation= tappedPoint;
+      _selectedByUser = tappedPoint;
+      selectedMarker = Marker(
+        markerId: const MarkerId("selected-point"),
+        position: tappedPoint,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
+      );
+    });
+
+    // Print selected location in console
+    print("Selected Location: ${tappedPoint.latitude}, ${tappedPoint.longitude}");
+  }
+  void _goToCurrentLocation() {
+    if (_currentLocation != null) {
+      _mapController?.animateCamera(
+        CameraUpdate.newLatLng(_currentLocation!),
+      );
+    }
+  }
+  void _handleMapTap(LatLng tappedPoint) {
+    setState(() {
+      _onMapTapped(tappedPoint); // Handle the tap event
+      _searchResults.clear(); // Clear search results
+    });
   }
 
   @override
@@ -84,26 +117,26 @@ class _SearchOnMapState extends State<SearchOnMap> {
     return Scaffold(
       body: Stack(
         children: [
-          // Google Map
           Positioned.fill(
             child: GoogleMap(
               initialCameraPosition: CameraPosition(
-                target: _currentLocation ?? LatLng(37.7749, -122.4194),
-                // Default SF if location unavailable
-                zoom: 500,
+                target: _currentLocation ?? LatLng(18.4679772, 73.836784),
+                zoom: 15, // Adjusted for visibility
               ),
               onMapCreated: (controller) => _mapController = controller,
               myLocationEnabled: _locationPermissionGranted,
-              myLocationButtonEnabled: true,
+              myLocationButtonEnabled: false, // Disabled default button
               mapType: MapType.satellite,
               markers: {
                 if (_searchedLocation != null)
                   Marker(
-                    markerId: MarkerId("searched_location"),
+                    markerId: const MarkerId("searched_location"),
                     position: _searchedLocation!,
                     icon: BitmapDescriptor.defaultMarker,
                   ),
+                if (selectedMarker != null) selectedMarker!,
               },
+              onTap: _handleMapTap,
             ),
           ),
 
@@ -134,22 +167,56 @@ class _SearchOnMapState extends State<SearchOnMap> {
                     height: 200,
                     color: Colors.white,
                     child: ListView(
-                      children:
-                          _searchResults
-                              .map(
-                                (prediction) => ListTile(
-                                  title: Text(prediction.description ?? ""),
-                                  onTap: () => _selectLocation(prediction),
-                                ),
-                              )
-                              .toList(),
+                      children: _searchResults
+                          .map(
+                            (prediction) => ListTile(
+                          title: Text(prediction.description ?? ""),
+                          onTap: () => _selectLocation(prediction),
+                        ),
+                      )
+                          .toList(),
                     ),
                   ),
               ],
             ),
           ),
+
+          // Custom Current Location Button
+          Positioned(
+            bottom: 110,
+            right: 12,
+            child: FloatingActionButton(
+              onPressed: _goToCurrentLocation,
+              backgroundColor: Colors.white,
+              child: Icon(Icons.my_location, color: Colors.blue),
+            ),
+          ),
+          Positioned(
+            bottom: 20,
+            left: 12,
+            child: ElevatedButton(
+              onPressed: () {
+                print(_selectedByUser);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white, // Button background
+                foregroundColor: Colors.black, // Text color
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12), // Size
+                textStyle: TextStyle(fontSize: 20), // Font size
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  side: BorderSide(color: Colors.grey), // Border color
+                ),
+              ),
+              child: Text("Select"),
+            ),
+          ),
+
         ],
       ),
     );
   }
+
+
+
 }

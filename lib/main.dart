@@ -1,3 +1,4 @@
+import 'package:droute_driver_frontend/screens/driver/complete_detail_form.dart';
 import 'package:droute_driver_frontend/screens/driver/home.dart';
 import 'package:droute_driver_frontend/screens/journey/journey_cards_page.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       title: 'dRoute Driver App',
       debugShowCheckedModeBanner: false,
       // home: SplashScreen(),// Set SplashScreen as the initial screen
-      home: JourneyCardsPage(),
+      home: SearchOnMap(),
       routes: appRoutes, // Define app routes
     );
   }

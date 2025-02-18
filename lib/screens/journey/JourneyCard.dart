@@ -51,8 +51,8 @@ class JourneyCard extends StatelessWidget {
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
-                        ),
-                      ),
+                          ),
+                          ),
                       TextSpan(
                         text: fromLocation,
                         style: TextStyle(
