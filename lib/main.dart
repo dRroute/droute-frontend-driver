@@ -1,4 +1,5 @@
 import 'package:droute_driver_frontend/screens/driver/home.dart';
+import 'package:droute_driver_frontend/screens/journey/journey_cards_page.dart';
 import 'package:flutter/material.dart';
 import 'package:droute_driver_frontend/utils/routes.dart'; // Import routes file
 import 'package:droute_driver_frontend/screens/driver/initial.dart'; // Import HomePage
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'dRoute Driver App',
       debugShowCheckedModeBanner: false,
       // home: SplashScreen(),// Set SplashScreen as the initial screen
-      home: ProfileScreen(),
+      home: JourneyCardsPage(),
       routes: appRoutes, // Define app routes
     );
   }
