@@ -1,3 +1,4 @@
+import 'package:droute_driver_frontend/screens/driver/home.dart';
 import 'package:flutter/material.dart';
 import 'package:droute_driver_frontend/styles/custom_widgets/custom_scaffold.dart';
 import 'package:droute_driver_frontend/screens/journey/JourneyCard.dart';
@@ -28,7 +29,7 @@ class JourneyCardsPage extends StatelessWidget {
       JourneyData("San Francisco", "Seattle", "2025-02-23 08:00 AM", "2025-02-23 02:00 PM", "2 Seats","Ongoinng"),
     ];
 
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 4, // Creates a shadow effect
@@ -36,7 +37,10 @@ class JourneyCardsPage extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()), // Navigate to SupportScreen
+            );
           },
           icon: Icon(Icons.arrow_back, color: Colors.black),
         ),
@@ -51,13 +55,13 @@ class JourneyCardsPage extends StatelessWidget {
       ),
       body: Expanded(
         child: Container(
-          color: Color(0xFFEDEDED),
+          color: Colors.white,
           child: ListView.builder(
             itemCount: yourList.length,
             itemBuilder: (context, index) {
               final data = yourList[index];
               return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
+                padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 child: JourneyCard(
                   fromLocation: data.fromLocation,
                   toLocation: data.toLocation,
@@ -71,7 +75,7 @@ class JourneyCardsPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(),
+
     );
 
   }

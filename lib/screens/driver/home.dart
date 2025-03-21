@@ -1,3 +1,7 @@
+import 'package:droute_driver_frontend/screens/driver/Chat.dart';
+import 'package:droute_driver_frontend/screens/journey/journey_cards_page.dart';
+import 'package:droute_driver_frontend/screens/journey/postJourney.dart';
+import 'package:droute_driver_frontend/screens/map/search_on_map.dart';
 import 'package:flutter/material.dart';
 import 'package:droute_driver_frontend/styles/color/app_color.dart';
 import 'package:droute_driver_frontend/styles/custom_widgets/custom_scaffold.dart';
@@ -140,6 +144,12 @@ class Home extends StatelessWidget {
                           iconBackgroundColor: Color(0xFFEBFCE4),
                           title: 'New Journey',
                           description: 'Start sharing your experiences \nExplore new opportunities',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => PostJourney()), // Navigate to SupportScreen
+                            );
+                          },
                         ),
                         CustomCardHome(
                           icon: Icons.shopping_cart_checkout_rounded,
@@ -147,6 +157,12 @@ class Home extends StatelessWidget {
                           iconBackgroundColor: Color(0xFFFCEDE4),
                           title: 'Pending Orders',
                           description: 'Explore new job opportunities \nFind your next career',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Home()), // Navigate to SupportScreen
+                            );
+                          },
                         ),
                         CustomCardHome(
                           icon: Icons.chat,
@@ -154,6 +170,12 @@ class Home extends StatelessWidget {
                           iconBackgroundColor: Color(0xFFD4FCF5),
                           title: 'Chats',
                           description: 'Explore new job opportunities \nFind your next career',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Chat()), // Navigate to SupportScreen
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -168,6 +190,12 @@ class Home extends StatelessWidget {
                           iconBackgroundColor: Color(0xFFFBE6FB),
                           title: 'All Trips',
                           description: 'Explore new job opportunities \nFind your next career',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => JourneyCardsPage()), // Navigate to SupportScreen
+                            );
+                          },
                         ),
                         CustomCardHome(
                           icon: Icons.attach_money,
@@ -175,6 +203,12 @@ class Home extends StatelessWidget {
                           iconBackgroundColor: Color(0xFFFCEDE4),
                           title: 'Payments',
                           description: 'Explore new job opportunities \nFind your next career',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Home()), // Navigate to SupportScreen
+                            );
+                          },
                         ),
                         CustomCardHome(
                           icon: Icons.support_agent_rounded,
@@ -182,6 +216,12 @@ class Home extends StatelessWidget {
                           iconBackgroundColor: Color(0xFFF7E9EF),
                           title: 'Support',
                           description: 'Explore new job opportunities \nFind your next career',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Home()), // Navigate to SupportScreen
+                            );
+                          },
                         ),
                       ],
                     ),

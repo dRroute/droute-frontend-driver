@@ -126,7 +126,7 @@ class _SearchOnMapState extends State<SearchOnMap> {
               onMapCreated: (controller) => _mapController = controller,
               myLocationEnabled: _locationPermissionGranted,
               myLocationButtonEnabled: false, // Disabled default button
-              mapType: MapType.satellite,
+
               markers: {
                 if (_searchedLocation != null)
                   Marker(

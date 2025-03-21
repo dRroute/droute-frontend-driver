@@ -32,7 +32,6 @@ class CompleteDetailForm extends StatelessWidget {
           Row(
             children: [
               CompleteDetailProgressBar(completedSteps: 3),
-
             ],
           )
         ],

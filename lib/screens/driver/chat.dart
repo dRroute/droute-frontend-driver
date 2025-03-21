@@ -126,8 +126,8 @@ class _ChatState extends State<Chat> {
                       ],
                     ),
                     child: const Text(
-                      "Offer",
-                      style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                      "View Request",
+                      style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:droute_driver_frontend/styles/color/app_color.dart';
+import 'package:droute_driver_frontend/screens/driver/home.dart';
 
 class EnableLocation extends StatelessWidget {
   const EnableLocation({super.key});
@@ -10,40 +11,39 @@ class EnableLocation extends StatelessWidget {
 
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Location permission denied")),
         );
-        return; // Stop execution if permission is denied
+        await Future.delayed(Duration(seconds: 1));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+        return;
       }
     }
 
     try {
-      // ✅ Get Current Location
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
 
-      print(
-        "User Location: Lat: ${position.latitude}, Lng: ${position.longitude}",
-      );
+      print("User Location: Lat: ${position.latitude}, Lng: ${position.longitude}");
 
-      // ✅ Navigate **only if location is retrieved**
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Welcome()),
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Location fetched successfully!")),
       );
+      await Future.delayed(Duration(seconds: 1));
+
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+
     } catch (e) {
       print("Failed to get location: $e");
-
-      // 🚨 Show error to the user
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Failed to retrieve location. Please try again."),
-        ),
+        const SnackBar(content: Text("Failed to retrieve location. Please try again.")),
       );
+      await Future.delayed(Duration(seconds: 1));
+
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
     }
   }
 
@@ -121,18 +121,6 @@ class EnableLocation extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-// Dummy Welcome Page
-class Welcome extends StatelessWidget {
-  const Welcome({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(child: Text('Welcome Page', style: TextStyle(fontSize: 30))),
     );
   }
 }

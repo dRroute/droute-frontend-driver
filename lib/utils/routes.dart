@@ -1,4 +1,5 @@
 
+import 'package:droute_driver_frontend/screens/driver/home.dart';
 import 'package:flutter/material.dart';
 import 'package:droute_driver_frontend/screens/auth/signup.dart';
 import 'package:droute_driver_frontend/screens/auth/signin.dart';
@@ -13,6 +14,7 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/otp': (context) => const OtpPage(),
   '/forget-password': (context) => const ForgetPassword(),
   '/t&c': (context) => TermsAndConditionsPage(),
+  '/home':(context) => Home(),
 
 
 };
