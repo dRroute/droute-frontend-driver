@@ -1,3 +1,4 @@
+import 'package:droute_driver_frontend/screens/driver/completeDetail/uploadAadhaar.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:droute_driver_frontend/styles/color/app_color.dart';
@@ -17,7 +18,7 @@ class EnableLocation extends StatelessWidget {
           const SnackBar(content: Text("Location permission denied")),
         );
         await Future.delayed(Duration(seconds: 1));
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UploadAaadhar()));
         return;
       }
     }
@@ -34,7 +35,7 @@ class EnableLocation extends StatelessWidget {
       );
       await Future.delayed(Duration(seconds: 1));
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UploadAaadhar()));
 
     } catch (e) {
       print("Failed to get location: $e");
@@ -43,7 +44,7 @@ class EnableLocation extends StatelessWidget {
       );
       await Future.delayed(Duration(seconds: 1));
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UploadAaadhar()));
     }
   }
 

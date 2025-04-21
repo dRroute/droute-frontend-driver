@@ -17,7 +17,7 @@ class Home extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
             image: NetworkImage(
-              "https://plus.unsplash.com/premium_photo-1675433344518-21eb72dfc7a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bmF0dXJlfGVufDB8fDB8fHww",
+              "https://images.unsplash.com/photo-1543253539-58c7d1c00c8a?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             ),
             fit: BoxFit.cover,
           ),
@@ -26,7 +26,6 @@ class Home extends StatelessWidget {
       Column(
         children: [
           Container(
-
             padding: EdgeInsets.only(top: 60, left: 30, right: 30, bottom: 30),
             child: Column(children: <Widget>[
               Row(
@@ -138,11 +137,11 @@ class Home extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         CustomCardHome(
-                          icon: Icons.fire_truck_outlined,
+                          icon: Icons.add,
 
                           iconColor: Color(0xFF52C01B),
                           iconBackgroundColor: Color(0xFFEBFCE4),
-                          title: 'New Journey',
+                          title: 'Post a New Journey',
                           description: 'Start sharing your experiences \nExplore new opportunities',
                           onTap: () {
                             Navigator.push(
@@ -186,7 +185,7 @@ class Home extends StatelessWidget {
                       children: [
                         CustomCardHome(
                           icon: Icons.swap_vertical_circle_outlined,
-                          iconColor: Color(0xFFFF03FF),
+                          iconColor: Color(0xFF4F0B4D),
                           iconBackgroundColor: Color(0xFFFBE6FB),
                           title: 'All Trips',
                           description: 'Explore new job opportunities \nFind your next career',
@@ -233,7 +232,9 @@ class Home extends StatelessWidget {
           ),
 
         ],
-      ),)
+      ),
+      
+      )
     );
   }
 }

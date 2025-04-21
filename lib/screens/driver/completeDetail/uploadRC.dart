@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:droute_driver_frontend/screens/driver/completeDetail/complete_detail_form.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -52,7 +53,7 @@ class _UploadRcState extends State<UploadRc> {
         children: [
           Row(
             children: [
-              CompleteDetailProgressBar(completedSteps: 2),
+              CompleteDetailProgressBar(completedSteps: 3),
             ],
           ),
           Expanded(
@@ -94,9 +95,7 @@ class _UploadRcState extends State<UploadRc> {
                 width: fullWidth * 0.8,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (_image != null) {
-                      // Handle submit action
-                    }
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CompleteDetailForm()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColor.primaryColor,

@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:droute_driver_frontend/styles/custom_widgets/navigation_bar.dart';  // Updated import
+import 'package:droute_driver_frontend/styles/custom_widgets/navigation_bar.dart'; // Import Custom Navigation Bar
 
 class CustomScaffold extends StatelessWidget {
   final Widget body;
-  final PreferredSizeWidget? appBar;  // Allow AppBar to be optional
+  final PreferredSizeWidget? appBar;
 
-  CustomScaffold({required this.body, this.appBar});  // Correct constructor
+  const CustomScaffold({
+    super.key, // Added key parameter
+    required this.body,
+    this.appBar,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar,  // Assign the optional AppBar
+      appBar: appBar,
       body: body,
-      bottomNavigationBar: CustomNavigationBar(),  // Use renamed widget here
+      // bottomNavigationBar: CustomNavigationBar(), // Attach the custom bottom navigation here
     );
   }
 }

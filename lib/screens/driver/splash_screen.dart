@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:droute_driver_frontend/styles/color/app_color.dart';
 
-class Initial extends StatelessWidget {
+class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

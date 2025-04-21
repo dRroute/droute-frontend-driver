@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:droute_driver_frontend/styles/color/app_color.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 
 class Chat extends StatefulWidget {
   @override
@@ -8,11 +9,11 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
-
   String? _validImageUrl;
- String   imageUrl="https://media.telanganatoday.com/wp-content/uploads/2025/02/Virat-Kohli-1.jpg";
-  String name="driver name";
- @override
+  String imageUrl =
+      "https://media.telanganatoday.com/wp-content/uploads/2025/02/Virat-Kohli-1.jpg";
+  String name = "driver name";
+  @override
   void initState() {
     super.initState();
     _checkImageValidity();
@@ -24,27 +25,25 @@ class _ChatState extends State<Chat> {
 
       if (response.statusCode == 200) {
         setState(() {
-          _validImageUrl = imageUrl; // Use the image if valid
+          _validImageUrl = imageUrl; // Valid image
         });
       } else {
         setState(() {
-          _validImageUrl = null; // Fallback to letter avatar
+          _validImageUrl = null; // Invalid URL, fallback
         });
       }
     } catch (e) {
+      print("Error: $e");
       setState(() {
-        print("null");
-        _validImageUrl = null; // Error case, fallback to letter avatar
+        _validImageUrl = null; // On exception, fallback
       });
     }
   }
 
-
-
   final TextEditingController _messageController = TextEditingController();
   final List<Map<String, String>> messages = [
     {"sender": "alok@gmail.com", "message": "How Can I help You?"},
-    {"sender": "alok@gmail.com", "message": "Virat Kohli this Side"},
+    {"sender": "alok@gmail.com", "message": "Driver this Side"},
     {"sender": "alok@gmail.com", "message": "Welcome to DRoute!"},
     {"sender": "alok@gmail.com", "message": "hi"},
   ];
@@ -52,7 +51,8 @@ class _ChatState extends State<Chat> {
   void _sendMessage() {
     if (_messageController.text.trim().isNotEmpty) {
       setState(() {
-        messages.insert(0, {"sender": "You", "message": _messageController.text.trim()});
+        messages.insert(
+            0, {"sender": "You", "message": _messageController.text.trim()});
       });
       _messageController.clear();
     }
@@ -60,35 +60,44 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: AppColor.primaryColor,
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+    );
+
     return Scaffold(
-      backgroundColor: AppColor.primaryColor,
+      backgroundColor: AppColor.primaryColorLightest,
       body: Column(
         children: [
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
-                BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2, offset: Offset(0, 3)),
+                BoxShadow(
+                    color: const Color.fromARGB(31, 142, 142, 142),
+                    blurRadius: 5,
+                    spreadRadius: 2,
+                    offset: Offset(0, 3)),
               ],
             ),
             child: SafeArea(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Ensures proper spacing
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween, // Ensures proper spacing
                 children: [
                   Row(
                     children: [
                       CircleAvatar(
                         radius: 24,
-                        backgroundColor: _validImageUrl == null ? Colors.blue : null,
-                        backgroundImage: _validImageUrl != null ? NetworkImage(_validImageUrl!) : null,
-                        child: _validImageUrl == null
-                            ? Text(
-                          name.isNotEmpty ? name[0].toUpperCase() : "?",
-                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                        )
-                            : null,
+                        backgroundImage: NetworkImage(
+                          'https://images.unsplash.com/photo-1602233158242-3ba0ac4d2167?w=600',
+                        ),
                       ),
 
                       const SizedBox(width: 12),
@@ -99,11 +108,14 @@ class _ChatState extends State<Chat> {
                         children: const [
                           Text(
                             "Driver Name",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.primaryColor),
                           ),
                           Text(
                             "Journey ID: droute45626",
-                            style: TextStyle(fontSize: 14, color: Colors.grey),
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
                           ),
                         ],
                       ),
@@ -111,33 +123,10 @@ class _ChatState extends State<Chat> {
                   ),
 
                   // Offer Button Column
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: AppColor.primaryColor, // Use your primary color
-                      borderRadius: BorderRadius.circular(4), // Rounded corners
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 4,
-                          spreadRadius: 1,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: const Text(
-                      "View Request",
-                      style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
                 ],
               ),
             ),
-
-
           ),
-
-
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(6.0),
@@ -148,51 +137,63 @@ class _ChatState extends State<Chat> {
                   final messageData = messages[index];
                   bool isYou = messageData['sender'] == 'You';
                   return Align(
-                    alignment: isYou ? Alignment.centerRight : Alignment.centerLeft,
+                    alignment:
+                        isYou ? Alignment.centerRight : Alignment.centerLeft,
                     child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 8),
                       padding: const EdgeInsets.all(10),
-                      constraints: const BoxConstraints(minWidth: 80, maxWidth: 250), // Ensures proper width
+                      constraints: const BoxConstraints(
+                          minWidth: 80, maxWidth: 250), // Ensures proper width
                       decoration: BoxDecoration(
-                        color: isYou ? Colors.yellow.shade100 : Colors.grey.shade300,
+                        color: isYou
+                            ? const Color.fromARGB(255, 255, 254, 225)
+                            : const Color.fromARGB(255, 225, 255, 250),
                         borderRadius: BorderRadius.only(
-                          topLeft: !isYou ? Radius.zero : const Radius.circular(10),
+                          topLeft:
+                              !isYou ? Radius.zero : const Radius.circular(10),
                           topRight: const Radius.circular(10),
                           bottomLeft: const Radius.circular(10),
-                          bottomRight: isYou ? Radius.zero : const Radius.circular(10),
+                          bottomRight:
+                              isYou ? Radius.zero : const Radius.circular(10),
                         ),
                       ),
                       child: Column(
-                        crossAxisAlignment: isYou?CrossAxisAlignment.end:CrossAxisAlignment.start, // Ensures timestamp aligns right
+                        crossAxisAlignment: isYou
+                            ? CrossAxisAlignment.end
+                            : CrossAxisAlignment
+                                .start, // Ensures timestamp aligns right
                         children: [
                           Text(
                             messageData['message']!,
-                            style: const TextStyle(fontSize: 16),
+                            style: const TextStyle(fontSize: 12),
                           ),
-                          const SizedBox(height: 5), // Space between message and timestamp
+                          const SizedBox(
+                              height: 5), // Space between message and timestamp
                           Text(
                             "6 min ago", // Hardcoded timestamp
-                            style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
+                            style: TextStyle(
+                                fontSize: 8, color: Colors.grey.shade600),
                           ),
                         ],
                       ),
                     ),
                   );
-
-
-
                 },
               ),
             ),
           ),
-
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
-                BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2, offset: Offset(0, -2)),
+                BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 5,
+                    spreadRadius: 2,
+                    offset: Offset(0, -2)),
               ],
             ),
             child: Row(
@@ -202,28 +203,32 @@ class _ChatState extends State<Chat> {
                     controller: _messageController,
                     decoration: InputDecoration(
                       hintText: "Type a message...",
+                      hintStyle: TextStyle(
+                          fontSize: 12), // Set the font size of the placeholder
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
                       fillColor: Colors.grey.shade200,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
                     ),
                   ),
                 ),
                 const SizedBox(width: 10),
                 IconButton(
-                  icon: const Icon(Icons.add_photo_alternate_outlined, color: AppColor.primaryColor),
-                  onPressed: () {},
-                ),
-
-                IconButton(
-                  icon: const Icon(Icons.add_a_photo, color: AppColor.primaryColor),
+                  icon: const Icon(Icons.add_photo_alternate_outlined,
+                      color: AppColor.primaryColor),
                   onPressed: () {},
                 ),
                 IconButton(
-                  icon: const Icon(Icons.send,  color: AppColor.primaryColor),
+                  icon: const Icon(Icons.add_a_photo,
+                      color: AppColor.primaryColor),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: const Icon(Icons.send, color: AppColor.primaryColor),
                   onPressed: _sendMessage,
                 ),
               ],

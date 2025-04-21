@@ -79,7 +79,7 @@ class _PostJourneyState extends State<PostJourney> {
         elevation: 2,
         centerTitle: true,
         title: Text('Post a New Journey',
-            style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500)),
+            style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500)),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
@@ -136,7 +136,7 @@ class _PostJourneyState extends State<PostJourney> {
   Widget _buildLabel(String text) {
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 4),
-      child: Text(text, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black)),
+      child: Text(text, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color:Colors.black54)),
     );
   }
 

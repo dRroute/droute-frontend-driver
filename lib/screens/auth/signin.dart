@@ -130,7 +130,7 @@ class _SignInPageState extends State<SignInPage> {
                               "Sign In",
                               style: const TextStyle(
                                 fontFamily: 'TimesNewRoman',
-                                fontSize: 24,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -141,6 +141,7 @@ class _SignInPageState extends State<SignInPage> {
                               controller: _emailOrPhoneController,
                               decoration: InputDecoration(
                                 hintText: "Enter Email Or Mobile no.",
+                                hintStyle: TextStyle(fontSize: 12),
                               ),
                             ),
 
@@ -150,6 +151,7 @@ class _SignInPageState extends State<SignInPage> {
                               controller: _passwordController,
                               decoration: InputDecoration(
                                 hintText: "Enter Password",
+                                hintStyle: TextStyle(fontSize: 12),
                               ),
                             ),
 
@@ -163,15 +165,17 @@ class _SignInPageState extends State<SignInPage> {
                                   Text(
                                     "Forgot Password?",
                                     style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
                                       color: Colors.red,
+                                      fontWeight: FontWeight.w600, // Semi-bold equivalent
                                     ),
                                   ),
                                   Text(
                                     "Click here",
                                     style: TextStyle(
+                                      fontSize: 12,
                                       color: AppColor.primaryColor,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ],
@@ -246,14 +250,17 @@ class _SignInPageState extends State<SignInPage> {
                                   Text(
                                     "Don't Have an Account?",
                                     style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600, // Semi-bold equivalent
                                     ),
                                   ),
                                   Text(
-                                    "Sign Up",
+                                    " Sign Up",
                                     style: TextStyle(
+                                      fontSize: 14,
                                       color: AppColor.primaryColor,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ],
@@ -278,6 +285,10 @@ class _SignInPageState extends State<SignInPage> {
 Widget CustomText({required String text}) {
   return Text(
     text,
-    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+    style: TextStyle(
+      fontSize: 12,
+      color: Colors.black,
+      fontWeight: FontWeight.w600, // Semi-bold equivalent
+    ),
   );
 }

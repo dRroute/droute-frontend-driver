@@ -1,5 +1,6 @@
 
 import 'dart:io';
+import 'package:droute_driver_frontend/screens/driver/completeDetail/uploadLicence.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -45,74 +46,70 @@ class _UploadAaadharState extends State<UploadAaadhar> {
           'Upload Aadhaar',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 20,
+            fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              CompleteDetailProgressBar(completedSteps: 3),
-            ],
-          ),
-          Expanded(
-            child: Center(
-              child:  DottedBorder(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                CompleteDetailProgressBar(completedSteps: 1),
+              ],
+            ),
+            SizedBox(height: 20), // Added some spacing
+            Center(
+              child: DottedBorder(
                 color: AppColor.primaryColor,
                 strokeWidth: 2,
                 dashPattern: [6, 3],
                 borderType: BorderType.RRect,
                 radius: Radius.circular(8),
-                child: Container(
+                child: SizedBox( // Use SizedBox instead of Expanded
                   width: fullWidth * 0.8,
                   height: 200,
-                  alignment: Alignment.center,
                   child: _image == null
-                      ? Text("Upload Aadhaar Card", style: TextStyle(color: Colors.black))
+                      ? Center(child: Text("Upload Aadhaar Card", style: TextStyle(color: Colors.black)))
                       : Image.file(_image!, fit: BoxFit.contain),
                 ),
               ),
             ),
-
-          ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-
-              // Buttons Row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _customOutlinedButton("Take Image", Icons.camera_alt, ImageSource.camera),
-                  SizedBox(width: 10),
-                  _customOutlinedButton("Upload from Gallery", Icons.photo, ImageSource.gallery),
-                ],
-              ),
-              SizedBox(height: 20),
-              // Submit Button
-              SizedBox(
-                width: fullWidth * 0.8,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_image != null) {
-                      // Handle submit action
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColor.primaryColor,
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  ),
-                  child: Text("Submit", style: TextStyle(color: Colors.white, fontSize: 16)),
+            SizedBox(height: 20),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _customOutlinedButton("Take Image", Icons.camera_alt, ImageSource.camera),
+                    SizedBox(width: 10),
+                    _customOutlinedButton("Upload from Gallery", Icons.photo, ImageSource.gallery),
+                  ],
                 ),
-              ),
-              SizedBox(height: 50),
-            ],
-          ),
-        ],
+                SizedBox(height: 20),
+                SizedBox(
+                  width: fullWidth * 0.8,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UploadLicence()));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.primaryColor,
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                    child: Text("Submit", style: TextStyle(color: Colors.white, fontSize: 16)),
+                  ),
+                ),
+                SizedBox(height: 50),
+              ],
+            ),
+          ],
+        ),
       ),
+
     );
   }
 

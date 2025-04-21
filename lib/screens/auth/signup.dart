@@ -137,7 +137,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     Text(
                       "Sign UP",
                       style: const TextStyle(
-                        fontSize: 24,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -147,13 +147,18 @@ class _SignUpPageState extends State<SignUpPage> {
                       controller: _fullNameController,
                       decoration: InputDecoration(
                         hintText: "Enter Your Fullname",
+                        hintStyle: TextStyle(fontSize: 12),
                       ),
                     ),
                     const SizedBox(height: 16),
                     CustomText(text: "Email:"),
                     TextFormField(
                       controller: _emailController,
-                      decoration: InputDecoration(hintText: "Enter Email Id"),
+                      decoration: InputDecoration(
+                          hintText: "Enter Email Id",
+                        hintStyle: TextStyle(fontSize: 12),
+                      ),
+
                     ),
 
                     SizedBox(height: 10),
@@ -162,6 +167,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       controller: _mobileController,
                       decoration: InputDecoration(
                         hintText: "Enter mobile Number",
+                        hintStyle: TextStyle(fontSize: 12),
                       ),
                     ),
                     SizedBox(height: 10),
@@ -169,7 +175,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     TextFormField(
                       controller: _passwordController,
                       obscureText: true,
-                      decoration: InputDecoration(hintText: "Enter Password"),
+                      decoration: InputDecoration(
+                          hintText: "Enter Password",
+                        hintStyle: TextStyle(fontSize: 12),
+                      ),
                     ),
                     SizedBox(height: 10),
                     CustomText(text: "Confirm Password"),
@@ -178,9 +187,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       obscureText: true,
                       decoration: InputDecoration(
                         hintText: "Enter Confirm Password",
+                        hintStyle: TextStyle(fontSize: 12),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 20),
 
                     if (_errorMessage != null)
                       Padding(
@@ -240,14 +250,18 @@ class _SignUpPageState extends State<SignUpPage> {
                         children: [
                           Text(
                             "Already Have an Account?",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                            ),
                           ),
                           SizedBox(width: 5),
                           Text(
-                            "Sign In",
+                            " Sign In",
                             style: TextStyle(
+                              fontSize: 14,
                               color: AppColor.primaryColor,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],
@@ -267,6 +281,10 @@ class _SignUpPageState extends State<SignUpPage> {
 Widget CustomText({required String text}) {
   return Text(
     text,
-    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+    style: TextStyle(
+      fontSize: 12,
+      color: Colors.black,
+      fontWeight: FontWeight.w600, // Semi-bold equivalent
+    ),
   );
 }

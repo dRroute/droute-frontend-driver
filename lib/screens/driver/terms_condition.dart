@@ -1,3 +1,4 @@
+import 'package:droute_driver_frontend/screens/driver/completeDetail/uploadAadhaar.dart';
 import 'package:flutter/material.dart';
 import 'package:droute_driver_frontend/styles/color/app_color.dart';
 import 'package:droute_driver_frontend/screens/driver/enable_location.dart';
@@ -83,7 +84,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
             child: const SafeArea(
               child: Text(
                 "Terms & Conditions",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -104,7 +105,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                               Text(
                                 term["title"]!,
                                 style: const TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -112,7 +113,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                               Text(
                                 term["description"]!,
                                 style: const TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 12,
                                   color: Colors.black54,
                                 ),
                               ),
@@ -171,7 +172,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => EnableLocation(),
+                                  builder: (context) => UploadAaadhar(),
                                 ),
                               );
                             }
