@@ -1,6 +1,7 @@
 import 'package:droute_driver_frontend/screens/driver/Chat.dart';
 import 'package:droute_driver_frontend/styles/color/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class RequestedOrderDetail extends StatefulWidget {
   final String name;
@@ -23,18 +24,39 @@ class _RequestedOrderDetailState extends State<RequestedOrderDetail> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: AppColor.primaryColor,
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 2,
-        centerTitle: true,
-        title: const Text(
-          'Take an Action',
-          style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500),
+        elevation: 4,
+        shadowColor: Colors.black38,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor:
+              AppColor.primaryColor, // Match this with the system chrome
+          statusBarIconBrightness: Brightness.light,
         ),
+        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+        ),
+        title: Text(
+          'Take an action',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -48,8 +70,10 @@ class _RequestedOrderDetailState extends State<RequestedOrderDetail> {
               children: [
                 CircleAvatar(
                   radius: 24,
-                  backgroundColor: Colors.grey[300], // Fallback color
-                  backgroundImage: widget.imageUrl.isNotEmpty ? NetworkImage(widget.imageUrl) : null,
+                  backgroundColor: Colors.grey[400], // Fallback color
+                  backgroundImage: widget.imageUrl.isNotEmpty
+                      ? NetworkImage(widget.imageUrl)
+                      : null,
                   child: widget.imageUrl.isEmpty
                       ? Icon(Icons.person, color: Colors.grey[700])
                       : null, // Fallback icon if no image
@@ -64,7 +88,8 @@ class _RequestedOrderDetailState extends State<RequestedOrderDetail> {
                         children: [
                           Text(
                             widget.name,
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           Row(
                             children: const [
@@ -79,12 +104,14 @@ class _RequestedOrderDetailState extends State<RequestedOrderDetail> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: const [
-                          Text("+91 97567876567"),
+                          Text("+91 97567876567",
+                              style: TextStyle(fontSize: 14)),
                           Text(
                             "See Reviews",
                             style: TextStyle(
-                              color: Colors.blue,
+                              color: Color.fromARGB(255, 0, 68, 124),
                               fontWeight: FontWeight.bold,
+                              fontSize: 12,
                             ),
                           ),
                         ],
@@ -96,33 +123,32 @@ class _RequestedOrderDetailState extends State<RequestedOrderDetail> {
             ),
             const SizedBox(height: 20),
 
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Chat With user :",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Chat()), // Navigate to Chat screen
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              Chat()), // Navigate to Chat screen
                     );
                   },
                   child: Icon(
                     Icons.chat,
-                    size: 30,
+                    size: 24,
                     color: AppColor.primaryColor,
                   ),
                 ),
-
               ],
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 25),
 
-            const SizedBox(height: 20),
 
             // Location Selection
             Column(
@@ -143,8 +169,11 @@ class _RequestedOrderDetailState extends State<RequestedOrderDetail> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("Pune", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                            const Text("Sky bay F wing, Mahalunge, Balewadi...", style: TextStyle(color: Colors.grey)),
+                            const Text("Pune",
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold)),
+                            const Text("Sky bay F wing, Mahalunge, Balewadi...",
+                                style: TextStyle(color: Colors.grey,fontSize: 12)),
                           ],
                         ),
                       ),
@@ -167,8 +196,11 @@ class _RequestedOrderDetailState extends State<RequestedOrderDetail> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("Navi Mumbai", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                            const Text("Sky bay F wing, Mahalunge, Balewadi...", style: TextStyle(color: Colors.grey)),
+                            const Text("Navi Mumbai",
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold)),
+                            const Text("Sky bay F wing, Mahalunge,Sky bay F wing, Mahalunge, Balewadi Balewadi Sky bay F wing, Mahalunge, Balewadi...",
+                                style: TextStyle(color: Colors.grey ,fontSize: 12)),
                           ],
                         ),
                       ),
@@ -192,7 +224,7 @@ class _RequestedOrderDetailState extends State<RequestedOrderDetail> {
                 children: [
                   const Text(
                     "Package Details:",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                   buildPackageRow("Height:", "10 ft."),
@@ -214,11 +246,12 @@ class _RequestedOrderDetailState extends State<RequestedOrderDetail> {
                     // Navigate to the next screen (make sure it's defined)
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    backgroundColor: AppColor.primaryColor,
+                    backgroundColor: Colors.teal,
                   ),
                   child: const Text(
                     "Accept",
@@ -235,11 +268,12 @@ class _RequestedOrderDetailState extends State<RequestedOrderDetail> {
                     // Navigate to the next screen (make sure it's defined)
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    backgroundColor: Colors.red[900],
+                    backgroundColor: AppColor.ThirdColor,
                   ),
                   child: const Text(
                     "Reject",
@@ -264,8 +298,8 @@ class _RequestedOrderDetailState extends State<RequestedOrderDetail> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(value),
+          Text(label, style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 12)),
+          Text(value,style: const TextStyle(fontSize: 12)),
         ],
       ),
     );

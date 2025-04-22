@@ -43,8 +43,7 @@ class JourneyCardsPage extends StatelessWidget {
 
     return 
      CustomScaffold(
-
-           appBar: AppBar(
+       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 4,
         shadowColor: Colors.black38,
@@ -53,20 +52,12 @@ class JourneyCardsPage extends StatelessWidget {
           statusBarIconBrightness: Brightness.light,
         ),
         centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Home()),
-            );
-          },
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-        ),
+     
         title: Text(
           'Your Journey',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 20,
+            fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),

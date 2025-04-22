@@ -1,7 +1,10 @@
+import 'package:droute_driver_frontend/screens/driver/home.dart';
 import 'package:droute_driver_frontend/screens/orders/requestedOrderDetail.dart';
+import 'package:droute_driver_frontend/styles/color/app_color.dart';
 import 'package:flutter/material.dart';
 import "package:droute_driver_frontend/styles/custom_widgets/custom_scaffold.dart";
 // import 'requested_order_detail.dart'; // Import your detail page
+import 'package:flutter/services.dart'; 
 
 class RequestedOrders extends StatelessWidget {
   final List<Map<String, String>> users = List.generate(
@@ -15,18 +18,33 @@ class RequestedOrders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+ SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: AppColor.primaryColor,
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+    );
+    
     return CustomScaffold(
-      appBar: AppBar(
+         appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 2,
-        centerTitle: true,
-        title: const Text(
-          'Requested Orders',
-          style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500),
+        elevation: 4,
+        shadowColor: Colors.black38,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: AppColor.primaryColor, // Match this with the system chrome
+          statusBarIconBrightness: Brightness.light,
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+        centerTitle: true,
+        
+        title: Text(
+          'Requested Orders',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
       body: ListView.builder(
@@ -48,8 +66,8 @@ class RequestedOrders extends StatelessWidget {
               );
             },
             child: Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              padding: const EdgeInsets.all(16),
+              margin: const EdgeInsets.only(bottom: 1),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
@@ -76,7 +94,7 @@ class RequestedOrders extends StatelessWidget {
                       children: [
                         Text(
                           user['name']!,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                         ),
                         Text(
                           user['description']!,

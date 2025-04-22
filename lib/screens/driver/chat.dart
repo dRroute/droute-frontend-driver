@@ -190,7 +190,7 @@ class _ChatState extends State<Chat> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black12,
+                    color: const Color.fromARGB(31, 102, 102, 102),
                     blurRadius: 5,
                     spreadRadius: 2,
                     offset: Offset(0, -2)),
