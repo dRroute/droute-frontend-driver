@@ -34,28 +34,31 @@ class _RequestedOrderDetailState extends State<RequestedOrderDetail> {
     );
 
     return Scaffold(
-      appBar: AppBar(
+      backgroundColor: Colors.white,
+     appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 4,
-        shadowColor: Colors.black38,
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor:
-              AppColor.primaryColor, // Match this with the system chrome
+        elevation: 0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: AppColor.primaryColor,
           statusBarIconBrightness: Brightness.light,
         ),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-        ),
-        title: Text(
-          'Take an action',
+        title: const Text(
+          'Take an Action',
           style: TextStyle(
             color: Colors.black,
             fontSize: 16,
-            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(
+            color: Colors.grey.shade300,
+            height: 1.0,
           ),
         ),
       ),
@@ -273,7 +276,7 @@ class _RequestedOrderDetailState extends State<RequestedOrderDetail> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    backgroundColor: AppColor.ThirdColor,
+                    backgroundColor: AppColor.primaryColor,
                   ),
                   child: const Text(
                     "Reject",

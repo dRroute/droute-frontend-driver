@@ -87,29 +87,31 @@ class _PostJourneyState extends State<PostJourney> {
     );
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 4,
-        shadowColor: Colors.black38,
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: AppColor.primaryColor, // Match this with the system chrome
+        elevation: 0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: AppColor.primaryColor,
           statusBarIconBrightness: Brightness.light,
         ),
-        centerTitle: true,
-        leading: IconButton(
-         onPressed: () {
-  if (Navigator.canPop(context)) {
-    Navigator.pop(context);
-  }
-},
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-        ),
-        title: Text(
-          'Post a New Journey',
+        title: const Text(
+          'Post A New Journey',
           style: TextStyle(
             color: Colors.black,
             fontSize: 16,
-            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(
+            color: Colors.grey.shade300,
+            height: 1.0,
           ),
         ),
       ),
@@ -222,38 +224,35 @@ class _PostJourneyState extends State<PostJourney> {
     );
   }
 
-  Widget _buildDimensionsCard() {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Padding(
-        padding: EdgeInsets.all(12),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                    child: _buildInputField("Weight (kg)", weightController)),
-                SizedBox(width: 10),
-                Expanded(
-                    child: _buildInputField("Height (cm)", heightController)),
-              ],
-            ),
-            SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                    child: _buildInputField("Width (cm)", widthController)),
-                SizedBox(width: 10),
-                Expanded(
-                    child: _buildInputField("Length (cm)", lengthController)),
-              ],
-            ),
-          ],
-        ),
+ Widget _buildDimensionsCard() {
+  return Card(
+    color: Colors.white,  // <-- Correct property
+    elevation: 2,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    child: Padding(
+      padding: EdgeInsets.all(12),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(child: _buildInputField("Weight (kg)", weightController)),
+              SizedBox(width: 10),
+              Expanded(child: _buildInputField("Height (cm)", heightController)),
+            ],
+          ),
+          SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(child: _buildInputField("Width (cm)", widthController)),
+              SizedBox(width: 10),
+              Expanded(child: _buildInputField("Length (cm)", lengthController)),
+            ],
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildInputField(String label, TextEditingController controller) {
     return TextField(

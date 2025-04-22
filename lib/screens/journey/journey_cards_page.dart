@@ -41,24 +41,31 @@ class JourneyCardsPage extends StatelessWidget {
       JourneyData("San Francisco", "Seattle", "2025-02-23 08:00 AM", "2025-02-23 02:00 PM", "2 Seats","Ongoinng"),
     ];
 
-    return 
-     CustomScaffold(
-       appBar: AppBar(
+    return CustomScaffold(
+      appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 4,
-        shadowColor: Colors.black38,
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: AppColor.primaryColor, // Match this with the system chrome
+        elevation: 0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: AppColor.primaryColor,
           statusBarIconBrightness: Brightness.light,
         ),
-        centerTitle: true,
-     
-        title: Text(
+        title: const Text(
           'Your Journey',
           style: TextStyle(
             color: Colors.black,
             fontSize: 16,
-            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(
+            color: Colors.grey.shade300,
+            height: 1.0,
           ),
         ),
       ),
