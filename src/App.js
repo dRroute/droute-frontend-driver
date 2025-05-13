@@ -9,6 +9,7 @@ import SignUpScreen from './screens/auth/signUp';
 import SignInScreen from './screens/auth/signIn';
 import VerificationScreen from './screens/auth/verificationScreen';
 import ForgetPassword from './screens/auth/forgetPassword';
+import CompleteProfileForm from './screens/profile/completeProfileForm';
 
 const Stack = createStackNavigator();
 
@@ -23,11 +24,13 @@ export default function App() {
             ...TransitionPresets.SlideFromRightIOS,
           }}
         >
+         
           <Stack.Screen name="Onboarding" component={OnboardingScreen} />
           <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+          <Stack.Screen name="CompleteProfileForm" component={CompleteProfileForm} />
           <Stack.Screen name="SignInScreen" component={SignInScreen} />
           <Stack.Screen name="VerificationScreen" component={VerificationScreen} />
-          <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+          <Stack.Screen name="ForgetPassword" component={ForgetPassword} /> 
         </Stack.Navigator>
       </NavigationContainer>
     </View>

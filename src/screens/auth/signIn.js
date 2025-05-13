@@ -26,18 +26,8 @@ const SignInScreen = ({ navigation }) => {
  
 
   const handleSignIn = () => {
-    if (!email  || !password) {
-      alert('Please fill in all fields');
-      return;
-    }
-    if (password !== confirmPassword) {
-      alert('Passwords do not match');
-      return;
-    }
-    // Navigate to next screen or show success message
-    alert('Sign up successful!');
-  };
-
+  navigation.navigate('CompleteProfileForm');
+  }
   // Handle navigation to sign in
   const navigateToSignUp = () => {
     navigation.navigate('SignUpScreen');
