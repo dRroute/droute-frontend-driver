@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { Overlay } from "@rneui/themed";
 import {
   Colors,
   commonStyles,
@@ -113,24 +114,27 @@ export const renderImageBox = (
   setCurrentImageSetter,
   setCurrentImageLabel,
   setBottomSheetVisible,
-  imageloading
+  imageloading,
+  setSelectedImage,
+  setModalVisible,
+  circular
 ) => {
   return (
     <TouchableOpacity
       onPress={() => {
         if (apiRespUri) {
-          showFullImage(apiRespUri);
+          showFullImage(apiRespUri, setSelectedImage, setModalVisible);
         }
       }}
       style={{ alignItems: "center", marginBottom: 20 }}
     >
-      <View style={[styles.imageBox, { borderRadius: 4 }]}>
+      <View style={[styles.imageBox,{ borderRadius: circular ? 50 : 4 }]}>
         {imageloading === label ? (
           <ActivityIndicator size={40} color="#ccc" />
         ) : apiRespUri ? (
           <Image
             source={{ uri: apiRespUri }}
-            style={[styles.imageStyle, { borderRadius: 4 }]}
+            style={[styles.imageStyle,{ borderRadius: circular ? 50 : 4 }]}
           />
         ) : (
           <Ionicons name="image-outline" size={50} color="#bbb" />
@@ -152,42 +156,61 @@ export const renderImageBox = (
   );
 };
 
- export function ImageBottomSheet(currentImageSetter,currentImageLabel,isBottomSheetVisible,setBottomSheetVisible,setImageLoading) {
-    return (
-      <RNModal
-        isVisible={isBottomSheetVisible}
-        onBackdropPress={() => setBottomSheetVisible(false)}
-        style={{ justifyContent: "flex-end", margin: 0 }}
-      >
-        <View style={styles.bottomSheet}>
-          <TouchableOpacity
-            style={styles.sheetOption}
-            onPress={() => openCamera(currentImageSetter,currentImageLabel,setBottomSheetVisible,setImageLoading)}
-          >
-            <Ionicons name="camera" size={22} color={Colors.primaryColor} />
-            <Text style={styles.sheetOptionText}>Use Camera</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.sheetOption}
-            onPress={() => openGallery(currentImageSetter, currentImageLabel,setBottomSheetVisible,setImageLoading)}
-          >
-            <Ionicons name="image" size={22} color={Colors.primaryColor} />
-            <Text style={styles.sheetOptionText}>Choose from Gallery</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.sheetOption}
-            onPress={() => removeImage(currentImageSetter,setBottomSheetVisible)}
-          >
-            <Ionicons name="trash-outline" size={22} color="red" />
-            <Text style={[styles.sheetOptionText, { color: "red" }]}>
-              Remove Image
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </RNModal>
-    );
-  }
-
+export function ImageBottomSheet(
+  currentImageSetter,
+  currentImageLabel,
+  isBottomSheetVisible,
+  setBottomSheetVisible,
+  setImageLoading
+) {
+  return (
+    <RNModal
+      isVisible={isBottomSheetVisible}
+      onBackdropPress={() => setBottomSheetVisible(false)}
+      style={{ justifyContent: "flex-end", margin: 0 }}
+    >
+      <View style={styles.bottomSheet}>
+        <TouchableOpacity
+          style={styles.sheetOption}
+          onPress={() =>
+            openCamera(
+              currentImageSetter,
+              currentImageLabel,
+              setBottomSheetVisible,
+              setImageLoading
+            )
+          }
+        >
+          <Ionicons name="camera" size={22} color={Colors.primaryColor} />
+          <Text style={styles.sheetOptionText}>Use Camera</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.sheetOption}
+          onPress={() =>
+            openGallery(
+              currentImageSetter,
+              currentImageLabel,
+              setBottomSheetVisible,
+              setImageLoading
+            )
+          }
+        >
+          <Ionicons name="image" size={22} color={Colors.primaryColor} />
+          <Text style={styles.sheetOptionText}>Choose from Gallery</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.sheetOption}
+          onPress={() => removeImage(currentImageSetter, setBottomSheetVisible)}
+        >
+          <Ionicons name="trash-outline" size={22} color="red" />
+          <Text style={[styles.sheetOptionText, { color: "red" }]}>
+            Remove Image
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </RNModal>
+  );
+}
 
 export function commonLabel(label, optional) {
   return (
@@ -286,8 +309,6 @@ export function commonAppBar(label, navigation) {
   );
 }
 
-
-
 export function fullImageContainer(
   modalVisible,
   setModalVisible,
@@ -317,6 +338,92 @@ export function circularLoader(isLoading) {
     </View>
   );
 }
+
+export function renderPassword  (
+  label,
+  value,
+  setter,
+  placeholder,
+  secure,
+  setSecure
+) {
+  return(
+  <View style={{ marginBottom: 12 }}>
+    {commonLabel(label, false)}
+    <View style={styles.passwordBox}>
+      <TextInput
+        style={[{ flex: 1, height: 45, fontSize: 12 }]}
+        value={value}
+        onChangeText={setter}
+        placeholder={placeholder}
+        secureTextEntry={secure}
+        maxLength={20}
+      />
+      <TouchableOpacity onPress={() => setSecure(!secure)}>
+        <Ionicons name={secure ? "eye-off" : "eye"} size={20} color="#888" />
+      </TouchableOpacity>
+    </View>
+  </View>
+)};
+
+export function actionOverlay(method,visibility,setVisiblity,title) {
+    return (
+      <Overlay
+        isVisible={visibility}
+        onBackdropPress={() => setVisiblity(false)}
+        overlayStyle={styles.dialogStyle}
+      >
+        <View>
+          <Text
+            style={{
+              ...Fonts.blackColor18Medium,
+              textAlign: "center",
+              marginHorizontal: Sizes.fixPadding * 2.0,
+              marginVertical: Sizes.fixPadding * 2.0,
+            }}
+          >
+            {title}
+          </Text>
+
+          <View
+            style={{
+              ...commonStyles.rowAlignCenter,
+              marginTop: Sizes.fixPadding,
+            }}
+          >
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => {
+                setVisiblity(false);
+              }}
+              style={{
+                ...styles.noButtonStyle,
+                ...styles.dialogYesNoButtonStyle,
+              }}
+            >
+              <Text style={{ ...Fonts.blackColor14Medium }}>No</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => {
+                method();
+                setVisiblity(false);
+                // handle delete logic here
+              }}
+              style={{
+                backgroundColor: Colors.primaryColor,
+                borderBottomRightRadius: 4,
+                ...styles.dialogYesNoButtonStyle,
+              }}
+            >
+              <Text style={{ ...Fonts.whiteColor14Medium }}>Yes</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Overlay>
+    );
+  }
 const styles = StyleSheet.create({
   inputContainer: {
     marginBottom: 16,
@@ -343,17 +450,19 @@ const styles = StyleSheet.create({
     ...commonStyles.shadow,
     marginHorizontal: Sizes.fixPadding / 2,
   },
-  imageBox: {
-    width: 100,
-    height: 100,
-    borderWidth: 1,
-    borderStyle: "dotted",
-    borderColor: "#aaa",
-    justifyContent: "center",
-    alignItems: "center",
-    position: "relative",
-    backgroundColor: "#f9f9f9",
-  },
+ imageBox: {
+  width: 100,
+  height: 100,
+  borderWidth: 1,
+  borderStyle: "dotted",
+  borderColor: "#aaa",
+  justifyContent: "center",
+  alignItems: "center",
+  position: "relative",
+  backgroundColor: "#f9f9f9",
+  // overflow: "hidden", 
+},
+
   imageStyle: {
     width: "100%",
     height: "100%",
@@ -450,13 +559,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-    fullImage: {
+  fullImage: {
     width: "90%",
     height: "70%",
     resizeMode: "contain",
     borderRadius: 10,
   },
-    bottomSheet: {
+  bottomSheet: {
     backgroundColor: "#fff",
     padding: 20,
     borderTopRightRadius: 20,
@@ -472,7 +581,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     color: Colors.primaryColor,
   },
-   loaderContainer: {
+  loaderContainer: {
     position: "absolute",
     top: 0,
     left: 0,
@@ -482,5 +591,37 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // backgroundColor: 'rgba(67, 92, 128, 0.43)', // Optional: semi-transparent overlay
     zIndex: 999,
+  },
+  passwordBox: {
+    flexDirection: "row",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 4,
+    paddingHorizontal: 12,
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#f5f5f5",
+    paddingHorizontal: 10,
+  },
+   dialogStyle: {
+    backgroundColor: Colors.whiteColor,
+    borderRadius: Sizes.fixPadding - 5.0,
+    width: "85%",
+    padding: 0.0,
+    elevation: 0,
+  },
+
+  dialogYesNoButtonStyle: {
+    flex: 1,
+    ...commonStyles.shadow,
+
+    padding: Sizes.fixPadding,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  noButtonStyle: {
+    backgroundColor: Colors.whiteColor,
+    borderTopColor: Colors.extraLightGrayColor,
+    borderBottomLeftRadius: Sizes.fixPadding - 5.0,
   },
 });

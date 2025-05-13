@@ -49,6 +49,12 @@ export const Fonts = {
     fontFamily: FontFamily.Medium,
     includeFontPadding: false,
   },
+   whiteColor16Medium: {
+    color: Colors.whiteColor,
+    fontSize: 16.0,
+    fontFamily: FontFamily.Medium,
+    includeFontPadding: false,
+  },
 
   whiteColor14Medium: {
     color: Colors.whiteColor,
@@ -95,6 +101,12 @@ export const Fonts = {
   blackColor10Medium: {
     color: Colors.blackColor,
     fontSize: 10.0,
+    fontFamily: FontFamily.Medium,
+    includeFontPadding: false,
+  },
+   blackColor16Medium: {
+    color: Colors.blackColor,
+    fontSize: 16.0,
     fontFamily: FontFamily.Medium,
     includeFontPadding: false,
   },

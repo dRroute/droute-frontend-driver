@@ -74,3 +74,9 @@ export const openCamera = async (setter, label,setImageLoading,setBottomSheetVis
     setter(null);
     setBottomSheetVisible(false);
   };
+
+   export const showFullImageFunction = (uri,setSelectedImage,setModalVisible) => {
+      if (!uri) return;
+      setSelectedImage(uri);
+      setModalVisible(true);
+    };
