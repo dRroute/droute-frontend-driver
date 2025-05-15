@@ -24,9 +24,10 @@ import * as ImagePicker from 'expo-image-picker';
   return formData;
 };
 
-export const openGallery = async (setter, label,setImageLoading,setBottomSheetVisible) => {
+export const openGallery = async (label, setImageLoading, setBottomSheetVisible) => {
+  setImageLoading(label);
   try {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       allowsEditing: true,
       aspect: label === "avatar" ? [1, 1] : undefined,
@@ -35,20 +36,22 @@ export const openGallery = async (setter, label,setImageLoading,setBottomSheetVi
 
     if (!result.canceled) {
       const imageUri = result.assets[0].uri;
-      setImageLoading(label);
-      const file = await setupImagePicker(imageUri);
-      setter(imageUri); // Set the file
+      await setupImagePicker(imageUri); 
+      return imageUri;
     }
   } catch (error) {
     console.log("Error uploading file:", error);
     Alert.alert("Error", "Upload failed. Please try again.");
   } finally {
-    setImageLoading("");
+    setImageLoading(null);
     setBottomSheetVisible(false);
   }
+
+  return null;
 };
 
-export const openCamera = async (setter, label,setImageLoading,setBottomSheetVisible) => {
+export const openCamera = async (label, setImageLoading, setBottomSheetVisible) => {
+  setImageLoading(label);
   try {
     const result = await ImagePicker.launchCameraAsync({
       quality: 0.1,
@@ -58,18 +61,21 @@ export const openCamera = async (setter, label,setImageLoading,setBottomSheetVis
 
     if (!result.canceled) {
       const imageUri = result.assets[0].uri;
-      setImageLoading(label);
-      const file = await setupImagePicker(imageUri);
-      setter(imageUri); // Set the file
+      await setupImagePicker(imageUri); 
+      return imageUri;
     }
   } catch (error) {
     console.log("Error uploading file:", error);
     Alert.alert("Error", "Upload failed. Please try again.");
   } finally {
-    setImageLoading("");
+    setImageLoading(null);
     setBottomSheetVisible(false);
   }
+
+  return null;
 };
+
+
  export const removeImage = (setter,setBottomSheetVisible) => {
     setter(null);
     setBottomSheetVisible(false);

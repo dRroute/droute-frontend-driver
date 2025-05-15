@@ -94,7 +94,7 @@ const EditProfile= () => {
         {fullImageContainer(modalVisible,setModalVisible ,selectedImage)}
         {ImageBottomSheet(currentImageSetter,currentImageLabel,isBottomSheetVisible,setBottomSheetVisible,setImageLoading)}
       </ScrollView>
-     {circularLoader(isLoading)}
+      {circularLoader(isLoading)}
       {actionOverlay(handleSubmit,showDialogue,setshowDialogue,"Are you sure you want to update?")}
     </View>
   );
@@ -127,7 +127,7 @@ const EditProfile= () => {
             setSelectedImage,
             setModalVisible
           )}
-            {renderImageBox(
+          {renderImageBox(
                 "RC",
                 setRCImageURI,
                 RCimageURI,

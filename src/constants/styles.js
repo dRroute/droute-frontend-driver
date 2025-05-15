@@ -311,6 +311,15 @@ export const commonStyles = {
     fontSize: 14,
     fontWeight: "bold",
   },
+  boxInput: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 4,
+    padding: 12,
+    fontSize: 12,
+    backgroundColor: "#f5f5f5",
+    height: 45,
+  },
 };
 
 export const screenWidth = Dimensions.get("window").width;
