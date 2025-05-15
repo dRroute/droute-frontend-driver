@@ -2,9 +2,12 @@ import { Dimensions } from "react-native";
 
 export const Colors = {
   primaryColor: "#861658",
+  extraLightPrimaryColor:"#fce6f3",
   blackColor: "#000000",
   whiteColor: "#FFFFFF",
   grayColor: "#828282",
+  userBubble:"#d9f7fa",
+  otherBubble:"#f9ffd9",
   lightBlackColor: "#333333",
   bodyBackColor: "#F2F2F2",
   yellowColor: "#F2C94C",

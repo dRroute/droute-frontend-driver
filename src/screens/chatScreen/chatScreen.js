@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,9 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { Colors, commonStyles } from "../../constants/styles";
+import { Animated, Easing } from "react-native";
+import moment from 'moment';
+
 import {
   openCamera,
   openGallery,
@@ -29,6 +32,30 @@ const ChatScreen = ({ navigation }) => {
   const [deleteItem, setDeleteItem] = useState(null);
   const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const spinAnim = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    if (isRefreshing) {
+      Animated.loop(
+        Animated.timing(spinAnim, {
+          toValue: 1,
+          duration: 1000,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        })
+      ).start();
+    } else {
+      spinAnim.stopAnimation();
+      spinAnim.setValue(0);
+    }
+  }, [isRefreshing]);
+
+const spin = spinAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "360deg"],
+  });
+
   const sendMessage = (image = null) => {
     if (!textInput.trim() && !image) return;
 
@@ -91,54 +118,64 @@ const ChatScreen = ({ navigation }) => {
   const handleLongPress = (item) => {
     setDeleteItem(item.id);
   };
+const handleRefresh = () => {
+  setIsRefreshing(true);
 
+  setTimeout(() => {
+    setIsRefreshing(false);
+  }, 5000); 
+};
   const renderMessage = ({ item }) => {
     const isUser = item.sender === "user";
     const isLoading = imageLoadingId === item.id;
 
     return (
-    <TouchableOpacity
-  activeOpacity={1}
-  onLongPress={() => handleLongPress(item)}
-  onPress={() => {
-    if (item.image && deleteItem === null) {
-      showFullImageFunction(item.image, setSelectedImage, setModalVisible);
-    } else if (deleteItem != null) {
-      setDeleteItem(null);
-    }
-  }}
-  delayLongPress={300}
->
-  <View
-    style={[
-      styles.messageBubble,
-      isUser ? styles.userBubble : styles.otherBubble,
-      deleteItem === item.id ? { backgroundColor: "gray" } : null,
-    ]}
-  >
-    {item.image && (
-      <View style={{ position: "relative" }}>
-        {isLoading && (
-          <ActivityIndicator
-            size="large"
-            color={Colors.grayColor}
-            style={styles.loader}
-          />
-        )}
-        <Image
-          source={{ uri: item.image }}
-          style={styles.imageBubble}
-          onLoadStart={() => setImageLoadingId(item.id)}
-          onLoadEnd={() => setImageLoadingId(null)}
-        />
-      </View>
-    )}
+      <TouchableOpacity
+        activeOpacity={1}
+        onLongPress={() => handleLongPress(item)}
+        onPress={() => {
+          if (item.image && deleteItem === null) {
+            showFullImageFunction(
+              item.image,
+              setSelectedImage,
+              setModalVisible
+            );
+          } else if (deleteItem != null) {
+            setDeleteItem(null);
+          }
+        }}
+        delayLongPress={300}
+      >
+        <View
+          style={[
+            styles.messageBubble,
+            isUser ? styles.userBubble : styles.otherBubble,
+            deleteItem === item.id ? { backgroundColor: "gray" } : null,
+          ]}
+        >
+          {item.image && (
+            <View style={{ position: "relative" }}>
+              {isLoading && (
+                <ActivityIndicator
+                  size="large"
+                  color={Colors.grayColor}
+                  style={styles.loader}
+                />
+              )}
+              <Image
+                source={{ uri: item.image }}
+                style={styles.imageBubble}
+                onLoadStart={() => setImageLoadingId(item.id)}
+                onLoadEnd={() => setImageLoadingId(null)}
+              />
+            </View>
+          )}
 
-    {item.text && <Text style={styles.messageText}>{item.text}</Text>}
-    <Text style={styles.timeText}>6:00 min ago</Text>
-  </View>
-</TouchableOpacity>
+          {item.text && <Text style={styles.messageText}>{item.text}</Text>}
+         <Text style={styles.timeText}>{moment(item.time).fromNow()}</Text>
 
+        </View>
+      </TouchableOpacity>
     );
   };
 
@@ -147,49 +184,60 @@ const ChatScreen = ({ navigation }) => {
       <View style={styles.appBar}>
         <View style={styles.profile}>
           <View style={styles.avatarPlaceholder}>
-            <Text style={{ color: "#fff" }}>D</Text>
+            <Ionicons name="person" size={24} color={Colors.bodyBackColor} />
           </View>
           <View>
             <Text style={styles.userName}>Dummy User</Text>
             <Text style={styles.userPhone}>+91 567898765</Text>
           </View>
         </View>
-        {deleteItem && (
+         {deleteItem && (
           <TouchableOpacity  onPress={() => deleteMessage(deleteItem)}>
-            <Ionicons name="trash" size={24} color={Colors.darkOrangeColor} />
+          <Ionicons name="trash" size={24} color={Colors.darkOrangeColor} />
+          </TouchableOpacity>
+         )}
+        {!deleteItem && (
+          <TouchableOpacity onPress={handleRefresh} >
+            <Animated.View style={{ transform: [{ rotate: spin }] }}>
+              <Ionicons name="refresh" size={24} color={Colors.primaryColor} />
+            </Animated.View>
           </TouchableOpacity>
         )}
       </View>
-     <TouchableOpacity activeOpacity={1} onPress={()=>setDeleteItem(null)} style={styles.container}>
-      <FlatList
-        data={messages}
-        keyExtractor={(item) => item.id}
-        renderItem={renderMessage}
-        contentContainerStyle={{ padding: 10 }}
-        inverted
-      />
-
-      <View style={styles.inputBar}>
-        <View style={{ ...commonStyles.rowSpaceBetween, gap: 10 }}>
-          <TouchableOpacity onPress={handleOpenCamera}>
-            <Ionicons name="camera" size={24} color={Colors.primaryColor} />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={handleOpenGallery}>
-            <Ionicons name="image" size={24} color={Colors.primaryColor} />
-          </TouchableOpacity>
-        </View>
-        <TextInput
-          style={styles.textInput}
-          value={textInput}
-          placeholder="Type a message"
-          onChangeText={setTextInput}
+      <TouchableOpacity
+        activeOpacity={1}
+        onPress={() => setDeleteItem(null)}
+        style={styles.container}
+      >
+        <FlatList
+          data={messages}
+          keyExtractor={(item) => item.id}
+          renderItem={renderMessage}
+          contentContainerStyle={{ padding: 10 }}
+          inverted
         />
 
-        <TouchableOpacity onPress={() => sendMessage()}>
-          <Ionicons name="send" size={24} color={Colors.primaryColor} />
-        </TouchableOpacity>
-      </View>
+        <View style={styles.inputBar}>
+          <View style={{ ...commonStyles.rowSpaceBetween, gap: 10 }}>
+            <TouchableOpacity onPress={handleOpenCamera}>
+              <Ionicons name="camera" size={24} color={Colors.primaryColor} />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={handleOpenGallery}>
+              <Ionicons name="image" size={24} color={Colors.primaryColor} />
+            </TouchableOpacity>
+          </View>
+          <TextInput
+            style={styles.textInput}
+            value={textInput}
+            placeholder="Type a message"
+            onChangeText={setTextInput}
+          />
+
+          <TouchableOpacity onPress={() => sendMessage()}>
+            <Ionicons name="send" size={24} color={Colors.primaryColor} />
+          </TouchableOpacity>
+        </View>
       </TouchableOpacity>
       {fullImageContainer(modalVisible, setModalVisible, selectedImage)}
     </View>
@@ -201,7 +249,7 @@ export default ChatScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fce6f3",
+    backgroundColor: Colors.extraLightPrimaryColor,
   },
   appBar: {
     flexDirection: "row",
@@ -227,7 +275,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#007AFF",
+    backgroundColor: Colors.grayColor,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 10,
@@ -249,7 +297,6 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-   
     marginHorizontal: 10,
     ...commonStyles.boxInput,
   },
@@ -261,9 +308,8 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     padding: 10,
   },
-
   userBubble: {
-    backgroundColor: "#d9f7fa",
+    backgroundColor:Colors.userBubble,
     alignSelf: "flex-end",
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
@@ -271,7 +317,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 0,
   },
   otherBubble: {
-    backgroundColor: "#f9ffd9",
+    backgroundColor:Colors.otherBubble,
     alignSelf: "flex-start",
     borderTopLeftRadius: 0,
     borderTopRightRadius: 12,
