@@ -135,6 +135,13 @@ export const Fonts = {
     fontFamily: FontFamily.SemiBold,
     includeFontPadding: false,
   },
+   blackColor12Bold: {
+    color: Colors.blackColor,
+    fontSize: 12.0,
+    fontWeight:"700",
+    fontFamily: FontFamily.Bold,
+    includeFontPadding: false,
+  },
 
   blackColor14SemiBold: {
     color: Colors.blackColor,

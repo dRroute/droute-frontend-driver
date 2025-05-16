@@ -50,7 +50,7 @@ export default function App() {
            <Stack.Screen name="ChangePassword" component={ChangePassword} />
             <Stack.Screen name="EditProfile" component={EditProfile} />
              <Stack.Screen name="ChatScreen" component={ChatScreen} />
-             <Stack.Screen name="PendingRequests" component={PendingRequests} />
+          <Stack.Screen name="PendingRequests" component={PendingRequests} />
             
         </Stack.Navigator>
       </NavigationContainer>

@@ -62,6 +62,7 @@ const menuItems = [
   {
     id: 2,
     title: "All Journeys",
+    screen:"AllJourneyList",
     icon: <MaterialIcons name="route" size={24} color={Colors.primaryColor} />,
     bgColor: COLORS.iconBgPurple,
     description: "View all your current and past journeys in one place.",
@@ -176,7 +177,7 @@ const Home = ({ navigation }) => {
       />
       <ImageBackground
         source={{
-          uri: imageRef.current,
+          uri: imageRef?.current || "https://plus.unsplash.com/premium_photo-1675827055694-010aef2cf08f?q=80&w=2024&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         }}
         style={styles.headerBackground}
       >
@@ -270,7 +271,7 @@ const styles = StyleSheet.create({
 
   menuCard: {
     flex: 1,
-    backgroundColor: Colors.whiteColor,
+    backgroundColor: Colors.bodyBackColor,
     marginTop: -30,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
