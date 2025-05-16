@@ -74,7 +74,7 @@ export const JourneyCard = ({ journey, onViewDetails }) => {
         </View>
 
         <TouchableOpacity onPress={() => onViewDetails(journey)}>
-          <Text style={styles.viewDetailsText}>view Details</Text>
+          <Text style={{...Fonts.primaryColor12SemiBold ,fontWeight:"700",color:"green"}}>Completed</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.whiteColor,
     borderRadius: 12,
     padding: 16,
-    marginVertical: 8,
+    margin: 4,
     elevation: 2,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   viewDetailsText: {
-    color: Colors.darkOrangeColor,
+    
     fontWeight: "bold",
     fontSize: 12,
   },
