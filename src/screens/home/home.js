@@ -1,36 +1,316 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+// DriverDashboard.js
+import React, { useEffect, useRef, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Switch,
+  SafeAreaView,
+  StatusBar,
+} from "react-native";
+import {
+  Colors,
+  commonStyles,
+  Fonts,
+  screenWidth,
+  Sizes,
+} from "../../constants/styles";
+import {
+  MaterialIcons,
+  MaterialCommunityIcons,
+  FontAwesome5,
+  Ionicons,
+} from "@expo/vector-icons";
+import {
+  fetchAddressFromCoordinates,
+  fetchCity,
+  fetchImageForCity,
+  getUserLocation,
+} from "../../utils/commonMethods";
 
-const Home = () => {
+const COLORS = {
+  green: "#4CAF50",
+  darkBlue: "#101942",
+  lightOrange: "#FFA726",
+  textDark: "#333333",
+  textLight: "#757575",
+  iconBgOrange: "rgba(255, 138, 101, 0.1)",
+  iconBgPurple: "rgba(254, 212, 234, 0.56)",
+  iconBgGreen: "rgba(76, 175, 80, 0.1)",
+  iconBgPink: "rgba(144, 139, 245, 0.1)",
+  iconBgLightOrange: "rgba(255, 167, 38, 0.1)",
+};
+const menuItems = [
+  {
+    id: 1,
+    title: "Pending Requests",
+    screen: "PendingRequests",
+    icon: (
+      <Ionicons
+        name="notifications-outline"
+        size={24}
+        color={Colors.orangeColor}
+      />
+    ),
+    bgColor: COLORS.iconBgOrange,
+    description: "Review and take action on new order requests from users.",
+  },
+  {
+    id: 2,
+    title: "All Journeys",
+    icon: <MaterialIcons name="route" size={24} color={Colors.primaryColor} />,
+    bgColor: COLORS.iconBgPurple,
+    description: "View all your current and past journeys in one place.",
+  },
+  {
+    id: 3,
+    title: "Current Journey",
+    icon: <Ionicons name="map-outline" size={24} color={COLORS.green} />, // updated for clarity
+    bgColor: COLORS.iconBgGreen,
+    description: "Manage your ongoing journey with real-time updates.",
+  },
+  {
+    id: 4,
+    title: "Support",
+    icon: (
+      <MaterialIcons name="support-agent" size={24} color={COLORS.darkBlue} />
+    ),
+    bgColor: COLORS.iconBgPink,
+    description: "Access 24/7 support for any assistance you need.",
+  },
+  {
+    id: 5,
+    title: "All Orders",
+    icon: (
+      <MaterialCommunityIcons
+        name="clipboard-list-outline"
+        size={24}
+        color={COLORS.lightOrange}
+      />
+    ), // more fitting than message-text
+    bgColor: COLORS.iconBgLightOrange,
+    description: "Track all your ongoing and past orders efficiently.",
+  },
+];
+const Home = ({ navigation }) => {
+  const mapRef = useRef(null);
+  const [address, setAddress] = useState(null);
+  const imageRef = useRef(null);
+  const [region, setRegion] = useState({});
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [errorMessage, setErrorMsg] = useState(null);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      StatusBar.setBarStyle("dark-content");
+      StatusBar.setBackgroundColor("transparent");
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    const fetchLocationAndAddress = async () => {
+      try {
+        const { latitude, longitude } = await getUserLocation({
+          setRegion,
+          setCurrentLocation,
+          mapRef,
+          setErrorMsg,
+        });
+
+        if (latitude && longitude) {
+          const city = await fetchCity(latitude, longitude);
+          const address = await fetchAddressFromCoordinates(
+            latitude,
+            longitude
+          );
+
+          if (city) {
+            imageRef.current = await fetchImageForCity(city);
+          }
+
+          if (address) {
+            setAddress(address);
+          }
+        } else {
+          console.warn("Latitude or longitude not available.");
+        }
+      } catch (error) {
+        console.error("Error in fetching location and address:", error);
+      }
+    };
+
+    fetchLocationAndAddress();
+  }, []);
+
+  const MenuItem = ({ item, screen, navigation }) => {
+    const handlePress = () => {
+      if (screen) {
+        navigation.navigate(screen);
+      }
+    };
+
+    return (
+      <TouchableOpacity onPress={handlePress} style={styles.menuItem}>
+        <View style={[styles.iconContainer, { backgroundColor: item.bgColor }]}>
+          {item.icon}
+        </View>
+        <Text style={styles.menuTitle}>{item.title}</Text>
+        <Text style={styles.menuDescription} numberOfLines={2}>
+          {item.description}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>🚧Home is Under Development</Text>
-      <Text style={styles.description}>
-        This feature is currently under development. Please check back later.
-      </Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="light-content"
+      />
+      <ImageBackground
+        source={{
+          uri: imageRef.current,
+        }}
+        style={styles.headerBackground}
+      >
+        <View style={styles.headerOverlay}>
+          <View style={styles.locationContainer}>
+            <MaterialIcons
+              name="location-on"
+              size={18}
+              color={Colors.whiteColor}
+            />
+            {address && (
+              <Text style={styles.locationText}>
+                {address ? address.substring(0, 25) + "..." : ""}
+              </Text>
+            )}
+          </View>
+          <View style={styles.welcomeContainer}>
+            <Text style={styles.welcomeText}>WELCOME</Text>
+            <Text style={styles.driverName}>Alok Singh</Text>
+            <Text style={styles.driverInfo}>Driver ID: 12345678</Text>
+            <Text style={styles.driverInfo}>Vehicle Number: HR07FXP1234</Text>
+          </View>
+        </View>
+      </ImageBackground>
+
+      <View style={styles.menuCard}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.menuGrid}>
+            {menuItems.map((item, index) => (
+              <MenuItem
+                key={item.id}
+                item={item}
+                screen={item.screen}
+                navigation={navigation}
+              />
+            ))}
+          </View>
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 };
-
-export default Home;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: Colors.whiteColor,
+  },
+  headerBackground: {
+    height: 280,
+  },
+  headerOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
     padding: 20,
   },
-  heading: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#333',
+  locationContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-end",
+    marginTop: 10,
   },
-  description: {
+  locationText: {
+    padding: 10,
+    ...Fonts.whiteColor12Medium,
+    marginLeft: 2,
+    fontSize: 12,
+  },
+  welcomeContainer: {
+    marginTop: 30,
+  },
+  welcomeText: {
+    ...Fonts.whiteColor18SemiBold,
+    letterSpacing: 1,
+  },
+  driverName: {
+    ...Fonts.whiteColor18SemiBold,
+    marginTop: 8,
+  },
+  driverInfo: {
+    ...Fonts.whiteColor14Medium,
+    marginTop: 4,
+    opacity: 0.9,
+  },
+  profileContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 20,
+  },
+
+  menuCard: {
+    flex: 1,
+    backgroundColor: Colors.whiteColor,
+    marginTop: -30,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 15,
+    paddingTop: 20,
+  },
+  menuGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    paddingBottom: 20,
+  },
+  menuItem: {
+    width: "48%",
+    backgroundColor: Colors.lightestGray,
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 15,
+    borderColor: Colors.extraLightGrayColor,
+    borderWidth: 1,
+  },
+  iconContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  menuTitle: {
     fontSize: 16,
-    textAlign: 'center',
-    color: '#666',
+    fontWeight: "bold",
+    color: COLORS.textDark,
+    marginBottom: 8,
+  },
+  menuDescription: {
+    fontSize: 12,
+    color: COLORS.textLight,
+    lineHeight: 16,
   },
 });
+
+export default Home;

@@ -30,10 +30,12 @@ const ChatScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [deleteItem, setDeleteItem] = useState(null);
-  const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
+  const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);//dummy use state just to call function
+  const [currentImageSetter, setCurrentImageSetter] = useState(null);//dummy use state just to call function
+
   const [messages, setMessages] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
-
+  
   const spinAnim = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     if (isRefreshing) {
@@ -85,6 +87,7 @@ const spin = spinAnim.interpolate({
   const handleOpenGallery = async () => {
     try {
       const imageUri = await openGallery(
+        setCurrentImageSetter,
         imageLoadingId,
         setImageLoadingId,
         setBottomSheetVisible
@@ -98,6 +101,7 @@ const spin = spinAnim.interpolate({
   const handleOpenCamera = async () => {
     try {
       const imageUri = await openCamera(
+        setCurrentImageSetter,
         imageLoadingId,
         setImageLoadingId,
         setBottomSheetVisible

@@ -19,6 +19,7 @@ import PrivacyPolicyScreen from './screens/profile/privacyPolicy';
 import ChangePassword from './screens/profile/changePassword';
 import EditProfile from './screens/profile/editProfile';
 import ChatScreen from './screens/chatScreen/chatScreen';
+import PendingRequests from './screens/orders/pendingRequests';
 
 
 const Stack = createStackNavigator();
@@ -26,7 +27,6 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <View style={{ flex: 1 }}>
-      <MyStatusBar />
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
@@ -34,7 +34,7 @@ export default function App() {
             ...TransitionPresets.SlideFromRightIOS,
           }}
         >
-          <Stack.Screen name="ChatScreen" component={ChatScreen} />
+         
           <Stack.Screen name="BottomNavigationBar" component={BottomNavigationBar} />
           <Stack.Screen name="Onboarding" component={OnboardingScreen} />
           <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
@@ -49,11 +49,9 @@ export default function App() {
           <Stack.Screen name="TermsAndConditionsScreen" component={TermsAndConditionsScreen} />
            <Stack.Screen name="ChangePassword" component={ChangePassword} />
             <Stack.Screen name="EditProfile" component={EditProfile} />
-          
-
-
-         
-         
+             <Stack.Screen name="ChatScreen" component={ChatScreen} />
+             <Stack.Screen name="PendingRequests" component={PendingRequests} />
+            
         </Stack.Navigator>
       </NavigationContainer>
     </View>
