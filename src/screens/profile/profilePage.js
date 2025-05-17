@@ -101,6 +101,11 @@ const Profile = ({ navigation }) => {
             iconName: "privacy-tip",
             onPress: () => navigation.navigate("PrivacyPolicyScreen"),
           })}
+                  {profileOption({
+            option: "Raised Tickets",
+            iconName: "confirmation-number",
+            onPress: () => navigation.navigate("AllSupportTickets"),
+          })}
 
           {logoutInfo()}
         </View>

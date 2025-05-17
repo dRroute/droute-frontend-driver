@@ -20,6 +20,9 @@ import ChangePassword from './screens/profile/changePassword';
 import EditProfile from './screens/profile/editProfile';
 import ChatScreen from './screens/chatScreen/chatScreen';
 import PendingRequests from './screens/orders/pendingRequests';
+import HelpScreen from './screens/support/helpScreen';
+import AllSupportTickets from './screens/support/allSupportTickets';
+import AllParcelsInJourney from './screens/orders/AllParcelsInJourney';
 
 
 const Stack = createStackNavigator();
@@ -51,7 +54,9 @@ export default function App() {
             <Stack.Screen name="EditProfile" component={EditProfile} />
              <Stack.Screen name="ChatScreen" component={ChatScreen} />
           <Stack.Screen name="PendingRequests" component={PendingRequests} />
-            
+           <Stack.Screen name="HelpScreen" component={HelpScreen} />
+           <Stack.Screen name="AllSupportTickets" component={AllSupportTickets} />
+            <Stack.Screen name="AllParcelsInJourney" component={AllParcelsInJourney} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

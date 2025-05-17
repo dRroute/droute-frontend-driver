@@ -181,9 +181,14 @@ export const fetchCity = async (latitude, longitude) => {
 };
 
 
-export const fetchImageForCity = async (cityName) => {
-  const response = await fetch(`https://api.unsplash.com/photos/random?query=${cityName}+mountain&orientation=landscape&client_id=${Key.unsplashApiKey}`);
+export const fetchImageForCity = async () => {
+  const response = await fetch(`https://api.unsplash.com/photos/random?query=truck&orientation=landscape&client_id=${Key.unsplashApiKey}`);
   const data = await response.json();
   if (data && data.urls) {
    return data.urls.regular; 
 }};
+
+export const trimText = (text, maxLength) => {
+  if (typeof text !== 'string') return '';
+  return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+};

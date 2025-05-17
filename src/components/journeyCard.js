@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import {
   Colors,
+  commonStyles,
   Fonts,
   screenWidth,
 } from "../constants/styles";
@@ -17,16 +18,16 @@ import {
   FontAwesome,
 } from "@expo/vector-icons";
 
-export const JourneyCard = ({ journey, onViewDetails }) => {
+export const JourneyCard = ({ journey ,navigation}) => {
   return (
-    <View style={styles.card}>
+    <TouchableOpacity onPress={()=>navigation.navigate("AllParcelsInJourney",journey)} style={styles.card}>
       <View style={styles.routeContainer}>
         <View style={styles.locationContainer}>
           <MaterialIcons name="location-on" size={20} color={Colors.primaryColor} />
           <View style={styles.fromContainer}>
             <Text style={styles.label}>From:</Text>
             <Text style={styles.descriptionText}>
-              {journey.from.address},
+              {journey.from.address}
             </Text>
           </View>
         </View>
@@ -60,10 +61,19 @@ export const JourneyCard = ({ journey, onViewDetails }) => {
       <View style={styles.divider} />
 
       <View style={styles.spaceContainer}>
+        <View style={{...commonStyles.rowSpaceBetween}}>
         <FontAwesome name="cube" size={18} color={Colors.blackColor} />
         <View style={styles.spaceTextContainer}>
           <Text style={styles.label}>Available Space:</Text>
-          <Text style={styles.descriptionText}>{journey.availableSpace}</Text>
+          <Text style={styles.descriptionText}>200 ft^3</Text>
+        </View>
+        </View>
+        <View style={{...commonStyles.rowSpaceBetween}}>
+        <FontAwesome name="cube" size={18} color={Colors.blackColor} />
+        <View style={styles.spaceTextContainer}>
+          <Text style={styles.label}>Weight Capacity:</Text>
+          <Text style={styles.descriptionText}>500 kg</Text>
+        </View>
         </View>
       </View>
 
@@ -73,11 +83,11 @@ export const JourneyCard = ({ journey, onViewDetails }) => {
           <Text style={styles.packagesText}>Packages: {journey.packages}</Text>
         </View>
 
-        <TouchableOpacity onPress={() => onViewDetails(journey)}>
+        <View>
           <Text style={{...Fonts.primaryColor12SemiBold ,fontWeight:"700",color:"green"}}>Completed</Text>
-        </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -152,17 +162,19 @@ const styles = StyleSheet.create({
   },
   routeContainer: {
     flexDirection: "row",
+    // justifyContent:"space-around",
     alignItems: "center",
     marginBottom: 3,
   },
   locationContainer: {
     flex: 1,
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "center",
   },
   fromContainer: {
+    ...commonStyles.rowAlignCenter,
     marginLeft: 8,
-    flex: 1,
+     flexWrap: "wrap",
   },
   label: {
     ...Fonts.blackColor12Bold,
@@ -175,6 +187,8 @@ const styles = StyleSheet.create({
   },
   toContainer: {
     flex: 1,
+    ...commonStyles.rowAlignCenter,
+    flexWrap: "wrap",
   },
   divider: {
     height: 1,
@@ -192,8 +206,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   spaceContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+   ...commonStyles.rowSpaceBetween,
     marginBottom: 10,
   },
   spaceTextContainer: {

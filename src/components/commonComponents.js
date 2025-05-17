@@ -423,7 +423,48 @@ export function actionOverlay(method,visibility,setVisiblity,title) {
         </View>
       </Overlay>
     );
-  }
+}
+export function reUsableOverlayWithButton(component,submitMethod,cancelMethod,visibility ,setVisibility) {
+    return (
+      <Overlay
+        isVisible={visibility}
+        onBackdropPress={() => setVisibility(false)}
+        overlayStyle={styles.dialogStyle}
+      >
+        <View style={{ paddingTop: 10 }}>
+          {component()}
+          <View
+            style={{
+              ...commonStyles.rowAlignCenter,
+              marginTop: Sizes.fixPadding,
+            }}
+          >
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={cancelMethod}
+              style={{
+                ...styles.noButtonStyle,
+                ...styles.dialogYesNoButtonStyle,
+              }}
+            >
+              <Text style={{ ...Fonts.blackColor14Medium }}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={submitMethod}
+              style={{
+                backgroundColor: Colors.primaryColor,
+                borderBottomRightRadius: 4,
+                ...styles.dialogYesNoButtonStyle,
+              }}
+            >
+              <Text style={{ ...Fonts.whiteColor14Medium }}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Overlay>
+    );
+}
 const styles = StyleSheet.create({
   inputContainer: {
     marginBottom: 16,

@@ -28,7 +28,7 @@ import {
 import {
   fetchAddressFromCoordinates,
   fetchCity,
-  fetchImageForCity,
+  fetchImageForCity as fetchRandomImage,
   getUserLocation,
 } from "../../utils/commonMethods";
 
@@ -77,6 +77,7 @@ const menuItems = [
   {
     id: 4,
     title: "Support",
+    screen:"HelpScreen",
     icon: (
       <MaterialIcons name="support-agent" size={24} color={COLORS.darkBlue} />
     ),
@@ -104,6 +105,10 @@ const Home = ({ navigation }) => {
   const [region, setRegion] = useState({});
   const [currentLocation, setCurrentLocation] = useState(null);
   const [errorMessage, setErrorMsg] = useState(null);
+  const backgroundSource = imageRef?.current
+  ? { uri: imageRef.current }
+  : require('../../../assets/images/homeBg.png');
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       StatusBar.setBarStyle("dark-content");
@@ -125,15 +130,9 @@ const Home = ({ navigation }) => {
 
         if (latitude && longitude) {
           const city = await fetchCity(latitude, longitude);
-          const address = await fetchAddressFromCoordinates(
-            latitude,
-            longitude
-          );
-
-          if (city) {
-            imageRef.current = await fetchImageForCity(city);
-          }
-
+          const address = await fetchAddressFromCoordinates( latitude, longitude )
+          imageRef.current = await fetchRandomImage();
+        
           if (address) {
             setAddress(address);
           }
@@ -176,22 +175,22 @@ const Home = ({ navigation }) => {
         barStyle="light-content"
       />
       <ImageBackground
-        source={{
-          uri: imageRef?.current || "https://plus.unsplash.com/premium_photo-1675827055694-010aef2cf08f?q=80&w=2024&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        }}
+        source={backgroundSource}
         style={styles.headerBackground}
       >
         <View style={styles.headerOverlay}>
           <View style={styles.locationContainer}>
-            <MaterialIcons
+            
+            {address && (<>
+             <MaterialIcons
               name="location-on"
               size={18}
-              color={Colors.whiteColor}
+               color={Colors.whiteColor}
             />
-            {address && (
               <Text style={styles.locationText}>
                 {address ? address.substring(0, 25) + "..." : ""}
               </Text>
+              </>
             )}
           </View>
           <View style={styles.welcomeContainer}>
@@ -241,9 +240,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   locationText: {
-    padding: 10,
+    paddingVertical: 10,
     ...Fonts.whiteColor12Medium,
-    marginLeft: 2,
     fontSize: 12,
   },
   welcomeContainer: {
@@ -302,13 +300,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   menuTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     color: COLORS.textDark,
     marginBottom: 8,
   },
   menuDescription: {
-    fontSize: 12,
+    fontSize: 10,
     color: COLORS.textLight,
     lineHeight: 16,
   },

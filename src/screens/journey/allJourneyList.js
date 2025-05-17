@@ -125,13 +125,8 @@ const JOURNEYS = [
 const AllJourneyList = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleViewDetails = (journey) => {
-    console.log("View details for journey:", journey.id);
-    // Navigate to details screen
-  };
-
   const renderJourneyCard = ({ item }) => (
-    <JourneyCard journey={item} onViewDetails={handleViewDetails} />
+    <JourneyCard journey={item} navigation={navigation} />
   );
 
   return (
