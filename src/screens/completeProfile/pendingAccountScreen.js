@@ -1,32 +1,45 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import { Colors } from "../../constants/styles";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  Platform,
+} from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import MyStatusBar from "../../components/myStatusBar";
-
-const InstructionToComplete = ({navigation}) => {
-//   const navigation = useNavigation();
+import { Colors } from "../../constants/styles";
+// import { selectUser } from "../auth/services/selector";
+// import { logoutUser } from "../../redux/store/userSlice";
+const PendingAccountScreen = ({ navigation }) => {
 //   const user = useSelector(selectUser);
 //   const dispatch = useDispatch();
-
   return (
     <View style={styles.container}>
         <MyStatusBar/>
       <Image
-        source={require("../../../assets/images/instruction.png")}
+        source={require("../../../assets/images/sadCar.png")}
         style={styles.image}
       />
-      <Text style={styles.title}>Complete Your{"\n"}Profile</Text>
+
+      <Text style={styles.title}>
+        Oops! Your account is currently 
+        {/* {user?.status} */}
+      </Text>
+
       <Text style={styles.subtitle}>
-        Kindly fill in all the required details to proceed.
+        Your access has been restricted. Please contact the administrator for
+        further assistance or to resolve any issues.
       </Text>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("CompleteProfileForm")}
+        onPress={() => navigation.navigate("HelpScreen")}
       >
-        <Text style={styles.buttonText}>Proceed</Text>
+        <Text style={styles.buttonText}>Contact Support</Text>
       </TouchableOpacity>
-
       <TouchableOpacity 
     //   onPress={() => dispatch(logoutUser())}
       >
@@ -36,7 +49,7 @@ const InstructionToComplete = ({navigation}) => {
   );
 };
 
-export default InstructionToComplete;
+export default PendingAccountScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -46,7 +59,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 20,
   },
-  image: { width: 150, height: 150, resizeMode: "contain", marginBottom: 40 },
+  image: { width: 180, height: 180, resizeMode: "contain", marginBottom: 40 },
   title: {
     fontSize: 28,
     fontWeight: "bold",
@@ -61,7 +74,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: "100%",
-    backgroundColor:Colors.darkOrangeColor,
+    backgroundColor: Colors.darkOrangeColor,
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",

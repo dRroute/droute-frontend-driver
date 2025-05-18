@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-
+import { Provider, useSelector } from "react-redux";
 import OnboardingScreen from './screens/onBoardingScreens/onBoardingScreen';
 import MyStatusBar from './components/myStatusBar';
 import SignUpScreen from './screens/auth/signUp';
@@ -24,6 +24,13 @@ import HelpScreen from './screens/support/helpScreen';
 import AllSupportTickets from './screens/support/allSupportTickets';
 import AllParcelsInJourney from './screens/orders/AllParcelsInJourney';
 import LocationPickerScreen from './screens/journey/locationPicker';
+import CurrentJourney from './screens/journey/currentJourney';
+import RequestDetailScreen from './screens/orders/requestDetailScreen';
+import store from './redux/store/store';
+import Snackbar from './components/snackbar';
+import InstructionToComplete from './screens/completeProfile/instructionToComplete';
+import PendingForApprovalScreen from './screens/completeProfile/pendingForApproval';
+import PendingAccountScreen from './screens/completeProfile/pendingAccountScreen';
 
 
 const Stack = createStackNavigator();
@@ -31,6 +38,8 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <View style={{ flex: 1 }}>
+       <Provider store={store}>
+        <Snackbar/>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
@@ -38,13 +47,16 @@ export default function App() {
             ...TransitionPresets.SlideFromRightIOS,
           }}
         >
-         
-          <Stack.Screen name="BottomNavigationBar" component={BottomNavigationBar} />
-          <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-          <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
-          <Stack.Screen name="CompleteProfileForm" component={CompleteProfileForm} />
+           
+           <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
           <Stack.Screen name="SignInScreen" component={SignInScreen} />
-          <Stack.Screen name="VerificationScreen" component={VerificationScreen} />
+          <Stack.Screen name="VerificationScreen" component={VerificationScreen} /> 
+           <Stack.Screen name="Onboarding" component={OnboardingScreen} /> 
+           <Stack.Screen name="BottomNavigationBar" component={BottomNavigationBar} />
+          <Stack.Screen name="CompleteProfileForm" component={CompleteProfileForm} />
+          <Stack.Screen name="PendingAccountScreen" component={PendingAccountScreen} />
+          <Stack.Screen name="PendingForApprovalScreen" component={PendingForApprovalScreen} />
+          <Stack.Screen name="InstructionToComplete" component={InstructionToComplete} />
           <Stack.Screen name="ForgetPassword" component={ForgetPassword} /> 
           <Stack.Screen name="PostJourney" component={PostJourney} /> 
           <Stack.Screen name="Home" component={Home} />
@@ -59,8 +71,11 @@ export default function App() {
            <Stack.Screen name="AllSupportTickets" component={AllSupportTickets} />
             <Stack.Screen name="AllParcelsInJourney" component={AllParcelsInJourney} />
              <Stack.Screen name="LocationPickerScreen" component={LocationPickerScreen} />
+             <Stack.Screen name="CurrentJourney" component={CurrentJourney} />
+             <Stack.Screen name="RequestDetailScreen" component={RequestDetailScreen} />
         </Stack.Navigator>
       </NavigationContainer>
+       </Provider>
     </View>
   );
 }

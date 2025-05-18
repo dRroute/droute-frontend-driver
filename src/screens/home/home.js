@@ -26,8 +26,7 @@ import {
   Ionicons,
 } from "@expo/vector-icons";
 import {
-  fetchAddressFromCoordinates,
-  fetchCity,
+  fetchAddressComponent,
   fetchImageForCity as fetchRandomImage,
   getUserLocation,
 } from "../../utils/commonMethods";
@@ -128,14 +127,12 @@ const Home = ({ navigation }) => {
           mapRef,
           setErrorMsg,
         });
-
         if (latitude && longitude) {
-          const city = await fetchCity(latitude, longitude);
-          const address = await fetchAddressFromCoordinates( latitude, longitude )
-          imageRef.current = await fetchRandomImage();
-        
-          if (address) {
-            setAddress(address);
+          const addressData = await fetchAddressComponent(latitude, longitude);
+          imageRef.current = await fetchRandomImage(addressData.city);
+        //  console.log("address data is home page ",addressData);
+          if (addressData.address) {
+            setAddress(addressData.address);
           }
         } else {
           console.warn("Latitude or longitude not available.");
@@ -144,7 +141,6 @@ const Home = ({ navigation }) => {
         console.error(":", error);
       }
     };
-
     fetchLocationAndAddress();
   }, []);
 

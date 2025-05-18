@@ -25,7 +25,7 @@ import { openCamera, openGallery, removeImage } from "../utils/commonMethods";
 export function authInput(label, value, setter, placeholder, type) {
   const keyboardType =
     type === "number"
-      ? "phone-pad"
+      ? "numeric"
       : type === "email"
       ? "email-address"
       : "default";
@@ -48,6 +48,7 @@ export function authInput(label, value, setter, placeholder, type) {
         keyboardType={keyboardType}
         value={value}
         onChangeText={handleChangeText}
+        maxLength={type === "number"?10:50}
       />
     </View>
   );
@@ -105,7 +106,12 @@ export function otpFields(otpInput, setOtpInput) {
     />
   );
 }
-
+// export function ButtonWithLoader(name , isLoading ,loadingName) {
+//   <TouchableOpacity style={styles.signUpButton} onPress={handleSignIn}>
+//     {<Text style={styles.signUpButtonText}>{name}</Text>
+//     <Text>{loadingName} <ActivityIndicator size="large" color={Colors.whiteColor} /></Text>
+//   </TouchableOpacity>;
+// }
 export const renderImageBox = (
   label,
   setter,
@@ -128,13 +134,13 @@ export const renderImageBox = (
       }}
       style={{ alignItems: "center", marginBottom: 20 }}
     >
-      <View style={[styles.imageBox,{ borderRadius: circular ? 50 : 8 }]}>
+      <View style={[styles.imageBox, { borderRadius: circular ? 50 : 8 }]}>
         {imageloading === label ? (
           <ActivityIndicator size={40} color="#ccc" />
         ) : apiRespUri ? (
           <Image
             source={{ uri: apiRespUri }}
-            style={[styles.imageStyle,{ borderRadius: circular ? 50 : 8 }]}
+            style={[styles.imageStyle, { borderRadius: circular ? 50 : 8 }]}
           />
         ) : (
           <Ionicons name="image-outline" size={50} color="#bbb" />
@@ -211,19 +217,22 @@ export function ImageBottomSheet(
     </RNModal>
   );
 }
-export function reUsableBottomSheet(isBottomSheetVisible,setBottomSheetVisible,component){
+export function reUsableBottomSheet(
+  isBottomSheetVisible,
+  setBottomSheetVisible,
+  component
+) {
   return (
     <RNModal
-  isVisible={isBottomSheetVisible}
-  onBackdropPress={() => setBottomSheetVisible(false)}
-  style={{ justifyContent: "flex-end", margin: 0 }} 
->
-  <View style={[styles.bottomSheet, { maxHeight: "50%" }]}> 
-    {component()}
-  </View>
-</RNModal>
-
-  )
+      isVisible={isBottomSheetVisible}
+      onBackdropPress={() => setBottomSheetVisible(false)}
+      style={{ justifyContent: "flex-end", margin: 0 }}
+    >
+      <View style={[styles.bottomSheet, { maxHeight: "50%" }]}>
+        {component()}
+      </View>
+    </RNModal>
+  );
 }
 export function commonLabel(label, optional) {
   return (
@@ -267,7 +276,6 @@ export function typeSection(type, setType, label, optional, options = []) {
   );
 }
 
-
 export function textArea(value, setter, placeholder, label, optional) {
   return (
     <>
@@ -286,7 +294,7 @@ export function textArea(value, setter, placeholder, label, optional) {
     </>
   );
 }
-export function inputBox(value, setter, placeholder, label, optional,type) {
+export function inputBox(value, setter, placeholder, label, optional, type) {
   return (
     <>
       {commonLabel(label, optional)}
@@ -345,7 +353,7 @@ export function circularLoader(isLoading) {
   );
 }
 
-export function renderPassword  (
+export function renderPassword(
   label,
   value,
   setter,
@@ -353,123 +361,130 @@ export function renderPassword  (
   secure,
   setSecure
 ) {
-  return(
-  <View style={{ marginBottom: 12 }}>
-    {commonLabel(label, false)}
-    <View style={styles.passwordBox}>
-      <TextInput
-        style={[{ flex: 1, height: 45, fontSize: 12 }]}
-        value={value}
-        onChangeText={setter}
-        placeholder={placeholder}
-        secureTextEntry={secure}
-        maxLength={20}
-      />
-      <TouchableOpacity onPress={() => setSecure(!secure)}>
-        <Ionicons name={secure ? "eye-off" : "eye"} size={20} color="#888" />
-      </TouchableOpacity>
+  return (
+    <View style={{ marginBottom: 12 }}>
+      {commonLabel(label, false)}
+      <View style={styles.passwordBox}>
+        <TextInput
+          style={[{ flex: 1, height: 45, fontSize: 12 }]}
+          value={value}
+          onChangeText={setter}
+          placeholder={placeholder}
+          secureTextEntry={secure}
+          maxLength={20}
+        />
+        <TouchableOpacity onPress={() => setSecure(!secure)}>
+          <Ionicons name={secure ? "eye-off" : "eye"} size={20} color="#888" />
+        </TouchableOpacity>
+      </View>
     </View>
-  </View>
-)};
-
-export function actionOverlay(method,visibility,setVisiblity,title) {
-    return (
-      <Overlay
-        isVisible={visibility}
-        onBackdropPress={() => setVisiblity(false)}
-        overlayStyle={styles.dialogStyle}
-      >
-        <View>
-          <Text
-            style={{
-              ...Fonts.blackColor18Medium,
-              textAlign: "center",
-              marginHorizontal: Sizes.fixPadding * 2.0,
-              marginVertical: Sizes.fixPadding * 2.0,
-            }}
-          >
-            {title}
-          </Text>
-
-          <View
-            style={{
-              ...commonStyles.rowAlignCenter,
-              marginTop: Sizes.fixPadding,
-            }}
-          >
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => {
-                setVisiblity(false);
-              }}
-              style={{
-                ...styles.noButtonStyle,
-                ...styles.dialogYesNoButtonStyle,
-              }}
-            >
-              <Text style={{ ...Fonts.blackColor14Medium }}>No</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => {
-                method();
-                setVisiblity(false);
-                // handle delete logic here
-              }}
-              style={{
-                backgroundColor: Colors.primaryColor,
-                borderBottomRightRadius: 4,
-                ...styles.dialogYesNoButtonStyle,
-              }}
-            >
-              <Text style={{ ...Fonts.whiteColor14Medium }}>Yes</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Overlay>
-    );
+  );
 }
-export function reUsableOverlayWithButton(component,submitMethod,cancelMethod,visibility ,setVisibility) {
-    return (
-      <Overlay
-        isVisible={visibility}
-        onBackdropPress={() => setVisibility(false)}
-        overlayStyle={styles.dialogStyle}
-      >
-        <View style={{ paddingTop: 10 }}>
-          {component()}
-          <View
+
+export function actionOverlay(method, visibility, setVisiblity, title) {
+  return (
+    <Overlay
+      isVisible={visibility}
+      onBackdropPress={() => setVisiblity(false)}
+      overlayStyle={styles.dialogStyle}
+    >
+      <View>
+        <Text
+          style={{
+            ...Fonts.blackColor18Medium,
+            textAlign: "center",
+            marginHorizontal: Sizes.fixPadding * 2.0,
+            marginVertical: Sizes.fixPadding * 2.0,
+          }}
+        >
+          {title}
+        </Text>
+
+        <View
+          style={{
+            ...commonStyles.rowAlignCenter,
+            marginTop: Sizes.fixPadding,
+          }}
+        >
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+              setVisiblity(false);
+            }}
             style={{
-              ...commonStyles.rowAlignCenter,
-              marginTop: Sizes.fixPadding,
+              ...styles.noButtonStyle,
+              ...styles.dialogYesNoButtonStyle,
             }}
           >
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={cancelMethod}
-              style={{
-                ...styles.noButtonStyle,
-                ...styles.dialogYesNoButtonStyle,
-              }}
-            >
-              <Text style={{ ...Fonts.blackColor14Medium }}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={submitMethod}
-              style={{
-                backgroundColor: Colors.primaryColor,
-                borderBottomRightRadius: 4,
-                ...styles.dialogYesNoButtonStyle,
-              }}
-            >
-              <Text style={{ ...Fonts.whiteColor14Medium }}>Submit</Text>
-            </TouchableOpacity>
-          </View>
+            <Text style={{ ...Fonts.blackColor14Medium }}>No</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+              method();
+              setVisiblity(false);
+              // handle delete logic here
+            }}
+            style={{
+              backgroundColor: Colors.primaryColor,
+              borderBottomRightRadius: 4,
+              ...styles.dialogYesNoButtonStyle,
+            }}
+          >
+            <Text style={{ ...Fonts.whiteColor14Medium }}>Yes</Text>
+          </TouchableOpacity>
         </View>
-      </Overlay>
-    );
+      </View>
+    </Overlay>
+  );
+}
+export function reUsableOverlayWithButton(
+  component,
+  submitMethod,
+  cancelMethod,
+  visibility,
+  setVisibility
+) {
+  return (
+    <Overlay
+      isVisible={visibility}
+      onBackdropPress={() => setVisibility(false)}
+      overlayStyle={styles.dialogStyle}
+    >
+      <View style={{ paddingTop: 10 }}>
+        {component()}
+        <View
+          style={{
+            ...commonStyles.rowAlignCenter,
+            marginTop: Sizes.fixPadding,
+          }}
+        >
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={cancelMethod}
+            style={{
+              ...styles.noButtonStyle,
+              ...styles.dialogYesNoButtonStyle,
+            }}
+          >
+            <Text style={{ ...Fonts.blackColor14Medium }}>Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={submitMethod}
+            style={{
+              backgroundColor: Colors.primaryColor,
+              borderBottomRightRadius: 4,
+              ...styles.dialogYesNoButtonStyle,
+            }}
+          >
+            <Text style={{ ...Fonts.whiteColor14Medium }}>Submit</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Overlay>
+  );
 }
 const styles = StyleSheet.create({
   inputContainer: {
@@ -483,7 +498,7 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingVertical: 10,
-    ...Fonts.grayColor12Medium,
+    ...Fonts.blackColor12Medium,
   },
   textFieldStyle: {
     width: screenWidth / 9,
@@ -497,18 +512,18 @@ const styles = StyleSheet.create({
     ...commonStyles.shadow,
     marginHorizontal: Sizes.fixPadding / 2,
   },
- imageBox: {
-  width: 100,
-  height: 100,
-  borderWidth: 1,
-  borderStyle: "dotted",
-  borderColor: "#aaa",
-  justifyContent: "center",
-  alignItems: "center",
-  position: "relative",
-  backgroundColor: "#f9f9f9",
-  // overflow: "hidden", 
-},
+  imageBox: {
+    width: 100,
+    height: 100,
+    borderWidth: 1,
+    borderStyle: "dotted",
+    borderColor: "#aaa",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+    backgroundColor: "#f9f9f9",
+    // overflow: "hidden",
+  },
 
   imageStyle: {
     width: "100%",
@@ -650,7 +665,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     paddingHorizontal: 10,
   },
-   dialogStyle: {
+  dialogStyle: {
     backgroundColor: Colors.whiteColor,
     borderRadius: Sizes.fixPadding - 5.0,
     width: "85%",

@@ -24,6 +24,7 @@ import {
   authPassword,
   otpFields,
 } from "../../components/commonComponents";
+import MyStatusBar from "../../components/myStatusBar";
 
 const ForgetPassword = ({ navigation }) => {
  const [otpSent, setOtpSent] = useState(false);
@@ -45,6 +46,7 @@ const ForgetPassword = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <MyStatusBar/>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.keyboardAvoidingView}

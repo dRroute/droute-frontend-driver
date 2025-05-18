@@ -126,7 +126,8 @@ const PendingRequests = ({ navigation }) => {
   });
 
   const handleCardPress=()=>{
-  console.log("card pressed")
+    navigation.navigate("RequestDetailScreen");
+  // console.log("card pressed")
   }
   const handleRefresh = async () => {};
 

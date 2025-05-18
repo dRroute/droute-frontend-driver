@@ -18,10 +18,7 @@ import {
 
 import { actionOverlay, circularLoader, commonAppBar, renderPassword } from "../../components/commonComponents";
 
-
 const ChangePassword = ({ route, navigation }) => {
-
-
   const [currentPassword, setCurrentPassword] = useState(null);
   const [newPassword, setNewPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);

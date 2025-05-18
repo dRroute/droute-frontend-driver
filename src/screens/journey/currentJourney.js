@@ -107,7 +107,7 @@ const JOURNEYS = [
   },
 ];
 
-const AllJourneyList = ({ navigation }) => {
+const CurrentJourney = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const renderJourneyCard = ({ item }) => (
@@ -117,7 +117,7 @@ const AllJourneyList = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <MyStatusBar />
-      {commonAppBar("All Journey List", navigation)}
+      {commonAppBar("Current List", navigation)}
       {isLoading ? (
         <LoadingJourneyCard count={5} />
       ) : (
@@ -165,4 +165,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AllJourneyList;
+export default CurrentJourney;

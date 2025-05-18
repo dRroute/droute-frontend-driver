@@ -21,15 +21,14 @@ import {
 } from "../../constants/styles";
 import { otpFields } from "../../components/commonComponents";
 
-const VerificationScreen = ({ navigation }) => {
+const VerificationScreen = ({ navigation,route }) => {
+  const {data,otp}=route?.params;
   const [otpInput, setOtpInput] = useState(null);
 
   const VerifyOTP = () => {
     alert(otpInput);
-  };
-
-  const navigateToSignUp = () => {
-    navigation.navigate("SignUpScreen");
+    if(otpInput===otp){
+    navigation.navigate("InstructionToComplete");}
   };
 
   return (
@@ -45,18 +44,21 @@ const VerificationScreen = ({ navigation }) => {
               style={styles.logo}
               resizeMode="contain"
             />
+            <Text style={{ ...Fonts.whiteColor14Medium }}>
+              Please check your email
+            </Text>
+            <Text style={{ ...Fonts.whiteColor10Medium, marginTop: 5 }}>
+              (Kindly check your spam folder as well)
+            </Text>
           </View>
           <View style={styles.formContainer}>
             <Text style={styles.title}>Verify OTP</Text>
-
-            
 
             {otpFields(otpInput, setOtpInput)}
 
             <TouchableOpacity style={styles.signUpButton} onPress={VerifyOTP}>
               <Text style={styles.signUpButtonText}>Submit</Text>
             </TouchableOpacity>
-
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -67,7 +69,7 @@ const VerificationScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-   backgroundColor: Colors.primaryColor,
+    backgroundColor: Colors.primaryColor,
   },
   keyboardAvoidingView: {
     flex: 1,
@@ -104,15 +106,13 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     ...commonStyles.button,
-       marginTop:10,
-       marginBottom: 30,
-
+    marginTop: 10,
+    marginBottom: 30,
   },
 
   signUpButtonText: {
     ...commonStyles.buttonText,
   },
-
 });
 
 export default VerificationScreen;
