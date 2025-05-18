@@ -5,7 +5,7 @@ import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Home from "../screens/home/home";
-import PostJourney from "../screens/journey/postJourney";
+import PostJourney from "../screens/journey/postJourneyForm";
 import Profile from "../screens/profile/profilePage";
 
 

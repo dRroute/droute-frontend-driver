@@ -10,7 +10,7 @@ import SignInScreen from './screens/auth/signIn';
 import VerificationScreen from './screens/auth/verificationScreen';
 import ForgetPassword from './screens/auth/forgetPassword';
 import CompleteProfileForm from './screens/completeProfile/completeProfileForm';
-import PostJourney from './screens/journey/postJourney';
+import PostJourney from './screens/journey/postJourneyForm';
 import Home from './screens/home/home';
 import AllJourneyList from './screens/journey/allJourneyList';
 import BottomNavigationBar from './components/bottomNavigationBar';

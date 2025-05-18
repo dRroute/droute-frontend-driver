@@ -73,29 +73,33 @@ const HelpScreen = ({ navigation }) => {
             mobileNumber,
             setMobileNumber,
             "Enter Your Contact Number",
-            "Contact Number",
-            false
+            "Mobile Number",
+            false,
+            "phone-pad"
           )}
           {inputBox?.(
             email,
             setEmail,
             "Enter Your Email Id",
             "Email Id",
-            false
+            false,
+            "default"
           )}
           {inputBox?.(
             title,
             setTitle,
             "Enter Title or Subject of Query",
             "Title",
-            false
+            false,
+            "default"
           )}
           {textArea?.(
             description,
             setDescription,
             "Describe Your Query....",
             "Description",
-            false
+            false,
+           
           )}
           <TouchableOpacity
             style={{ ...commonStyles.button, marginBottom: 50 }}

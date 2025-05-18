@@ -128,13 +128,13 @@ export const renderImageBox = (
       }}
       style={{ alignItems: "center", marginBottom: 20 }}
     >
-      <View style={[styles.imageBox,{ borderRadius: circular ? 50 : 4 }]}>
+      <View style={[styles.imageBox,{ borderRadius: circular ? 50 : 8 }]}>
         {imageloading === label ? (
           <ActivityIndicator size={40} color="#ccc" />
         ) : apiRespUri ? (
           <Image
             source={{ uri: apiRespUri }}
-            style={[styles.imageStyle,{ borderRadius: circular ? 50 : 4 }]}
+            style={[styles.imageStyle,{ borderRadius: circular ? 50 : 8 }]}
           />
         ) : (
           <Ionicons name="image-outline" size={50} color="#bbb" />
@@ -225,43 +225,35 @@ export function commonLabel(label, optional) {
   );
 }
 
-export function typeSection(type, setType, label, value1, value2, optional) {
+export function typeSection(type, setType, label, optional, options = []) {
   return (
     <>
       {commonLabel(label, optional)}
       <View style={styles.TypeContainer}>
-        <TouchableOpacity
-          style={[styles.TypeButton, type === value1 && styles.selectedButton]}
-          onPress={() => {
-            setType(value1);
-          }}
-        >
-          <Text
+        {options.map((option, index) => (
+          <TouchableOpacity
+            key={index}
             style={[
-              styles.TypebuttonText,
-              type === value1 && styles.selectedButtonText,
+              styles.TypeButton,
+              type === option.value && styles.selectedButton,
             ]}
+            onPress={() => setType(option.value)}
           >
-            Individual
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.TypeButton, type === value2 && styles.selectedButton]}
-          onPress={() => setType(value2)}
-        >
-          <Text
-            style={[
-              styles.TypebuttonText,
-              type === value2 && styles.selectedButtonText,
-            ]}
-          >
-            Organization
-          </Text>
-        </TouchableOpacity>
+            <Text
+              style={[
+                styles.TypebuttonText,
+                type === option.value && styles.selectedButtonText,
+              ]}
+            >
+              {option.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </>
   );
 }
+
 
 export function textArea(value, setter, placeholder, label, optional) {
   return (
@@ -281,7 +273,7 @@ export function textArea(value, setter, placeholder, label, optional) {
     </>
   );
 }
-export function inputBox(value, setter, placeholder, label, optional) {
+export function inputBox(value, setter, placeholder, label, optional,type) {
   return (
     <>
       {commonLabel(label, optional)}
@@ -293,6 +285,7 @@ export function inputBox(value, setter, placeholder, label, optional) {
         onChangeText={(text) => {
           setter(text);
         }}
+        keyboardType={type}
       />
     </>
   );
@@ -572,7 +565,7 @@ const styles = StyleSheet.create({
   boxInput: {
     borderWidth: 1,
     borderColor: "#ddd",
-    borderRadius: 4,
+    borderRadius: 8,
     padding: 12,
     fontSize: 12,
     backgroundColor: "#f5f5f5",

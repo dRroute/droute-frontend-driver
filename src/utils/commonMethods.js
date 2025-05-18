@@ -182,7 +182,7 @@ export const fetchCity = async (latitude, longitude) => {
 
 
 export const fetchImageForCity = async () => {
-  const response = await fetch(`https://api.unsplash.com/photos/random?query=truck&orientation=landscape&client_id=${Key.unsplashApiKey}`);
+  const response = await fetch(`https://api.unsplash.com/photos/random?query=mountain&orientation=landscape&client_id=${Key.unsplashApiKey}`);
   const data = await response.json();
   if (data && data.urls) {
    return data.urls.regular; 

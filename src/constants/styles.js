@@ -300,7 +300,7 @@ export const commonStyles = {
     backgroundColor: Colors.primaryColor,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 4,
+    borderRadius: 8,
     padding: Sizes.fixPadding * 1.2,
   },
   outlinedButton: {
@@ -309,7 +309,7 @@ export const commonStyles = {
     borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 4,
+    borderRadius: 8,
     padding: Sizes.fixPadding * 1.2,
   },
   outlinedButtonText: {

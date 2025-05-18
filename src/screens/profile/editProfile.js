@@ -77,11 +77,11 @@ const EditProfile= () => {
             )}
        
     
-        {inputBox?.(legalName,setLegalName,"Enter Name As per Aadhaar or Legal Name","Name As per Aadhaar or Legal Name",true)}
-        {inputBox?.(aadhaarNumber,setAadhaarNumber,"Enter Aadhaar Number","Aadhaar Number",true)}
-        {inputBox?.(DLnumber,setDLNumber,"Enter Driving License Number","Driving License Number",true)}
-        {inputBox?.(RCnumber,setRCNumber,"Enter RC Number","RC Number",true)}
-        {textArea?.(address,setAddress,"Home/Street/Locality, City, State, Pincode","Address",true)}
+        {inputBox?.(legalName,setLegalName,"Enter Name As per Aadhaar or Legal Name","Name As per Aadhaar or Legal Name",true,"default")}
+        {inputBox?.(aadhaarNumber,setAadhaarNumber,"Enter Aadhaar Number","Aadhaar Number",true,"numeric")}
+        {inputBox?.(DLnumber,setDLNumber,"Enter Driving License Number","Driving License Number",true,"default")}
+        {inputBox?.(RCnumber,setRCNumber,"Enter RC Number","RC Number",true,"default")}
+        {textArea?.(address,setAddress,"Home/Street/Locality, City, State, Pincode","Address",true,)}
         {docImageSection?.()}
         <TouchableOpacity
           style={{ ...commonStyles.button, marginBottom: 50 }}
