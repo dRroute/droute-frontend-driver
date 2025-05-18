@@ -120,7 +120,7 @@ const LocationPickerScreen = ({navigation}) => {
       : setDestinationText(description);
 
     try {
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${Key.apiKey}`;
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${Key.mapApiKey}`;
       const response = await fetch(url);
       const data = await response.json();
       if (data.results.length > 0) {

@@ -211,7 +211,20 @@ export function ImageBottomSheet(
     </RNModal>
   );
 }
+export function reUsableBottomSheet(isBottomSheetVisible,setBottomSheetVisible,component){
+  return (
+    <RNModal
+  isVisible={isBottomSheetVisible}
+  onBackdropPress={() => setBottomSheetVisible(false)}
+  style={{ justifyContent: "flex-end", margin: 0 }} 
+>
+  <View style={[styles.bottomSheet, { maxHeight: "50%" }]}> 
+    {component()}
+  </View>
+</RNModal>
 
+  )
+}
 export function commonLabel(label, optional) {
   return (
     <Text style={styles.sectionLabel}>

@@ -11,6 +11,7 @@ import MyStatusBar from "../../components/myStatusBar";
 import {
   commonAppBar,
   inputBox,
+  reUsableBottomSheet,
   typeSection,
 } from "../../components/commonComponents";
 import { trimText } from "../../utils/commonMethods";
@@ -53,7 +54,7 @@ const suggestionStateList = [
 const PostJourney = ({ route, navigation }) => {
   const { data } = route?.params;
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [selectedForm, setSelectedForm] = useState(null);
+  const [selectedForm, setSelectedForm] = useState("locationDetail");
   const [selectedField, setSelectedField] = useState(null);
   const [departureDateTime, setDepartureDateTime] = useState("");
   const [arrivalDateTime, setArrivalDateTime] = useState("");
@@ -182,16 +183,16 @@ const PostJourney = ({ route, navigation }) => {
                 </View>
               </View>
 
-              {states?.()}
+              {statesContainer?.()}
             </>
           )}
         </View>
       </TouchableOpacity>
     );
   }
-  function states() {
+  function statesContainer() {
     return (
-      <>
+      <View style={{ marginBottom: 12 }}>
         <TouchableOpacity
           style={styles.stateSelectorButton}
           onPress={() => setDropdownVisible(!dropdownVisible)}
@@ -205,49 +206,8 @@ const PostJourney = ({ route, navigation }) => {
             color={Colors.primaryColor}
           />
         </TouchableOpacity>
-          <Modal visible={dropdownVisible} transparent={true}>
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: Colors.whiteColor,
-                padding:20,
-              }}
-            >
-              <View style={styles.suggestionList}>
-                <FlatList
-                  data={suggestionStateList}
-              
-                  keyExtractor={(state) => state}
-                  renderItem={({ item: state }) => (
-                    <TouchableOpacity
-                      style={styles.suggestionItem}
-                      onPress={() => toggleState(state)}
-                    >
-                      <Text>{state}</Text>
-                      <Ionicons
-                        name={
-                          stateList.includes(state)
-                            ? "checkbox"
-                            : "square-outline"
-                        }
-                        size={20}
-                        color={Colors.primaryColor}
-                      />
-                    </TouchableOpacity>
-                  )}
-                />
-              </View>
-              <TouchableOpacity
-                style={{
-                  ...commonStyles.button,
-                  marginVertical: 20,
-                }}
-                onPress={() => setDropdownVisible(false)}
-              >
-                <Text style={{ ...commonStyles.buttonText }}>Select</Text>
-              </TouchableOpacity>
-            </View>
-          </Modal>
+        {reUsableBottomSheet(dropdownVisible, setDropdownVisible, statesList)}
+
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
           {stateList.map((state, index) => (
             <View
@@ -268,7 +228,28 @@ const PostJourney = ({ route, navigation }) => {
             </View>
           ))}
         </View>
-      </>
+      </View>
+    );
+  }
+  function statesList() {
+    return (
+      <FlatList
+        data={suggestionStateList}
+        keyExtractor={(state) => state}
+        renderItem={({ item: state }) => (
+          <TouchableOpacity
+            style={styles.suggestionItem}
+            onPress={() => toggleState(state)}
+          >
+            <Text>{state}</Text>
+            <Ionicons
+              name={stateList.includes(state) ? "checkbox" : "square-outline"}
+              size={20}
+              color={Colors.primaryColor}
+            />
+          </TouchableOpacity>
+        )}
+      />
     );
   }
   function additionalDetail() {
@@ -516,11 +497,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "left",
   },
-  suggestionList: {
-    flex:1,
-    backgroundColor: Colors.whiteColor,
-    borderRadius: 4,
-  },
+
   suggestionItem: {
     padding: 10,
     borderBottomColor: Colors.extraLightGrayColor,
