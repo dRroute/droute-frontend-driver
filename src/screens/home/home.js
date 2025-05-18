@@ -105,6 +105,7 @@ const Home = ({ navigation }) => {
   const [region, setRegion] = useState({});
   const [currentLocation, setCurrentLocation] = useState(null);
   const [errorMessage, setErrorMsg] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const backgroundSource = imageRef?.current
   ? { uri: imageRef.current }
   : require('../../../assets/images/homeBg.png');
@@ -140,7 +141,7 @@ const Home = ({ navigation }) => {
           console.warn("Latitude or longitude not available.");
         }
       } catch (error) {
-        console.error("Error in fetching location and address:", error);
+        console.error(":", error);
       }
     };
 

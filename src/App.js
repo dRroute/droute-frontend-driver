@@ -23,6 +23,7 @@ import PendingRequests from './screens/orders/pendingRequests';
 import HelpScreen from './screens/support/helpScreen';
 import AllSupportTickets from './screens/support/allSupportTickets';
 import AllParcelsInJourney from './screens/orders/AllParcelsInJourney';
+import LocationPickerScreen from './screens/journey/locationPicker';
 
 
 const Stack = createStackNavigator();
@@ -57,6 +58,7 @@ export default function App() {
            <Stack.Screen name="HelpScreen" component={HelpScreen} />
            <Stack.Screen name="AllSupportTickets" component={AllSupportTickets} />
             <Stack.Screen name="AllParcelsInJourney" component={AllParcelsInJourney} />
+             <Stack.Screen name="LocationPickerScreen" component={LocationPickerScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

@@ -142,7 +142,8 @@ export const getUserLocation = async ({ setRegion, setCurrentLocation, mapRef, s
 };
 
 
-export const fetchAddressFromCoordinates = async (latitude, longitude) => {
+export const fetchAddressFromCoordinates = async (latitude, longitude,) => {
+
   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${Key.mapApiKey}`;
   try {
     const response = await fetch(url);
@@ -154,6 +155,7 @@ export const fetchAddressFromCoordinates = async (latitude, longitude) => {
     console.error("Error fetching address:", error);
     return null;
   }
+  
 };
 
 
@@ -179,7 +181,6 @@ export const fetchCity = async (latitude, longitude) => {
     return null;
   }
 };
-
 
 export const fetchImageForCity = async () => {
   const response = await fetch(`https://api.unsplash.com/photos/random?query=mountain&orientation=landscape&client_id=${Key.unsplashApiKey}`);

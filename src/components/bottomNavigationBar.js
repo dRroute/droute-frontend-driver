@@ -7,6 +7,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Home from "../screens/home/home";
 import PostJourney from "../screens/journey/postJourneyForm";
 import Profile from "../screens/profile/profilePage";
+import LocationPickerScreen from "../screens/journey/locationPicker";
 
 
 
@@ -83,8 +84,8 @@ useFocusEffect(
         
         />
 <Tab.Screen
-  name="PostJourney"
-  component={PostJourney}
+  name="LocationPickerScreen"
+  component={LocationPickerScreen}
   options={({ navigation, route }) => ({
     tabBarButton: (props) => {
       const isFocused = navigation.getState().index === 1; // Index 1 is 'PostJourney' in tab order

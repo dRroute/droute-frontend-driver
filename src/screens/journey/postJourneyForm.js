@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  Modal,
 } from "react-native";
 import MyStatusBar from "../../components/myStatusBar";
 import {
@@ -49,8 +50,8 @@ const suggestionStateList = [
   "Jammu and Kashmir",
 ];
 
-const PostJourney = () => {
-  
+const PostJourney = ({ route, navigation }) => {
+  const { data } = route?.params;
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selectedForm, setSelectedForm] = useState(null);
   const [selectedField, setSelectedField] = useState(null);
@@ -131,9 +132,9 @@ const PostJourney = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView scrollEnabled={!dropdownVisible} style={styles.container}>
       <MyStatusBar />
-      {commonAppBar("Post journey")}
+      {commonAppBar("Post journey", navigation)}
       {locationDetail?.()}
       {additionalDetail?.()}
 
@@ -172,17 +173,11 @@ const PostJourney = () => {
 
                 <View style={styles.addressesContainer}>
                   <Text style={styles.addressText}>
-                    {trimText(
-                      " Ramsukh Market, 667, opp. Jagat Clinic, behind Deepchand market · 0982",
-                      50
-                    )}
+                    {trimText(data.sourceAddress, 45)}
                   </Text>
                   <View style={{ height: 25 }} />
                   <Text style={styles.addressText}>
-                    {trimText(
-                      " Ramsukh Market, 667, opp. Jagat Clinic, behind Deepchand market · 0982",
-                      50
-                    )}
+                    {trimText(data.destinationAddress, 45)}
                   </Text>
                 </View>
               </View>
@@ -210,30 +205,49 @@ const PostJourney = () => {
             color={Colors.primaryColor}
           />
         </TouchableOpacity>
-        {dropdownVisible && (
-          <View style={styles.suggestionList}>
-            <FlatList
-              data={suggestionStateList}
-              // scrollEnabled={false}
-              keyExtractor={(state) => state}
-              renderItem={({ item: state }) => (
-                <TouchableOpacity
-                  style={styles.suggestionItem}
-                  onPress={() => toggleState(state)}
-                >
-                  <Text>{state}</Text>
-                  <Ionicons
-                    name={
-                      stateList.includes(state) ? "checkbox" : "square-outline"
-                    }
-                    size={20}
-                    color={Colors.primaryColor}
-                  />
-                </TouchableOpacity>
-              )}
-            />
-          </View>
-        )}
+          <Modal visible={dropdownVisible} transparent={true}>
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: Colors.whiteColor,
+                padding:20,
+              }}
+            >
+              <View style={styles.suggestionList}>
+                <FlatList
+                  data={suggestionStateList}
+              
+                  keyExtractor={(state) => state}
+                  renderItem={({ item: state }) => (
+                    <TouchableOpacity
+                      style={styles.suggestionItem}
+                      onPress={() => toggleState(state)}
+                    >
+                      <Text>{state}</Text>
+                      <Ionicons
+                        name={
+                          stateList.includes(state)
+                            ? "checkbox"
+                            : "square-outline"
+                        }
+                        size={20}
+                        color={Colors.primaryColor}
+                      />
+                    </TouchableOpacity>
+                  )}
+                />
+              </View>
+              <TouchableOpacity
+                style={{
+                  ...commonStyles.button,
+                  marginVertical: 20,
+                }}
+                onPress={() => setDropdownVisible(false)}
+              >
+                <Text style={{ ...commonStyles.buttonText }}>Select</Text>
+              </TouchableOpacity>
+            </View>
+          </Modal>
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
           {stateList.map((state, index) => (
             <View
@@ -503,11 +517,9 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   suggestionList: {
-    backgroundColor: "white",
-    height: 200,
+    flex:1,
+    backgroundColor: Colors.whiteColor,
     borderRadius: 4,
-    elevation: 5,
-    marginBottom: 8,
   },
   suggestionItem: {
     padding: 10,
