@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import MyStatusBar from "../../components/myStatusBar";
 import {
   commonAppBar,
@@ -8,10 +14,44 @@ import {
 } from "../../components/commonComponents";
 import { trimText } from "../../utils/commonMethods";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { Colors, commonStyles } from "../../constants/styles";
-import { TextInput } from "react-native-gesture-handler";
+import { Colors, commonStyles, Sizes } from "../../constants/styles";
+import { FlatList, Pressable, TextInput } from "react-native-gesture-handler";
+import Ionicons from "react-native-vector-icons/Ionicons";
+const suggestionStateList = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Jammu and Kashmir",
+];
 
 const PostJourney = () => {
+  
+  const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selectedForm, setSelectedForm] = useState(null);
   const [selectedField, setSelectedField] = useState(null);
   const [departureDateTime, setDepartureDateTime] = useState("");
@@ -23,10 +63,22 @@ const PostJourney = () => {
   const [length, setLength] = useState(null);
   const [lengthUnit, setLengthUnit] = useState(null);
   const [weightUnit, setWeightUnit] = useState(null);
+  const [stateList, setStateList] = useState([]);
   const showPicker = () => setPickerVisible(true);
   const hidePicker = () => setPickerVisible(false);
 
-  const handleConfirm = (date) => {
+  const toggleState = (state) => {
+    if (stateList.includes(state)) {
+      setStateList(stateList.filter((s) => s !== state));
+    } else {
+      setStateList([...stateList, state]);
+    }
+  };
+  const removeState = (stateToRemove) => {
+    setStateList(stateList.filter((state) => state !== stateToRemove));
+  };
+
+  const handleDatePick = (date) => {
     const formatted = date.toLocaleString([], {
       year: "numeric",
       month: "2-digit",
@@ -79,25 +131,33 @@ const PostJourney = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <MyStatusBar />
       {commonAppBar("Post journey")}
       {locationDetail?.()}
       {additionalDetail?.()}
+
       <TouchableOpacity
-        style={{ ...commonStyles.button, marginHorizontal: 10 ,marginVertical:50 }}
+        style={{
+          ...commonStyles.button,
+          marginHorizontal: 10,
+          marginVertical: 50,
+        }}
         onPress={() => {}}
       >
         <Text style={{ ...commonStyles.buttonText }}>Submit</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 
   function locationDetail() {
     return (
       <TouchableOpacity
         activeOpacity={1}
-        onPress={() => handleVisibility("locationDetail")}
+        onPress={() => {
+          handleVisibility("locationDetail");
+          if (dropdownVisible) setDropdownVisible(false);
+        }}
       >
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Location Detail</Text>
@@ -113,23 +173,88 @@ const PostJourney = () => {
                 <View style={styles.addressesContainer}>
                   <Text style={styles.addressText}>
                     {trimText(
-                      "njdbedjbdjkebdjkbed hvqwqhd hjvqwhdv jbjksb bsjbsbsb bsjsnks bssjjbs",
+                      " Ramsukh Market, 667, opp. Jagat Clinic, behind Deepchand market · 0982",
                       50
                     )}
                   </Text>
                   <View style={{ height: 25 }} />
                   <Text style={styles.addressText}>
                     {trimText(
-                      "njdbedjbdjkebdjkbed jebdjkb hvhvdhwqd bhjb gugv ggu gyghv gygyv gyyv ",
+                      " Ramsukh Market, 667, opp. Jagat Clinic, behind Deepchand market · 0982",
                       50
                     )}
                   </Text>
                 </View>
               </View>
+
+              {states?.()}
             </>
           )}
         </View>
       </TouchableOpacity>
+    );
+  }
+  function states() {
+    return (
+      <>
+        <TouchableOpacity
+          style={styles.stateSelectorButton}
+          onPress={() => setDropdownVisible(!dropdownVisible)}
+        >
+          <Text style={styles.stateSlectorButtonText}>
+            Choose States You Will Pass Through
+          </Text>
+          <Ionicons
+            name="caret-down-outline"
+            size={18}
+            color={Colors.primaryColor}
+          />
+        </TouchableOpacity>
+        {dropdownVisible && (
+          <View style={styles.suggestionList}>
+            <FlatList
+              data={suggestionStateList}
+              // scrollEnabled={false}
+              keyExtractor={(state) => state}
+              renderItem={({ item: state }) => (
+                <TouchableOpacity
+                  style={styles.suggestionItem}
+                  onPress={() => toggleState(state)}
+                >
+                  <Text>{state}</Text>
+                  <Ionicons
+                    name={
+                      stateList.includes(state) ? "checkbox" : "square-outline"
+                    }
+                    size={20}
+                    color={Colors.primaryColor}
+                  />
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        )}
+        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+          {stateList.map((state, index) => (
+            <View
+              key={index}
+              style={[
+                styles.stateButton,
+                { ...commonStyles.rowSpaceBetween, gap: 10 },
+              ]}
+            >
+              <Text style={styles.TypebuttonText}>{state}</Text>
+              <TouchableOpacity onPress={() => removeState(state)}>
+                <Ionicons
+                  name="close-circle-outline"
+                  size={18}
+                  color={Colors.orangeColor}
+                />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+      </>
     );
   }
   function additionalDetail() {
@@ -186,7 +311,7 @@ const PostJourney = () => {
         <DateTimePickerModal
           isVisible={isPickerVisible}
           mode="datetime"
-          onConfirm={handleConfirm}
+          onConfirm={handleDatePick}
           onCancel={hidePicker}
         />
       </>
@@ -267,7 +392,7 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius:12,
+    shadowRadius: 12,
     elevation: 3,
   },
   sectionTitle: {
@@ -344,5 +469,50 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 12,
+  },
+  //state
+  stateButton: {
+    backgroundColor: Colors.whiteColor,
+    borderColor: Colors.grayColor,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderRadius: 8,
+    alignSelf: "flex-start",
+  },
+
+  TypebuttonText: {
+    fontSize: 12,
+    color: Colors.grayColor,
+  },
+  stateSelectorButton: {
+    backgroundColor: Colors.whiteColor,
+    borderColor: Colors.primaryColor,
+    borderWidth: 1,
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    borderRadius: 8,
+    padding: Sizes.fixPadding * 1,
+    marginVertical: 20,
+  },
+  stateSlectorButtonText: {
+    color: Colors.primaryColor,
+    fontSize: 12,
+    fontWeight: "bold",
+    textAlign: "left",
+  },
+  suggestionList: {
+    backgroundColor: "white",
+    height: 200,
+    borderRadius: 4,
+    elevation: 5,
+    marginBottom: 8,
+  },
+  suggestionItem: {
+    padding: 10,
+    borderBottomColor: Colors.extraLightGrayColor,
+    borderBottomWidth: 0.5,
+    ...commonStyles.rowSpaceBetween,
   },
 });
