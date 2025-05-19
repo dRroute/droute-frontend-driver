@@ -1,5 +1,5 @@
-// RequestDetailScreen.js
-import React from 'react';
+
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,238 +8,158 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  StatusBar,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { commonAppBar } from '../../components/commonComponents';
+import { actionOverlay, commonAppBar } from '../../components/commonComponents';
 import MyStatusBar from '../../components/myStatusBar';
+import { Colors, commonStyles, Fonts } from '../../constants/styles';
 
-// Define colors at the top for easy customization
-const COLORS = {
-  primary: '#003B5C', // Dark blue for buttons
-  secondary: '#007AFF', // Blue for location markers
-  background: '#FFFFFF',
-  text: '#333333',
-  textLight: '#757575',
-  divider: '#EEEEEE',
-  star: '#FFC107', // Yellow for star rating
-  white: '#FFFFFF',
-};
 
-// Location component for reusability
-const LocationItem = ({ title, address }) => (
-  <View style={styles.locationItem}>
-    <View style={styles.locationMarker}>
-      <View style={styles.locationDot} />
-    </View>
-    <View style={styles.locationInfo}>
-      <Text style={styles.locationTitle}>{title}</Text>
-      <Text style={styles.locationAddress} numberOfLines={1}>{address}</Text>
-    </View>
-  </View>
-);
-
-// Package detail row component for reusability
-const DetailRow = ({ label, value }) => (
-  <View style={styles.detailRow}>
-    <Text style={styles.detailLabel}>{label}:</Text>
-    <Text style={styles.detailValue}>{value}</Text>
-  </View>
-);
 
 const RequestDetailScreen = ({ navigation }) => {
-  // Dummy data
-  const requestData = {
-    driver: {
-      name: 'Driver Name',
-      image: null, // Placeholder for driver image
-      deliveredItems: 202,
-      rating: 4.5,
-    },
-    description: 'Keep the parcel packed and ensure your phone is not in silent mode.',
-    locations: [
-      {
-        title: 'Pune',
-        address: 'Sky bay F wing mahalunge Balewadi...',
-      },
-      {
-        title: 'Navi Mumbai',
-        address: 'Sky bay F wing mahalunge Balewadi...',
-      },
-    ],
-    packageDetails: [
-      { label: 'Height', value: '10 ft.' },
-      { label: 'Width', value: '5 ft.' },
-      { label: 'Length', value: '12 ft.' },
-      { label: 'Weight', value: '25 Kg' },
-      { label: 'Value', value: '₹ 5000' },
-    ],
-  };
+  const [isAcceptModalVisible,setAcceptModalVisible]=useState(false);
+  const [isRejectModalVisible,setRejectModalVisible]=useState(false);
+  const image = null;
+ const handleAccept=()=>{
+
+ }
+const handleReject=()=>{
+
+}
 
   return (
     <SafeAreaView style={styles.container}>
       <MyStatusBar />
-      {commonAppBar("Request Detail",navigation)}
-     
-      
+      {commonAppBar("Request Detail", navigation)}
+
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-     
-        <View style={styles.driverContainer}>
-          <View style={styles.driverInfo}>
-            {requestData.driver.image ? (
-              <Image source={{ uri: requestData.driver.image }} style={styles.driverImage} />
+        <View style={styles.userContainer}>
+          <View style={styles.userInfo}>
+            {image ? (
+              <Image source={{ uri: image }} style={styles.userImage} />
             ) : (
-              <View style={styles.driverImagePlaceholder}>
-                <MaterialIcons name="person" size={30} color={COLORS.textLight} />
+              <View style={styles.userImagePlaceholder}>
+                <MaterialIcons name="person" size={26} color={Colors.grayColor} />
               </View>
             )}
-            <View style={styles.driverDetails}>
-              <Text style={styles.driverName}>{requestData.driver.name}</Text>
-              <Text style={styles.deliveredItems}>Delivered {requestData.driver.deliveredItems} items</Text>
+            <View style={styles.userDetails}>
+              <Text style={styles.userName}>Alok</Text>
+              <Text style={{...Fonts.grayColor12Medium,}}>+91 9767897556</Text>
             </View>
           </View>
-          
-          <View style={styles.ratingContainer}>
-            <View style={styles.ratingStars}>
-              <MaterialIcons name="star" size={16} color={COLORS.star} />
-              <Text style={styles.ratingText}>{requestData.driver.rating}</Text>
-            </View>
-            <TouchableOpacity>
-              <Text style={styles.reviewsLink}>See Reviews</Text>
-            </TouchableOpacity>
-          </View>
+
+          <TouchableOpacity onPress={()=>navigation.navigate("ChatScreen")} style={styles.chatIcon}>
+            <MaterialIcons name="chat" size={26} color="teal" />
+          </TouchableOpacity>
         </View>
-        
+
         <View style={styles.divider} />
-        
-        {/* Description */}
+         <View style={styles.locationsContainer}>
+          <LocationItem title={"Pickup Address"} address={"Vadgaon Bk Pune 411041 Vadgaon Bk Pune 411041 Vadgaon Bk Pune 411041 Vadgaon Bk Pune 411041"} />
+          <LocationItem title={"Delivery Addess"} address={"Vadgaon Bk Pune 411041 411041 Vadgaon Bk Pune 411041"} />
+         </View>
+
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Description:</Text>
-          <Text style={styles.descriptionText}>{requestData.description}</Text>
-        </View>
-        
-        {/* Locations */}
-        <View style={styles.locationsContainer}>
-          {requestData.locations.map((location, index) => (
-            <LocationItem 
-              key={index}
-              title={location.title}
-              address={location.address}
-            />
-          ))}
-        </View>
-        
-        {/* Package Details */}
-        <View style={styles.section}>
+          <View style={styles.divider} />
           <Text style={styles.sectionTitle}>Package Details:</Text>
-          <View style={styles.detailsContainer}>
-            {requestData.packageDetails.map((detail, index) => (
-              <DetailRow 
-                key={index}
-                label={detail.label}
-                value={detail.value}
-              />
-            ))}
+          <View style={styles.divider} />
+          <View style={{ marginTop: 8,}}>
+            <DetailRow label={"Height"} value={"20 m"} />
+            <DetailRow label={"Width"} value={"10 m"} />
+            <DetailRow label={"Length"} value={"19 m"} />
+            <DetailRow label={"Weight"} value={"20 Kg"} />
+            <DetailRow label={"Expected Value"} value={"400 $"} />
+            <DetailRow label={"Offered Value"} value={"500 $"} />
           </View>
         </View>
       </ScrollView>
-      
-      {/* Bottom Buttons */}
+
       <View style={styles.bottomButtons}>
-        <TouchableOpacity style={styles.negotiationButton}>
-          <Text style={styles.buttonText}>Negotiation</Text>
+        <TouchableOpacity onPress={()=>setRejectModalVisible(true)} style={{...commonStyles.outlinedButton,flex: 1,}}>
+          <Text style={{...commonStyles.outlinedButtonText}}>Reject</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.checkoutButton}>
-          <Text style={styles.buttonText}>Check Out</Text>
+        <TouchableOpacity onPress={()=>setAcceptModalVisible(true)} style={{...commonStyles.button,flex: 1,}}>
+          <Text style={{...commonStyles.buttonText}}>Accept</Text>
         </TouchableOpacity>
       </View>
+      {actionOverlay(handleAccept,isAcceptModalVisible,setAcceptModalVisible,"Do You Want to Accept ?",Colors.primaryColor)}
+      {actionOverlay(handleReject,isRejectModalVisible,setRejectModalVisible,"Do You Want to Reject ?",Colors.darkOrangeColor)}
     </SafeAreaView>
   );
+  function LocationItem ({ title, address }){
+  return (
+  <View style={styles.locationItem}>
+    <View style={styles.locationMarker}>
+      <MaterialIcons name="location-on" size={20} color="teal" />
+    </View>
+    <View style={styles.locationInfo}>
+      <Text style={{ ...Fonts.blackColor14Bold, marginBottom: 4,}}>{title}</Text>
+      <Text style={{...Fonts.grayColor12Medium,}} >{address}</Text>
+    </View>
+  </View>
+)};
+function DetailRow ({ label, value }){
+  return(
+  <View style={{ ...commonStyles.rowSpaceBetween,paddingVertical: 8,}}>
+    <Text style={{ ...Fonts.blackColor12SemiBold,}}>{label}:</Text>
+    <Text style={{ ...Fonts.blackColor12SemiBold,}}>{value}</Text>
+  </View>)
+};
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: Colors.whiteColor,
   },
- 
   content: {
     flex: 1,
   },
-  driverContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  userContainer: {
+  ...commonStyles.rowSpaceBetween,
     padding: 16,
   },
-  driverInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  userInfo: {
+   ...commonStyles.rowAlignCenter
   },
-  driverImagePlaceholder: {
-    width: 50,
-    height: 50,
+  userImagePlaceholder: {
+    width: 45,
+    height: 45,
     borderRadius: 25,
-    backgroundColor: COLORS.divider,
+    backgroundColor: Colors.extraLightGrayColor,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  driverImage: {
+  userImage: {
     width: 50,
     height: 50,
     borderRadius: 25,
   },
-  driverDetails: {
+  userDetails: {
     marginLeft: 12,
   },
-  driverName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: COLORS.primary,
+  userName: {
+    ...Fonts.blackColor16Bold,
+    color: Colors.primaryColor,
     marginBottom: 4,
   },
-  deliveredItems: {
-    fontSize: 14,
-    color: COLORS.textLight,
-  },
-  ratingContainer: {
+  chatIcon: {
     alignItems: 'flex-end',
-  },
-  ratingStars: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  ratingText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: COLORS.text,
-    marginLeft: 4,
-  },
-  reviewsLink: {
-    fontSize: 12,
-    color: COLORS.secondary,
-    marginTop: 4,
   },
   divider: {
     height: 1,
-    backgroundColor: COLORS.divider,
+    backgroundColor: Colors.extraLightGrayColor,
   },
   section: {
     padding: 16,
   },
   sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: COLORS.text,
-    marginBottom: 8,
-  },
-  descriptionText: {
-    fontSize: 14,
-    color: COLORS.textLight,
-    lineHeight: 20,
+   ...Fonts.blackColor14Bold,
+    marginVertical: 8,
   },
   locationsContainer: {
     paddingHorizontal: 16,
+    marginTop: 16,
   },
   locationItem: {
     flexDirection: 'row',
@@ -249,70 +169,21 @@ const styles = StyleSheet.create({
     width: 24,
     alignItems: 'center',
   },
-  locationDot: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: COLORS.secondary,
-  },
+  
   locationInfo: {
     flex: 1,
     marginLeft: 8,
   },
-  locationTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: COLORS.text,
-    marginBottom: 4,
-  },
-  locationAddress: {
-    fontSize: 14,
-    color: COLORS.textLight,
-  },
-  detailsContainer: {
-    marginTop: 8,
-  },
-  detailRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-  },
-  detailLabel: {
-    fontSize: 14,
-    color: COLORS.text,
-  },
-  detailValue: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: COLORS.text,
-  },
+ 
   bottomButtons: {
     flexDirection: 'row',
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: COLORS.divider,
+    gap:10,
+    borderTopColor: Colors.extraLightGrayColor,
   },
-  negotiationButton: {
-    flex: 1,
-    backgroundColor: COLORS.primary,
-    paddingVertical: 12,
-    borderRadius: 4,
-    marginRight: 8,
-    alignItems: 'center',
-  },
-  checkoutButton: {
-    flex: 1,
-    backgroundColor: COLORS.primary,
-    paddingVertical: 12,
-    borderRadius: 4,
-    marginLeft: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: COLORS.white,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
+ 
+
 });
 
 export default RequestDetailScreen;

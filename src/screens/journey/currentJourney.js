@@ -66,26 +66,6 @@ const JOURNEYS = [
     packages: 18,
   },
   {
-    id: "3",
-    from: {
-      address: "789 Pine Road",
-      city: "Anytown",
-      state: "IND",
-      zip: "845103",
-    },
-    to: "prayagraj up",
-    departure: {
-      date: "25 Feb",
-      time: "10:30 AM",
-    },
-    arrival: {
-      date: "25 Feb",
-      time: "10:30 PM",
-    },
-    availableSpace: "Length x Width x Height (in ft)",
-    packages: 45,
-  },
-  {
     id: "4",
     from: {
       address: "101 Maple Drive",
@@ -109,9 +89,11 @@ const JOURNEYS = [
 
 const CurrentJourney = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
-
+ const handleCardClick =()=>{
+  navigation.navigate("JourneyManagement")
+ }
   const renderJourneyCard = ({ item }) => (
-    <JourneyCard journey={item} navigation={navigation} />
+    <JourneyCard journey={item} method={handleCardClick} />
   );
 
   return (

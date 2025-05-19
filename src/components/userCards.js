@@ -16,7 +16,7 @@ import {
 
 export function UserInfo({ user, handleCardPress }) {
   return (
-    <TouchableOpacity activeOpacity={0.6} onPress={handleCardPress} style={styles.userItem}>
+    <TouchableOpacity activeOpacity={0.7} onPress={handleCardPress} style={styles.userItem}>
       {user?.avatar ? (
         <Image source={{ uri: user?.avatar }} style={styles.avatar} />
       ) : (

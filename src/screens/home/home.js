@@ -68,7 +68,8 @@ const menuItems = [
   },
   {
     id: 3,
-    title: "Current Journey",
+    title: "Manage Journey",
+    screen:"CurrentJourney",
     icon: <Ionicons name="map-outline" size={24} color={COLORS.green} />, // updated for clarity
     bgColor: COLORS.iconBgGreen,
     description: "Manage your ongoing journey with real-time updates.",

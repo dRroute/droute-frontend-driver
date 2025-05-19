@@ -63,6 +63,7 @@ export function TicketLoaderCard({ count = 1 }) {
 export function SupportTicket({ issue, navigation }) {
   return (
     <TouchableOpacity
+    activeOpacity={0.7}
       onPress={() => navigation.navigate("SupportIssuesDetail", { issue })}
       style={styles.userItem}
     >

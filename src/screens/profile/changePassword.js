@@ -69,7 +69,7 @@ const ChangePassword = ({ route, navigation }) => {
             <Text style={{...commonStyles.buttonText}}>Update</Text>
           </TouchableOpacity>
      
-        {actionOverlay(handleSubmit,showDialogue,setshowDialogue,"Are you sure you want to update?")}
+        {actionOverlay(handleSubmit,showDialogue,setshowDialogue,"Are you sure you want to update?",Colors.primaryColor)}
       </ScrollView>
        {circularLoader(isLoading)}
     </View>

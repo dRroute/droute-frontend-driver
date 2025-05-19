@@ -59,7 +59,7 @@ const AllParcelsInJourney = ({ navigation }) => {
   const [isLoading,setIsLoading]=useState(false);
 
   const renderPackageCard = ({ item }) => <ParcelCard  parcelItem={item} />;
-  return (
+   return (
     <SafeAreaView style={styles.container}>
       <MyStatusBar />
       {commonAppBar("All Parcels", navigation)}

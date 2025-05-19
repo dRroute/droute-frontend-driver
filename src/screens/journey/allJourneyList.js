@@ -22,9 +22,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import MyStatusBar from "../../components/myStatusBar";
 import { JourneyCard, LoadingJourneyCard } from "../../components/journeyCard";
 
-
 const JOURNEYS = [
-
   {
     id: "1",
     from: {
@@ -110,8 +108,11 @@ const JOURNEYS = [
 const AllJourneyList = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleCardClick = () => {
+    navigation.navigate("PreviousJourneyDetail");
+  };
   const renderJourneyCard = ({ item }) => (
-    <JourneyCard journey={item} navigation={navigation} />
+    <JourneyCard journey={item} method={handleCardClick} />
   );
 
   return (

@@ -95,7 +95,7 @@ const EditProfile= () => {
         {ImageBottomSheet(currentImageSetter,currentImageLabel,isBottomSheetVisible,setBottomSheetVisible,setImageLoading)}
       </ScrollView>
       {circularLoader(isLoading)}
-      {actionOverlay(handleSubmit,showDialogue,setshowDialogue,"Are you sure you want to update?")}
+      {actionOverlay(handleSubmit,showDialogue,setshowDialogue,"Are you sure you want to update?",Colors.primaryColor)}
     </View>
   );
   function docImageSection() {

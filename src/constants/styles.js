@@ -146,14 +146,28 @@ export const Fonts = {
   blackColor14SemiBold: {
     color: Colors.blackColor,
     fontSize: 14.0,
+    fontWeight:"500",
     fontFamily: FontFamily.SemiBold,
     includeFontPadding: false,
   },
-
+  blackColor14Bold: {
+    color: Colors.blackColor,
+    fontSize: 14.0,
+    fontWeight:"700",
+    fontFamily: FontFamily.Bold,
+    includeFontPadding: false,
+  },
   blackColor16SemiBold: {
     color: Colors.blackColor,
     fontSize: 16.0,
     fontFamily: FontFamily.SemiBold,
+    includeFontPadding: false,
+  },
+   blackColor16Bold: {
+    color: Colors.blackColor,
+    fontSize: 16.0,
+    fontWeight:"700",
+    fontFamily: FontFamily.Bold,
     includeFontPadding: false,
   },
 
@@ -301,7 +315,7 @@ export const commonStyles = {
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 8,
-    padding: Sizes.fixPadding * 1.2,
+    padding: Sizes.fixPadding * 1,
   },
   outlinedButton: {
     backgroundColor: Colors.whiteColor,
@@ -310,7 +324,7 @@ export const commonStyles = {
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 8,
-    padding: Sizes.fixPadding * 1.2,
+    padding: Sizes.fixPadding * 1,
   },
   outlinedButtonText: {
     color: Colors.primaryColor,

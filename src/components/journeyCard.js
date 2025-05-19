@@ -18,9 +18,9 @@ import {
   FontAwesome,
 } from "@expo/vector-icons";
 
-export const JourneyCard = ({ journey ,navigation}) => {
+export const JourneyCard = ({ journey ,method}) => {
   return (
-    <TouchableOpacity onPress={()=>navigation.navigate("AllParcelsInJourney",journey)} style={styles.card}>
+    <TouchableOpacity activeOpacity={0.7} onPress={method} style={styles.card}>
       <View style={styles.routeContainer}>
         <View style={styles.locationContainer}>
           <MaterialIcons name="location-on" size={20} color={Colors.primaryColor} />

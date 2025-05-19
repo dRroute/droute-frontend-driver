@@ -31,6 +31,8 @@ import Snackbar from './components/snackbar';
 import InstructionToComplete from './screens/completeProfile/instructionToComplete';
 import PendingForApprovalScreen from './screens/completeProfile/pendingForApproval';
 import PendingAccountScreen from './screens/completeProfile/pendingAccountScreen';
+import JourneyManagement from './screens/journey/journeyManagement';
+import PreviousJourneyDetail from './screens/journey/previousJourneyDetail';
 
 
 const Stack = createStackNavigator();
@@ -47,12 +49,14 @@ export default function App() {
             ...TransitionPresets.SlideFromRightIOS,
           }}
         >
-           
+          
+          <Stack.Screen name="BottomNavigationBar" component={BottomNavigationBar} />
+           <Stack.Screen name="JourneyManagement" component={JourneyManagement} />
+            <Stack.Screen name="PreviousJourneyDetail" component={PreviousJourneyDetail} />
            <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
           <Stack.Screen name="SignInScreen" component={SignInScreen} />
           <Stack.Screen name="VerificationScreen" component={VerificationScreen} /> 
            <Stack.Screen name="Onboarding" component={OnboardingScreen} /> 
-           <Stack.Screen name="BottomNavigationBar" component={BottomNavigationBar} />
           <Stack.Screen name="CompleteProfileForm" component={CompleteProfileForm} />
           <Stack.Screen name="PendingAccountScreen" component={PendingAccountScreen} />
           <Stack.Screen name="PendingForApprovalScreen" component={PendingForApprovalScreen} />

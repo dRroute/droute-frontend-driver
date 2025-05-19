@@ -19,7 +19,7 @@ export const ParcelCard = ({ parcelItem, onViewDetails }) => {
   };
 
   return (
-    <View style={styles.card}>
+    <TouchableOpacity activeOpacity={0.7} style={styles.card}>
       <View style={styles.cardContent}>
         <View style={styles.imageContainer}>
           {parcelItem.image ? (
@@ -81,7 +81,7 @@ export const ParcelCard = ({ parcelItem, onViewDetails }) => {
           <Text style={[styles.statusText, { color: "teal" }]}>Delivered</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
