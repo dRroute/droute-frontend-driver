@@ -13,7 +13,7 @@ import {
   ScrollView,
 } from "react-native";
 import { Colors, commonStyles, Fonts, Sizes } from "../../constants/styles";
-import { authInput, authPassword, circularLoader } from "../../components/commonComponents";
+import { authInput, authPassword, ButtonWithLoader, circularLoader } from "../../components/commonComponents";
 import MyStatusBar from "../../components/myStatusBar";
 import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "../../redux/slice/snackbarSlice";
@@ -92,14 +92,8 @@ const SignInScreen = ({ navigation }) => {
                 <Text style={styles.signInHighlight}>Click here</Text>
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.signUpButton}
-              onPress={handleSignIn}
-            >
-              <Text style={styles.signUpButtonText}>Sign In</Text>
-              {circularLoader(isLoading)}
-            </TouchableOpacity>
-
+            {ButtonWithLoader("Sign In","Processing...",isLoading,handleSignIn)}
+        
             <TouchableOpacity
               style={styles.signInLink}
               onPress={navigateToSignUp}

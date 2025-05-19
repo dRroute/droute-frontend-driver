@@ -19,16 +19,17 @@ import {
   screenWidth,
   Sizes,
 } from "../../constants/styles";
-import { otpFields } from "../../components/commonComponents";
+import { ButtonWithLoader, otpFields } from "../../components/commonComponents";
 
-const VerificationScreen = ({ navigation,route }) => {
-  const {data,otp}=route?.params;
+const VerificationScreen = ({ navigation, route }) => {
+  const { data, otp } = route?.params;
   const [otpInput, setOtpInput] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const VerifyOTP = () => {
     alert(otpInput);
-    if(otpInput===otp){
-    navigation.navigate("InstructionToComplete");}
+    if (otpInput === otp) {
+      navigation.navigate("InstructionToComplete");
+    }
   };
 
   return (
@@ -55,10 +56,7 @@ const VerificationScreen = ({ navigation,route }) => {
             <Text style={styles.title}>Verify OTP</Text>
 
             {otpFields(otpInput, setOtpInput)}
-
-            <TouchableOpacity style={styles.signUpButton} onPress={VerifyOTP}>
-              <Text style={styles.signUpButtonText}>Submit</Text>
-            </TouchableOpacity>
+            {ButtonWithLoader("Submit", "Processing...", isLoading, VerifyOTP)}
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

@@ -13,7 +13,7 @@ import {
   ScrollView,
 } from "react-native";
 import { Colors, commonStyles, Fonts } from "../../constants/styles";
-import { authInput, authPassword } from "../../components/commonComponents";
+import { authInput, authPassword, ButtonWithLoader } from "../../components/commonComponents";
 import MyStatusBar from "../../components/myStatusBar";
 import { showSnackbar } from "../../redux/slice/snackbarSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,7 +30,7 @@ const SignUpScreen = ({ navigation }) => {
   const [secureConfirmText, setSecureConfirmText] = useState(true);
   const dispatch = useDispatch();
   const authErrorMessage = useSelector(selectAuthErrorMessage);
-
+ const [isLoading,setIsLoading]=useState(false);
   const validateForm = (data) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const nameRegex = /^[A-Za-z\s]{3,}$/;
@@ -64,8 +64,8 @@ const SignUpScreen = ({ navigation }) => {
   };
 
   const handleSignUp = async () => {
-    if (!validateForm) return;
-
+ 
+    // setIsLoading(true);
     const data = {
       fullName: fullName,
       email: email,
@@ -74,16 +74,17 @@ const SignUpScreen = ({ navigation }) => {
       contactNo: mobileNumber,
       role: "driver",
     };
-    const validationError = validateForm(data);
-    if (validationError) {
-      console.log("error catched");
-      dispatch(
-        showSnackbar({ message: validationError, type: "error", time: 5000 })
-      );
-      return;
-    }
+    // const validationError = validateForm(data);
+    // if (validationError) {
+    //   console.log("error catched");
+    //   dispatch(
+    //     showSnackbar({ message: validationError, type: "error", time: 5000 })
+    //   );
+    //   return;
+    // }
     //Calling.. OTP thunk
     const response = await dispatch(sendOTP({ email: data.email }));
+    console.log('response = ', response?.data);
     if (response?.payload?.statusCode == 200 || response?.payload?.statusCode == 201) {
       const otp =response?.payload?.data;
       await dispatch(
@@ -93,6 +94,7 @@ const SignUpScreen = ({ navigation }) => {
           time: 2000,
         })
       );
+    
        navigation.navigate("VerificationScreen", { data ,otp});
     } else {
       await dispatch(
@@ -101,9 +103,11 @@ const SignUpScreen = ({ navigation }) => {
           type: "error",
           time: 2000,
         })
+       
       );
+      
     }
-   
+    // setIsLoading(false);
   };
 
   const navigateToSignIn = () => {
@@ -165,13 +169,8 @@ const SignUpScreen = ({ navigation }) => {
               secureConfirmText,
               setSecureConfirmText
             )}
-
-            <TouchableOpacity
-              style={styles.signUpButton}
-              onPress={handleSignUp}
-            >
-              <Text style={styles.signUpButtonText}>Sign Up</Text>
-            </TouchableOpacity>
+              {ButtonWithLoader("Sign Up","Processing...",isLoading,handleSignUp)}
+           
 
             <TouchableOpacity
               style={styles.signInLink}

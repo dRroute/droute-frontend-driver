@@ -22,23 +22,27 @@ import {
 import {
   authInput,
   authPassword,
+  ButtonWithLoader,
   otpFields,
 } from "../../components/commonComponents";
 import MyStatusBar from "../../components/myStatusBar";
 
 const ForgetPassword = ({ navigation }) => {
- const [otpSent, setOtpSent] = useState(false);
- const [verified, setVerified] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [verified, setVerified] = useState(false);
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [secureText, setSecureText] = useState(true);
   const [secureConfirmText, setSecureConfirmText] = useState(true);
   const [otpInput, setOtpInput] = useState(null);
   const [email, setEmail] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const VerifyOTP = () => {
-    alert(otpInput);
-  };
+  const VerifyOTP = () => {};
+  const sendOTP = () => {};
+  const hendleSubmit = () => {};
+
+
 
   const navigateToSignUp = () => {
     navigation.navigate("SignUpScreen");
@@ -46,7 +50,7 @@ const ForgetPassword = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <MyStatusBar/>
+      <MyStatusBar />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.keyboardAvoidingView}
@@ -61,47 +65,62 @@ const ForgetPassword = ({ navigation }) => {
           </View>
           <View style={styles.formContainer}>
             <Text style={styles.title}>Forget Password</Text>
-            {!otpSent &&<>
-            {authInput(
-              "Email",
-              email,
-              setEmail,
-              "Enter Email Id Here",
-              "email"
+            {!otpSent && (
+              <>
+                {authInput(
+                  "Email",
+                  email,
+                  setEmail,
+                  "Enter Email Id Here",
+                  "email"
+                )}
+                {ButtonWithLoader(
+                  "Send OTP",
+                  "Processing...",
+                  isLoading,
+                  sendOTP
+                )}
+              </>
             )}
-             <TouchableOpacity style={styles.signUpButton } onPress={VerifyOTP}>
-              <Text style={styles.signUpButtonText}>Send OTP</Text>
-            </TouchableOpacity>
-            </>}
 
-            {!verified && otpSent &&<>
-            {otpFields(otpInput, setOtpInput)}
-            <TouchableOpacity style={[styles.signUpButton,{marginBottom:20,} ]} onPress={VerifyOTP}>
-              <Text style={styles.signUpButtonText}>Verify OTP</Text>
-            </TouchableOpacity>
-            </>}
+            {!verified && otpSent && (
+              <View style={{ marginBottom: 20 }}>
+                {otpFields(otpInput, setOtpInput)}
+                {ButtonWithLoader(
+                  "Verify OTP",
+                  "Processing...",
+                  isLoading,
+                  VerifyOTP
+                )}
+              </View>
+            )}
 
-          {verified &&<>
-           {authPassword(
-              "Password",
-              password,
-              setPassword,
-              "Enter Password",
-              secureText,
-              setSecureText
+            {verified && (
+              <>
+                {authPassword(
+                  "Password",
+                  password,
+                  setPassword,
+                  "Enter Password",
+                  secureText,
+                  setSecureText
+                )}
+                {authPassword(
+                  "Confirm Password",
+                  confirmPassword,
+                  setConfirmPassword,
+                  "Confirm your Password",
+                  secureConfirmText,
+                  setSecureConfirmText
+                )}
+                {ButtonWithLoader(
+                  "Submit",
+                  "Processing...",
+                  isLoading,
+                  hendleSubmit
+                )}
+              </>
             )}
-            {authPassword(
-              "Confirm Password",
-              confirmPassword,
-              setConfirmPassword,
-              "Confirm your Password",
-              secureConfirmText,
-              setSecureConfirmText
-            )}
-            <TouchableOpacity style={styles.signUpButton } onPress={VerifyOTP}>
-              <Text style={styles.signUpButtonText}>Submit</Text>
-            </TouchableOpacity>
-           </>}
 
             <TouchableOpacity
               style={styles.signInLink}
@@ -159,7 +178,7 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     ...commonStyles.button,
-    marginTop:10
+    marginTop: 10,
   },
   signUpButtonText: {
     ...commonStyles.buttonText,

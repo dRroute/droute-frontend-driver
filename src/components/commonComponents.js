@@ -48,7 +48,7 @@ export function authInput(label, value, setter, placeholder, type) {
         keyboardType={keyboardType}
         value={value}
         onChangeText={handleChangeText}
-        maxLength={type === "number"?10:50}
+        maxLength={type === "number" ? 10 : 50}
       />
     </View>
   );
@@ -106,12 +106,18 @@ export function otpFields(otpInput, setOtpInput) {
     />
   );
 }
-// export function ButtonWithLoader(name , isLoading ,loadingName) {
-//   <TouchableOpacity style={styles.signUpButton} onPress={handleSignIn}>
-//     {<Text style={styles.signUpButtonText}>{name}</Text>
-//     <Text>{loadingName} <ActivityIndicator size="large" color={Colors.whiteColor} /></Text>
-//   </TouchableOpacity>;
-// }
+export function ButtonWithLoader(name,loadingName,isLoading, method) {
+  return isLoading ? (
+    <View style={{...commonStyles.button,flexDirection:"row",gap:10}}>
+      <ActivityIndicator size="small" color={Colors.whiteColor} />
+      <Text style={{...commonStyles.buttonText}}>{loadingName}</Text>
+    </View>
+  ) : (
+    <TouchableOpacity style={{...commonStyles.button}} onPress={method}>
+      <Text style={{...commonStyles.buttonText}}>{name}</Text>
+    </TouchableOpacity>
+  );
+}
 export const renderImageBox = (
   label,
   setter,
