@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { signInAPI } from "../../utils/api/authApi";
+import { getDriverByDriverIdAPI, resetPasswordAPI, signInAPI } from "../../utils/api/authApi";
 import { registerAPI } from "../../utils/api/authApi";
 import { sendOtpAPI } from "../../utils/api/authApi";
+import axios from "axios";
 
 // Async Thunks
 export const signIn = createAsyncThunk(
@@ -10,11 +11,11 @@ export const signIn = createAsyncThunk(
     try {
       const response = await signInAPI(data);
 
-      if (response.status === 200 || response.status === 201) {
+      if (response?.status === 200 || response?.status === 201) {
         // console.log("API Response:", response.data);
-        return response.data;
+        return response?.data;
       } else {
-        throw new Error(response.data?.message || "OTP not sent, try again");
+        throw new Error(response?.data?.message || "OTP not sent, try again");
       }
     } catch (error) {
       console.log("Error in postSignIn:", error);
@@ -25,13 +26,36 @@ export const signIn = createAsyncThunk(
   }
 );
 
+// Get driver By Id Thunk
+export const getDriverByDriverId = createAsyncThunk(
+  "auth/getDriverByDriverId",
+  async (driverId, { rejectWithValue }) => {
+    try {
+      const response = await getDriverByDriverIdAPI(driverId);
+
+      if (response?.status === 200 || response?.status === 201) {
+        // console.log("API Response:", response.data);
+        return response?.data;
+      } else {
+        throw new Error(response?.data?.message || "OTP not sent, try again");
+      }
+    } catch (error) {
+      console.log("Error in postSignIn:", error);
+      return rejectWithValue(
+        error?.response?.data?.message || "Something went wrong"
+      );
+    }
+  }
+);
+
+// Sign-up Thunk
 export const register = createAsyncThunk(
   "auth/register",
   async (data, { rejectWithValue }) => {
     try {
       const response = await registerAPI(data);
-
-      if (response.data.code === 200 || response.data.code === 201) {
+     console.log("this is response.status == "+response?.status);
+      if (response?.status === 200 || response?.status === 201) {
         return response?.data;
       } else {
         return rejectWithValue(
@@ -39,18 +63,34 @@ export const register = createAsyncThunk(
         );
       }
     } catch (error) {
-      console.log("Error in register:", error);
-
-      // Always extract message properly even in catch
-      const errorMessage =
-        error?.response?.data?.message || // API sent error message
-        error?.message || // JS error message
-        "Registration failed"; // fallback message
-
-      return rejectWithValue(errorMessage);
+      
+      return rejectWithValue(handleAxiosError(error));
     }
   }
 );
+
+//Reset-Password Thunk
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await resetPasswordAPI(data);
+     console.log("this is response.status == "+response?.status);
+      if (response?.status === 200 || response?.status === 201) {
+        return response?.data;
+      } else {
+        return rejectWithValue(
+          response?.data?.message || "Failed to update Password"
+        );
+      }
+    } catch (error) {
+      
+      return rejectWithValue(handleAxiosError(error));
+    }
+  }
+);
+
+// Send OTP Thunk
 export const sendOTP = createAsyncThunk(
   "auth/sendOTP",
   async (data, { rejectWithValue }) => {
@@ -64,12 +104,12 @@ export const sendOTP = createAsyncThunk(
 
         if (error.response) {
           // Server responded with a status code outside 2xx
-          console.error(error.response.data);
+           console.log(error.response.data);
           return  error.response.data;
 
         } else if (error.request) {
           // No response received from the server
-          console.error("Network Error: No response received", error.request);
+           console.log("Network Error: No response received", error.request);
           const data =  {
             message: "Oops! Something went wrong with the network. Please try again later.",
             statusCode: 500,
@@ -80,14 +120,46 @@ export const sendOTP = createAsyncThunk(
           return data;
         } else {
           // Something happened while setting up the request
-          console.error("Request Error:", error.message);
+           console.log("Request Error:", error.message);
           return error.message;
         }
       } else {
         // Non-Axios error (e.g. bug in your code)
-        console.error("Unexpected Error:", error);
+         console.log("Unexpected Error:", error);
       }
 
     }
   }
 );
+
+
+export const handleAxiosError = (error) => {
+   if (axios.isAxiosError(error)) {
+        console.log('error occured in axios', error);
+
+        if (error.response) {
+          // Server responded with a status code outside 2xx
+           console.log(error.response.data);
+          return  error.response.data;
+
+        } else if (error.request) {
+          // No response received from the server
+          console.log("Network Error: No response received", error.request);
+          const data =  {
+            message: "Oops! Something went wrong with the network. Please try again later.",
+            statusCode: 500,
+            data: null,
+            errorCode: "NETWORK_ERROR",
+            timestamp: Date.now(),
+          }
+          return data;
+        } else {
+          // Something happened while setting up the request
+           console.log("Request Error:", error.message);
+          return error.message;
+        }
+      } else {
+        // Non-Axios error (e.g. bug in your code)
+        console.log("Unexpected Error:", error);
+      }
+}

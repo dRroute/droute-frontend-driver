@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 12,
-    fontWeight: "bold",
+    // fontWeight: "bold",
   },
 
   skeletonAvatar: {

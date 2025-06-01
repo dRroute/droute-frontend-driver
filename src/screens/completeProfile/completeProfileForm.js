@@ -18,6 +18,8 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import MyStatusBar from "../../components/myStatusBar";
 import { circularLoader, commonAppBar, commonLabel, fullImageContainer, ImageBottomSheet, inputBox, renderImageBox, textArea, typeSection } from "../../components/commonComponents";
 import { showFullImageFunction } from "../../utils/commonMethods";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../../redux/selector/authSelector";
 const image = "https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_1280.jpg";
 
 
@@ -31,7 +33,8 @@ const CompleteProfileForm = () => {
   const [currentImageSetter, setCurrentImageSetter] = useState(null);
   const [currentImageLabel, setCurrentImageLabel] = useState(null);
   const navigation = useNavigation();
-
+const dispatch=useDispatch();
+const user= useSelector(selectUser);
 //  these are payload 
   const [legalName, setLegalName] = useState(null);
   const [address, setAddress] = useState(null);
@@ -43,7 +46,7 @@ const CompleteProfileForm = () => {
   const [aadhaarNumber, setAadhaarNumber] = useState(null);
   const[RCnumber,setRCNumber] = useState(null);
   const[RCimageURI,setRCImageURI] = useState(image);
-
+  // console.log("this is user id",user.driverId);
   const handleSubmit = async () => {};
 
   const selectOnMap = () => {
@@ -97,7 +100,7 @@ const CompleteProfileForm = () => {
           <Text style={{ ...commonStyles.buttonText }}>Submit</Text>
         </TouchableOpacity>
         {fullImageContainer(modalVisible,setModalVisible ,selectedImage)}
-        {ImageBottomSheet(currentImageSetter,currentImageLabel,isBottomSheetVisible,setBottomSheetVisible,setImageLoading)}
+        {ImageBottomSheet(currentImageSetter,currentImageLabel,isBottomSheetVisible,setBottomSheetVisible,setImageLoading, user, dispatch)}
       </ScrollView>
      {circularLoader(isLoading)}
     </View>
@@ -121,7 +124,7 @@ const CompleteProfileForm = () => {
             setModalVisible,
           )}
             {renderImageBox(
-            "Drivering License",
+            "DL",
             setDLImageURI,
             DLImageURI,
             showFullImageFunction,

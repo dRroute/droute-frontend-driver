@@ -65,7 +65,7 @@ const SignUpScreen = ({ navigation }) => {
 
   const handleSignUp = async () => {
  
-    // setIsLoading(true);
+    setIsLoading(true);
     const data = {
       fullName: fullName,
       email: email,
@@ -74,22 +74,23 @@ const SignUpScreen = ({ navigation }) => {
       contactNo: mobileNumber,
       role: "driver",
     };
-    // const validationError = validateForm(data);
-    // if (validationError) {
-    //   console.log("error catched");
-    //   dispatch(
-    //     showSnackbar({ message: validationError, type: "error", time: 5000 })
-    //   );
-    //   return;
-    // }
+    const validationError = validateForm(data);
+    if (validationError) {
+      console.log("error catched");
+      dispatch(
+        showSnackbar({ message: validationError, type: "error", time: 5000 })
+      );
+      return;
+    }
     //Calling.. OTP thunk
+   try{
     const response = await dispatch(sendOTP({ email: data.email }));
-    console.log('response = ', response?.data);
+    console.log('response = ', response?.payload?.data);
     if (response?.payload?.statusCode == 200 || response?.payload?.statusCode == 201) {
       const otp =response?.payload?.data;
       await dispatch(
         showSnackbar({
-          message: "Your otp is :" + response?.payload?.data,
+          message: response?.payload?.message,
           type: "success",
           time: 2000,
         })
@@ -99,7 +100,7 @@ const SignUpScreen = ({ navigation }) => {
     } else {
       await dispatch(
         showSnackbar({
-          message: authErrorMessage||"Failed to send OTP",
+          message: response?.payload?.message||"Failed to send OTP",
           type: "error",
           time: 2000,
         })
@@ -107,7 +108,13 @@ const SignUpScreen = ({ navigation }) => {
       );
       
     }
-    // setIsLoading(false);
+  }catch (e){
+    dispatch(
+        showSnackbar({ message:e.message, type: "error", time: 3000 })
+ );
+  }finally{
+    setIsLoading(false);
+   } 
   };
 
   const navigateToSignIn = () => {
@@ -124,7 +131,7 @@ const SignUpScreen = ({ navigation }) => {
         <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.logoContainer}>
             <Image
-              source={require("../../../assets/icon.png")}
+              source={require("../../../assets/transparentIcon.png")}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -191,7 +198,7 @@ const SignUpScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primaryColor,
+    backgroundColor: Colors.whiteColor,
   },
   keyboardAvoidingView: {
     flex: 1,

@@ -11,10 +11,10 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import MyStatusBar from "../../components/myStatusBar";
 import { Colors } from "../../constants/styles";
-// import { selectUser } from "../auth/services/selector";
-// import { logoutUser } from "../../redux/store/userSlice";
+import { selectUser } from "../../redux/selector/authSelector";
+
 const PendingAccountScreen = ({ navigation }) => {
-//   const user = useSelector(selectUser);
+  const user = useSelector (selectUser);
 //   const dispatch = useDispatch();
   return (
     <View style={styles.container}>
@@ -24,10 +24,13 @@ const PendingAccountScreen = ({ navigation }) => {
         style={styles.image}
       />
 
-      <Text style={styles.title}>
+      {user?.status ?(<Text style={styles.title}>
         Oops! Your account is currently 
-        {/* {user?.status} */}
-      </Text>
+       { user?.status||" On Hold"}
+       </Text>):(<Text style={styles.title}>
+       Unexpected Error Uccured
+      </Text>)
+      }
 
       <Text style={styles.subtitle}>
         Your access has been restricted. Please contact the administrator for
@@ -41,7 +44,7 @@ const PendingAccountScreen = ({ navigation }) => {
         <Text style={styles.buttonText}>Contact Support</Text>
       </TouchableOpacity>
       <TouchableOpacity 
-    //   onPress={() => dispatch(logoutUser())}
+      //   onPress={() => dispatch(logoutUser())}
       >
         <Text style={styles.goBackText}>Log out</Text>
       </TouchableOpacity>

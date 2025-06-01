@@ -18,6 +18,7 @@ import Key from "../../constants/key";
 import { Colors, Fonts, commonStyles } from "../../constants/styles";
 import { fetchAddressFromCoordinates } from "../../utils/commonMethods";
 import { circularLoader } from "../../components/commonComponents";
+import { DottedBlackLoader } from "../../components/lottieLoader/loaderView";
 
 
 const LocationPickerScreen = ({navigation}) => {
@@ -105,7 +106,7 @@ const LocationPickerScreen = ({navigation}) => {
         ? setSourceSuggestions(data.predictions || [])
         : setDestinationSuggestions(data.predictions || []);
     } catch (error) {
-      console.error("Autocomplete error:", error);
+       console.log("Autocomplete error:", error);
     }
   };
 
@@ -137,7 +138,7 @@ const LocationPickerScreen = ({navigation}) => {
         });
       }
     } catch (error) {
-      console.error("Place details error:", error);
+       console.log("Place details error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -358,7 +359,9 @@ const LocationPickerScreen = ({navigation}) => {
         <Text style={{...commonStyles.outlinedButtonText}}>Next</Text>
       
       </TouchableOpacity>
-      {circularLoader(isLoading)}
+     
+      {isLoading&& <DottedBlackLoader />}
+      
     </View>
   );
 };

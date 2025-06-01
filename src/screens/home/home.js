@@ -130,16 +130,16 @@ const Home = ({ navigation }) => {
         });
         if (latitude && longitude) {
           const addressData = await fetchAddressComponent(latitude, longitude);
-          imageRef.current = await fetchRandomImage(addressData.city);
+          imageRef.current = await fetchRandomImage(addressData?.city);
         //  console.log("address data is home page ",addressData);
-          if (addressData.address) {
-            setAddress(addressData.address);
+          if (addressData?.address) {
+            setAddress(addressData?.address);
           }
         } else {
           console.warn("Latitude or longitude not available.");
         }
       } catch (error) {
-        console.error(":", error);
+         console.log(":", error);
       }
     };
     fetchLocationAndAddress();

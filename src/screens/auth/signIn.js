@@ -13,23 +13,31 @@ import {
   ScrollView,
 } from "react-native";
 import { Colors, commonStyles, Fonts, Sizes } from "../../constants/styles";
-import { authInput, authPassword, ButtonWithLoader, circularLoader } from "../../components/commonComponents";
+import {
+  authInput,
+  authPassword,
+  ButtonWithLoader,
+  circularLoader,
+} from "../../components/commonComponents";
 import MyStatusBar from "../../components/myStatusBar";
 import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "../../redux/slice/snackbarSlice";
+import { signIn } from "../../redux/thunk/authThunk";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const SignInScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [emailOrPhone, setEmailOrPhone] = useState(null);
-  const [isLoading ,setIsLoading]=useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState(null);
 
   const [secureText, setSecureText] = useState(true);
   const validateForm = (data) => {
-    if(!data.emailOrPhone || !data.password){
-      return "Please Enter Login Credential First"
+    if (!data.emailOrPhone || !data.password) {
+      return "Please Enter Login Credential First";
     }
   };
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
+    setIsLoading(true);
     const data = {
       emailOrPhone: emailOrPhone,
       password: password,
@@ -38,12 +46,37 @@ const SignInScreen = ({ navigation }) => {
     const validationError = validateForm(data);
     if (validationError) {
       console.log("error catched");
-      dispatch(
+      await dispatch(
         showSnackbar({ message: validationError, type: "error", time: 5000 })
       );
       return;
     }
-    navigation.navigate("CompleteProfileForm");
+
+    try {
+      const response = await dispatch(signIn(data));
+      if (signIn.fulfilled.match(response)) {
+        await AsyncStorage.setItem(
+          "driver_id",
+          String(response?.payload?.data?.driverId)
+        );
+
+        const savedId = await AsyncStorage.getItem("driver_id");
+        console.log("driver id saved in storage", savedId);
+         await dispatch(
+          showSnackbar({
+            message: response?.payload?.message,
+            type: "success",
+            time: 5000,
+          })
+        );
+      }
+    } catch (e) {
+      await dispatch(
+        showSnackbar({ message: validationError, type: "error", time: 3000 })
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
   // Handle navigation to sign in
   const navigateToSignUp = () => {
@@ -60,7 +93,7 @@ const SignInScreen = ({ navigation }) => {
         <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.logoContainer}>
             <Image
-              source={require("../../../assets/icon.png")}
+              source={require("../../../assets/transparentIcon.png")}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -92,8 +125,13 @@ const SignInScreen = ({ navigation }) => {
                 <Text style={styles.signInHighlight}>Click here</Text>
               </Text>
             </TouchableOpacity>
-            {ButtonWithLoader("Sign In","Processing...",isLoading,handleSignIn)}
-        
+            {ButtonWithLoader(
+              "Sign In",
+              "Processing...",
+              isLoading,
+              handleSignIn
+            )}
+
             <TouchableOpacity
               style={styles.signInLink}
               onPress={navigateToSignUp}
@@ -113,7 +151,7 @@ const SignInScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primaryColor,
+    backgroundColor: Colors.whiteColor,
   },
   keyboardAvoidingView: {
     flex: 1,

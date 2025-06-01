@@ -2,11 +2,14 @@ import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Colors } from "../../constants/styles";
 import MyStatusBar from "../../components/myStatusBar";
+import { logoutUser } from "../../redux/slice/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../../redux/selector/authSelector";
 
 const InstructionToComplete = ({navigation}) => {
-//   const navigation = useNavigation();
-//   const user = useSelector(selectUser);
-//   const dispatch = useDispatch();
+
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
 
   return (
     <View style={styles.container}>
@@ -28,7 +31,7 @@ const InstructionToComplete = ({navigation}) => {
       </TouchableOpacity>
 
       <TouchableOpacity 
-    //   onPress={() => dispatch(logoutUser())}
+         onPress={() => dispatch(logoutUser())}
       >
         <Text style={styles.goBackText}>Log out</Text>
       </TouchableOpacity>

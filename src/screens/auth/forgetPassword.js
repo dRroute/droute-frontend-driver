@@ -26,6 +26,9 @@ import {
   otpFields,
 } from "../../components/commonComponents";
 import MyStatusBar from "../../components/myStatusBar";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/slice/snackbarSlice";
+import { resetPassword, sendOTP } from "../../redux/thunk/authThunk";
 
 const ForgetPassword = ({ navigation }) => {
   const [otpSent, setOtpSent] = useState(false);
@@ -37,12 +40,131 @@ const ForgetPassword = ({ navigation }) => {
   const [otpInput, setOtpInput] = useState(null);
   const [email, setEmail] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
-  const VerifyOTP = () => {};
-  const sendOTP = () => {};
-  const hendleSubmit = () => {};
+  const clearForm=()=>{
+    setOtpSent(false);
+    setVerified(false);
+    setPassword(null);
+    setEmail(null);
+    setOtpInput(null);
+    setConfirmPassword(null);
+  }
+  const VerifyOTP =async () => {
+    if (otpSent === otpInput) {
+      setVerified(true);
+        await dispatch(showSnackbar({
+        message: "OTP Verified Succesfully",
+        type: "success",
+        time: 3000,
+      }));
+    } else {
+      await dispatch( showSnackbar({
+        message: "Incorrect OTP",
+        type: "error",
+        time: 3000,
+      }));
+    }
+  };
 
+  const sendOtp = async () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setIsLoading(true);
+    if (!emailRegex.test(email)) {
+      showSnackbar({
+        message: "Invalid Email Entered",
+        type: "error",
+        time: 3000,
+      });
+      return;
+    }
+    try {
+      const response = await dispatch(sendOTP({ email }));
+      console.log("response = ", response?.payload?.data);
+      if (
+        response?.payload?.statusCode == 200 ||
+        response?.payload?.statusCode == 201
+      ) {
+        const otp = response?.payload?.data;
+        await dispatch(
+          showSnackbar({
+            message: response?.payload?.message,
+            type: "success",
+            time: 2000,
+          })
+        );
+        setOtpSent(otp);
+      } else {
+        await dispatch(
+          showSnackbar({
+            message: response?.payload?.message || "Failed to send OTP",
+            type: "error",
+            time: 2000,
+          })
+        );
+      }
+    } catch (e) {
+      dispatch(showSnackbar({ message: e.message, type: "error", time: 3000 }));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const hendleSubmit = async() => {
+   
+    const strongPasswordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+    if (password != confirmPassword) {
+    await   dispatch(showSnackbar({
+        message: "New Password and Confirm Password Should be same",
+        type: "error",
+        time: 3000,
+      }));
+      return;
+    }
+    if (!strongPasswordRegex.test(password)) {
+       await dispatch(showSnackbar({
+        message:
+          "Password must be 8–20 characters long and include at least one letter and one number",
+        type: "error",
+        time: 3000,
+      }));
+      return ;
+    }
+    const data={
+     email,
+     newPassword: password 
+    } 
+    setIsLoading(true);
+    try {
 
+     const response = await dispatch(resetPassword(data));
+     if(resetPassword.fulfilled.match(response)){
+      await dispatch(showSnackbar({
+        message: response?.payload?.message,
+        type: "success",
+        time: 2000,
+      }));
+      clearForm();
+       navigation.navigate("SignInScreen");
+     }else{
+       await dispatch(showSnackbar({
+        message: response?.payload?.message,
+        type: "error",
+        time: 2000,
+      }));
+       clearForm();
+     }
+      
+    } catch (e) {
+      await dispatch(showSnackbar({
+        message: e.message|| "Unexpected Error Occured , failed to Reset Password",
+        type: "error",
+        time: 3000,
+      }));
+    } 
+    finally {
+      setIsLoading(false);
+    }
+  };
 
   const navigateToSignUp = () => {
     navigation.navigate("SignUpScreen");
@@ -58,7 +180,7 @@ const ForgetPassword = ({ navigation }) => {
         <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.logoContainer}>
             <Image
-              source={require("../../../assets/icon.png")}
+              source={require("../../../assets/transparentIcon.png")}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -78,7 +200,7 @@ const ForgetPassword = ({ navigation }) => {
                   "Send OTP",
                   "Processing...",
                   isLoading,
-                  sendOTP
+                  sendOtp
                 )}
               </>
             )}
@@ -98,18 +220,18 @@ const ForgetPassword = ({ navigation }) => {
             {verified && (
               <>
                 {authPassword(
-                  "Password",
+                  "New Password",
                   password,
                   setPassword,
-                  "Enter Password",
+                  "Enter New Password",
                   secureText,
                   setSecureText
                 )}
                 {authPassword(
-                  "Confirm Password",
+                  "Confirm New Password",
                   confirmPassword,
                   setConfirmPassword,
-                  "Confirm your Password",
+                  "Confirm your New Password",
                   secureConfirmText,
                   setSecureConfirmText
                 )}
@@ -141,7 +263,7 @@ const ForgetPassword = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primaryColor,
+    backgroundColor: Colors.whiteColor,
   },
   keyboardAvoidingView: {
     flex: 1,

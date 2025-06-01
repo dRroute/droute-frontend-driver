@@ -5,6 +5,9 @@ export const apiPostRequest = async ({ apiUrl, content_type, data, accessToken }
       'Content-Type': content_type,
       'Accept': '*/*',
     };
+  //     const headers = {
+  //   Accept: "*/*",
+  // };
 
     if (accessToken) {
       headers['Authorization'] = `Bearer ${accessToken}`;

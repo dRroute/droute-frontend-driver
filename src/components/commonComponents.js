@@ -175,7 +175,9 @@ export function ImageBottomSheet(
   currentImageLabel,
   isBottomSheetVisible,
   setBottomSheetVisible,
-  setImageLoading
+  setImageLoading,
+  user,
+  dispatch
 ) {
   return (
     <RNModal
@@ -192,7 +194,9 @@ export function ImageBottomSheet(
               currentImageSetter,
               currentImageLabel,
               setBottomSheetVisible,
-              setImageLoading
+              setImageLoading,
+              user,
+              dispatch,
             )
           }
         >
@@ -207,7 +211,9 @@ export function ImageBottomSheet(
               currentImageSetter,
               currentImageLabel,
               setBottomSheetVisible,
-              setImageLoading
+              setImageLoading,
+              user,
+              dispatch
             )
           }
         >

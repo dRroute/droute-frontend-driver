@@ -20,15 +20,70 @@ import {
   Sizes,
 } from "../../constants/styles";
 import { ButtonWithLoader, otpFields } from "../../components/commonComponents";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../../redux/thunk/authThunk";
+import { showSnackbar } from "../../redux/slice/snackbarSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const VerificationScreen = ({ navigation, route }) => {
   const { data, otp } = route?.params;
+  const dispatch = useDispatch();
   const [otpInput, setOtpInput] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const VerifyOTP = () => {
-    alert(otpInput);
-    if (otpInput === otp) {
-      navigation.navigate("InstructionToComplete");
+  const VerifyOTP = async () => {
+    setIsLoading(true);
+    // alert(otpInput);
+    try {
+      if (otpInput === otp) {
+        const response = await dispatch(register(data));
+
+        console.log("Response in verification ", response?.payload);
+
+        if (register.fulfilled.match(response)) {
+          await AsyncStorage.setItem(
+            "driver_id",
+            String(response?.payload?.data?.driverId)
+          );
+
+          const savedId = await AsyncStorage.getItem("driver_id");
+          console.log("driver id saved in storage", savedId);
+
+          await dispatch(
+            showSnackbar({
+              message: response?.payload?.message,
+              type: "success",
+              time: 2000,
+            })
+          );
+          navigation.navigate("InstructionToComplete");
+        } else {
+          await dispatch(
+            showSnackbar({
+              message: response?.payload?.message,
+              type: "error",
+              time: 5000,
+            })
+          );
+        }
+      } else {
+        await dispatch(
+          showSnackbar({
+            message: "Entered Incorrect OTP",
+            type: "error",
+            time: 2000,
+          })
+        );
+      }
+    } catch (e) {
+      await dispatch(
+        showSnackbar({
+          message: e.message || "Registration Failed Unexpected Error",
+          type: "error",
+          time: 2000,
+        })
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -41,7 +96,7 @@ const VerificationScreen = ({ navigation, route }) => {
         <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.logoContainer}>
             <Image
-              source={require("../../../assets/icon.png")}
+              source={require("../../../assets/transparentIcon.png")}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -67,7 +122,7 @@ const VerificationScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primaryColor,
+    backgroundColor: Colors.whiteColor,
   },
   keyboardAvoidingView: {
     flex: 1,

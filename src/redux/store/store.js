@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // import authReducer, { restoreUser } from ;
 import authReducer, { restoreUser } from "../slice/authSlice";
 import snackbarReducer, { showSnackbar } from "../slice/snackbarSlice";
+import { getDriverByDriverId } from "../thunk/authThunk";
 
 const store = configureStore({
   reducer: {
@@ -15,16 +16,16 @@ const store = configureStore({
 
 const loadUserData = async () => {
   try {
-    const user_id = await AsyncStorage.getItem("user_id");
+    const driver_id = await AsyncStorage.getItem("driver_id");
     // const accessToken = await AsyncStorage.getItem("accessToken");
-    console.log("user key in store", user_id);
+    console.log("user key in store", driver_id);
     // console.log("Access token in store", accessToken);
-    // if (user_id && accessToken) {
-    if (user_id) {
-      await store.dispatch(getUserByKey(user_id));
+    // if (driver_id && accessToken) {
+    if (driver_id) {
+      await store.dispatch(getDriverByDriverId(parseInt(driver_id)));
     }
   } catch (error) {
-    console.error("Error loading user data:", error);
+    console.log("Error loading user data:", error);
     store.dispatch(
       showSnackbar({ message: "Logged-In failed. Try again", type: "error" })
     );

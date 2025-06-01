@@ -1,7 +1,9 @@
 import { Dimensions } from "react-native";
-
+//#861658 //axis
+//#101942  //evcare
+//#083c5d  //user
 export const Colors = {
-  primaryColor: "#861658",
+  primaryColor: "teal",
   extraLightPrimaryColor:"#fce6f3",
   blackColor: "#000000",
   whiteColor: "#FFFFFF",

@@ -24,7 +24,7 @@ const onboardingScreenList = [
   {
     id: "1",
     onboardingImage: require("../../../assets/images/onboarding1.png"),
-    onboardingTitle: "Book Vehicle And keep Keep Prcel Pack",
+    onboardingTitle: "Book Vehicle And keep Parcel Pack",
     onboardingDescription:
       "Lorem ipsum dolor sit amet consectetur. Lectus vulputate pretium phasellus elementum quam pellentesque urna velit.",
   },
