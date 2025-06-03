@@ -3,8 +3,8 @@ import { APP_BACKEND_API } from '@env';
 import {apiGetRequest} from '../http/get';
 import { apiPutRequest } from "../http/put";
 
-const DRIVER_API_URL = 'https://ba36-2409-40d0-3034-b1bb-9c5f-b08d-66b5-ae62.ngrok-free.app'+"/api/driver";
-const USER_API_URL = 'https://ba36-2409-40d0-3034-b1bb-9c5f-b08d-66b5-ae62.ngrok-free.app'+"/api/user";
+export const DRIVER_API_URL = 'https://f411-2409-40d0-3034-b1bb-78d8-5b72-4d91-64db.ngrok-free.app'+"/api/driver";
+export const USER_API_URL = 'https://f411-2409-40d0-3034-b1bb-78d8-5b72-4d91-64db.ngrok-free.app'+"/api/user";
 
 // const accessToken = async ()=> await AsyncStorage.getItem("accessToken");
 // API CALLS

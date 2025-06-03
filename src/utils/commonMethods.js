@@ -33,7 +33,7 @@ export const setupImagePicker = (file, label) => {
 };
 
 export const handleImageUpload = async (file, label, user, dispatch) => {
-  console.log("this is user id", user.driverId);
+  console.log("this is file = ", file);
   const data = {
     file,
     driverId: user?.driverId,
@@ -73,7 +73,7 @@ export const openGallery = async (
       mediaTypes: ["images"],
       allowsEditing: true,
       aspect: label === "avatar" ? [1, 1] : undefined,
-      quality: 0.1,
+      quality: 0.2,
     });
 
     if (!result.canceled) {
