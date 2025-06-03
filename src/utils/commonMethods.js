@@ -52,6 +52,8 @@ export const handleImageUpload = async (file, label, user, dispatch) => {
             response?.payload?.message ||
             response?.payload?.title ||
             "Document Not Uploaded. Please try again",
+            type:"error",
+            time: 5000
         })
       );
       return null;
@@ -60,14 +62,15 @@ export const handleImageUpload = async (file, label, user, dispatch) => {
   }
 };
 export const openGallery = async (
-  currentImageSetter,
-  label,
-  setImageLoading,
-  setBottomSheetVisible,
-  user,
-  dispatch
+  currentImageSetter,      
+  label,       
+  setImageLoading,         
+  setBottomSheetVisible,   
+  user,                   
+  dispatch  
 ) => {
   setImageLoading(label);
+  setBottomSheetVisible(false);
   try {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
@@ -114,7 +117,10 @@ export const openCamera = async (
   user,
   dispatch
 ) => {
+  console.log("This is label of image:", label);
   setImageLoading(label);
+  setBottomSheetVisible(false);
+
   try {
     const result = await ImagePicker.launchCameraAsync({
       quality: 0.1,
@@ -124,8 +130,20 @@ export const openCamera = async (
 
     if (!result.canceled) {
       const imageUri = result.assets[0].uri;
-      await setupImagePicker(imageUri);
-      currentImageSetter(imageUri);
+      console.log("Raw ImageURI =", imageUri);
+
+      const file = await setupImagePicker(imageUri, label);
+      console.log("File =", file);
+
+      const googleDriveURI = await handleImageUpload(
+        file,
+        label,
+        user,
+        dispatch
+      );
+      console.log("Google Drive URI =", googleDriveURI);
+
+      currentImageSetter(googleDriveURI);
       return imageUri;
     }
   } catch (error) {
@@ -138,6 +156,7 @@ export const openCamera = async (
 
   return null;
 };
+
 
 export const removeImage = (setter, setBottomSheetVisible) => {
   setter(null);

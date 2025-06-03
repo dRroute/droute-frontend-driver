@@ -100,7 +100,14 @@ const user= useSelector(selectUser);
           <Text style={{ ...commonStyles.buttonText }}>Submit</Text>
         </TouchableOpacity>
         {fullImageContainer(modalVisible,setModalVisible ,selectedImage)}
-        {ImageBottomSheet(currentImageSetter,currentImageLabel,isBottomSheetVisible,setBottomSheetVisible,setImageLoading, user, dispatch)}
+        <ImageBottomSheet
+         currentImageSetter={currentImageSetter}
+         currentImageLabel={currentImageLabel}
+         isBottomSheetVisible={isBottomSheetVisible}
+         setBottomSheetVisible={setBottomSheetVisible}
+         setImageLoading={setImageLoading}
+         user={user}
+         dispatch={dispatch}/>
       </ScrollView>
      {circularLoader(isLoading)}
     </View>

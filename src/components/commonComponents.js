@@ -106,15 +106,19 @@ export function otpFields(otpInput, setOtpInput) {
     />
   );
 }
-export function ButtonWithLoader(name,loadingName,isLoading, method) {
+export function ButtonWithLoader(name, loadingName, isLoading, method) {
   return isLoading ? (
-    <View style={{...commonStyles.button,flexDirection:"row",gap:10}}>
+    <View style={{ ...commonStyles.button, flexDirection: "row", gap: 10 }}>
       <ActivityIndicator size="small" color={Colors.whiteColor} />
-      <Text style={{...commonStyles.buttonText}}>{loadingName}</Text>
+      <Text style={{ ...commonStyles.buttonText }}>{loadingName}</Text>
     </View>
   ) : (
-    <TouchableOpacity activeOpacity={0.7} style={{...commonStyles.button}} onPress={method}>
-      <Text style={{...commonStyles.buttonText}}>{name}</Text>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={{ ...commonStyles.button }}
+      onPress={method}
+    >
+      <Text style={{ ...commonStyles.buttonText }}>{name}</Text>
     </TouchableOpacity>
   );
 }
@@ -133,7 +137,7 @@ export const renderImageBox = (
 ) => {
   return (
     <TouchableOpacity
-    activeOpacity={0.7}
+      activeOpacity={0.7}
       onPress={() => {
         if (apiRespUri) {
           showFullImage(apiRespUri, setSelectedImage, setModalVisible);
@@ -154,7 +158,7 @@ export const renderImageBox = (
         )}
 
         <TouchableOpacity
-        activeOpacity={0.7}
+          activeOpacity={0.7}
           style={styles.editIcon}
           onPress={() => {
             setCurrentImageSetter(() => setter);
@@ -169,16 +173,15 @@ export const renderImageBox = (
     </TouchableOpacity>
   );
 };
-
-export function ImageBottomSheet(
+export function ImageBottomSheet({
   currentImageSetter,
   currentImageLabel,
   isBottomSheetVisible,
   setBottomSheetVisible,
   setImageLoading,
   user,
-  dispatch
-) {
+  dispatch,
+}) {
   return (
     <RNModal
       isVisible={isBottomSheetVisible}
@@ -187,31 +190,32 @@ export function ImageBottomSheet(
     >
       <View style={styles.bottomSheet}>
         <TouchableOpacity
-        activeOpacity={0.7}
+          activeOpacity={0.7}
           style={styles.sheetOption}
           onPress={() =>
             openCamera(
               currentImageSetter,
               currentImageLabel,
-              setBottomSheetVisible,
               setImageLoading,
+              setBottomSheetVisible,
               user,
-              dispatch,
+              dispatch
             )
           }
         >
           <Ionicons name="camera" size={22} color={Colors.primaryColor} />
           <Text style={styles.sheetOptionText}>Use Camera</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
-        activeOpacity={0.7}
+          activeOpacity={0.7}
           style={styles.sheetOption}
           onPress={() =>
             openGallery(
-              currentImageSetter,
+             currentImageSetter,
               currentImageLabel,
-              setBottomSheetVisible,
               setImageLoading,
+              setBottomSheetVisible,
               user,
               dispatch
             )
@@ -220,8 +224,9 @@ export function ImageBottomSheet(
           <Ionicons name="image" size={22} color={Colors.primaryColor} />
           <Text style={styles.sheetOptionText}>Choose from Gallery</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
-        activeOpacity={0.7}
+          activeOpacity={0.7}
           style={styles.sheetOption}
           onPress={() => removeImage(currentImageSetter, setBottomSheetVisible)}
         >
@@ -234,6 +239,7 @@ export function ImageBottomSheet(
     </RNModal>
   );
 }
+
 export function reUsableBottomSheet(
   isBottomSheetVisible,
   setBottomSheetVisible,
@@ -271,7 +277,7 @@ export function typeSection(type, setType, label, optional, options = []) {
       <View style={styles.TypeContainer}>
         {options.map((option, index) => (
           <TouchableOpacity
-          activeOpacity={0.7}
+            activeOpacity={0.7}
             key={index}
             style={[
               styles.TypeButton,
@@ -332,7 +338,10 @@ export function inputBox(value, setter, placeholder, label, optional, type) {
 export function commonAppBar(label, navigation) {
   return (
     <View style={styles.appBar}>
-      <TouchableOpacity activeOpacity={0.7} onPress={() => navigation?.goBack()}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => navigation?.goBack()}
+      >
         <Ionicons name="arrow-back" size={24} color="black" />
       </TouchableOpacity>
       <Text style={styles.title}>{label}</Text>
@@ -351,7 +360,7 @@ export function fullImageContainer(
       <View style={styles.modalContainer}>
         <Image source={{ uri: selectedImage }} style={styles.fullImage} />
         <TouchableOpacity
-        activeOpacity={0.7}
+          activeOpacity={0.7}
           style={styles.modalCloseButton}
           onPress={() => setModalVisible(false)}
         >
@@ -392,7 +401,10 @@ export function renderPassword(
           secureTextEntry={secure}
           maxLength={20}
         />
-        <TouchableOpacity  activeOpacity={0.7} onPress={() => setSecure(!secure)}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => setSecure(!secure)}
+        >
           <Ionicons name={secure ? "eye-off" : "eye"} size={20} color="#888" />
         </TouchableOpacity>
       </View>
@@ -400,7 +412,7 @@ export function renderPassword(
   );
 }
 
-export function actionOverlay(method, visibility, setVisiblity, title,color) {
+export function actionOverlay(method, visibility, setVisiblity, title, color) {
   return (
     <Overlay
       isVisible={visibility}
@@ -423,7 +435,6 @@ export function actionOverlay(method, visibility, setVisiblity, title,color) {
           style={{
             ...commonStyles.rowAlignCenter,
             marginTop: Sizes.fixPadding,
-            
           }}
         >
           <TouchableOpacity
@@ -434,7 +445,6 @@ export function actionOverlay(method, visibility, setVisiblity, title,color) {
             style={{
               ...styles.noButtonStyle,
               ...styles.dialogYesNoButtonStyle,
-             
             }}
           >
             <Text style={{ ...Fonts.blackColor14Medium }}>No</Text>
@@ -704,8 +714,8 @@ const styles = StyleSheet.create({
   },
   noButtonStyle: {
     backgroundColor: Colors.whiteColor,
-    borderTopColor:Colors.extraLightGrayColor,
-    borderTopWidth:0.7,
+    borderTopColor: Colors.extraLightGrayColor,
+    borderTopWidth: 0.7,
     borderBottomLeftRadius: Sizes.fixPadding - 5.0,
   },
 });
