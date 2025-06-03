@@ -2,11 +2,11 @@ import { apiPostRequest } from "../http/post";
 import { APP_BACKEND_API } from '@env';
 import {apiGetRequest} from '../http/get';
 import { apiPutRequest } from "../http/put";
+import Key from "../../constants/key"; // Import Key object
 
-export const DRIVER_API_URL = 'https://f411-2409-40d0-3034-b1bb-78d8-5b72-4d91-64db.ngrok-free.app'+"/api/driver";
-export const USER_API_URL = 'https://f411-2409-40d0-3034-b1bb-78d8-5b72-4d91-64db.ngrok-free.app'+"/api/user";
+// Constants
+const { DRIVER_API_URL, USER_API_URL } = Key;
 
-// const accessToken = async ()=> await AsyncStorage.getItem("accessToken");
 // API CALLS
 export const signInAPI = (data) =>
   apiPostRequest({
