@@ -37,7 +37,7 @@ const SignInScreen = ({ navigation }) => {
     }
   };
   const handleSignIn = async () => {
-   
+
     const data = {
       emailOrPhone: emailOrPhone,
       password: password,
@@ -52,7 +52,7 @@ const SignInScreen = ({ navigation }) => {
       );
       return;
     }
- setIsLoading(true);
+    setIsLoading(true);
     try {
       const response = await dispatch(signIn(data));
       if (signIn.fulfilled.match(response)) {
@@ -63,17 +63,27 @@ const SignInScreen = ({ navigation }) => {
 
         const savedId = await AsyncStorage.getItem("driver_id");
         console.log("driver id saved in storage", savedId);
-         await dispatch(
+        await dispatch(
           showSnackbar({
             message: response?.payload?.message,
             type: "success",
             time: 5000,
           })
         );
+      } else if (signIn.rejected.match(response)) {
+        console.log("error in sign in", response?.payload?.message);
+        await dispatch(
+          showSnackbar({
+            message: response?.payload?.message || "Sign In Failed",
+            type: "error",
+            time: 3000,
+          })
+        );
       }
     } catch (e) {
+      console.log("error in sign in", e.message);
       await dispatch(
-        showSnackbar({ message: validationError, type: "error", time: 3000 })
+        showSnackbar({ message: response?.payload?.message || e.message, type: "error", time: 3000 })
       );
     } finally {
       setIsLoading(false);

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   Modal,
+  TextInput,
 } from "react-native";
 import MyStatusBar from "../../components/myStatusBar";
 import {
@@ -18,16 +19,19 @@ import {
 import { trimText } from "../../utils/commonMethods";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Colors, commonStyles, Sizes } from "../../constants/styles";
-import { FlatList, Pressable, TextInput } from "react-native-gesture-handler";
+import { FlatList, Pressable } from "react-native-gesture-handler";
+
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "../../redux/slice/snackbarSlice";
+import { selectUser } from "../../redux/selector/authSelector";
 const suggestionStateList = [
   "Andhra Pradesh",
   "Arunachal Pradesh",
   "Assam",
   "Bihar",
   "Chhattisgarh",
+  "Delhi",
   "Goa",
   "Gujarat",
   "Haryana",
@@ -55,7 +59,7 @@ const suggestionStateList = [
 ];
 
 const PostJourney = ({ route, navigation }) => {
-  const { data } ="dfghjkj ah "
+  const { data } = route?.params;
   // route?.params;
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selectedForm, setSelectedForm] = useState("locationDetail");
@@ -74,53 +78,96 @@ const PostJourney = ({ route, navigation }) => {
   const hidePicker = () => setPickerVisible(false);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
- console.log("date time is ",departureDateTime)
-  const handleSubmit = async () => {
-    if (
-      !departureDateTime ||
-      !arrivalDateTime ||
-      !weight ||
-      !height ||
-      !width ||
-      !length ||
-      !lengthUnit ||
-      !weightUnit ||
-      stateList.length === 0
-    ) {
-      await dispatch(
-        showSnackbar({
-          message: "Please Fill all The Details First",
-          type: "error",
-          time: 3000,
-        })
-      );
-      return;
-    }
 
-    const journeyData = {
-      sourceAddress: data?.sourceAddress,
-      destinationAddress: data?.destinationAddress,
-      states: stateList,
-      departureDateTime,
-      arrivalDateTime,
-      weight,
-      weightUnit,
-      length,
-      height,
-      width,
-      lengthUnit,
-    };
-    setIsLoading(true);
- try{}
- catch(e){}
- finally{
-  setIsLoading(false);
- }
-    // Dispatch your action here, e.g.:
-    // dispatch(postJourney(journeyData));
-    console.log("Prepared journey data:", journeyData);
+  const user = useSelector(selectUser);
+  console.log("date time is ", departureDateTime);
+
+
+  const handleSubmit = async () => {
+  // Validate required fields
+  if (
+    !departureDateTime ||
+    !arrivalDateTime ||
+    !weight ||
+    !height ||
+    !width ||
+    !length ||
+    !lengthUnit ||
+    !weightUnit ||
+    stateList.length === 0
+  ) {
+    await dispatch(
+      showSnackbar({
+        message: "Please Fill all The Details First",
+        type: "error",
+        time: 3000,
+      })
+    );
+    return;
+  }
+
+  // Date formatting function
+  const formatDateTime = (dateTimeStr) => {
+    if (!dateTimeStr) return null;
+    
+    try {
+      const [datePart, timePart] = dateTimeStr.split(', ');
+      const [day, month, year] = datePart.split('/');
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${timePart}:00`;
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return null;
+    }
   };
 
+  // Prepare the data object
+  const journeyData = {
+    sourceAddress: data?.sourceAddress || '',
+    destinationAddress: data?.destinationAddress || '',
+    states: stateList,
+    departureDateTime: formatDateTime(departureDateTime),
+    arrivalDateTime: formatDateTime(arrivalDateTime),
+    weight: weight,
+    weightUnit: weightUnit,
+    length: length,
+    height: height,
+    width: width,
+    lengthUnit: lengthUnit,
+  };
+
+  setIsLoading(true);
+  
+  try {
+    console.log("Formatted Journey data to be submitted:", journeyData);
+    
+    // Here you would typically make your API call
+    // Example: await api.post('/journeys', journeyData);
+    
+    // Show success message
+    await dispatch(
+      showSnackbar({
+        message: "Journey created successfully!",
+        type: "success",
+        time: 3000,
+      })
+    );
+    
+    // Optionally reset form or navigate away
+    // resetForm();
+    
+  } catch (error) {
+    console.error("Submission error:", error);
+    await dispatch(
+      showSnackbar({
+        message: "Failed to create journey. Please try again.",
+        type: "error",
+        time: 3000,
+      })
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
   const toggleState = (state) => {
     if (stateList.includes(state)) {
       setStateList(stateList.filter((s) => s !== state));
@@ -211,16 +258,16 @@ const PostJourney = ({ route, navigation }) => {
           if (dropdownVisible) setDropdownVisible(false);
         }}
       >
-         <View style={styles.card}>
-          <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-             <Text style={styles.sectionTitle}>Location Detail</Text>
-          <Ionicons
-            name={selectedForm === "locationDetail"?"caret-back-outline":"caret-down-outline"}
-            size={18}
-            color={Colors.primaryColor}
-          />
+        <View style={styles.card}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+            <Text style={styles.sectionTitle}>Location Detail</Text>
+            <Ionicons
+              name={selectedForm === "locationDetail" ? "caret-back-outline" : "caret-down-outline"}
+              size={18}
+              color={Colors.primaryColor}
+            />
           </View>
-         
+
           {selectedForm === "locationDetail" && (
             <>
               <View style={styles.routeContainer}>
@@ -317,13 +364,13 @@ const PostJourney = ({ route, navigation }) => {
         onPress={() => handleVisibility("additionalDetail")}
       >
         <View style={styles.card}>
-         <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-             <Text style={styles.sectionTitle}>Additional Detail</Text>
-          <Ionicons
-            name={selectedForm === "additionalDetail"?"caret-back-outline":"caret-down-outline"}
-            size={18}
-            color={Colors.primaryColor}
-          />
+          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+            <Text style={styles.sectionTitle}>Additional Detail</Text>
+            <Ionicons
+              name={selectedForm === "additionalDetail" ? "caret-back-outline" : "caret-down-outline"}
+              size={18}
+              color={Colors.primaryColor}
+            />
           </View>
           {selectedForm === "additionalDetail" && (
             <>
