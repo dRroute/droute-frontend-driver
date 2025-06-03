@@ -1,6 +1,13 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Colors, Fonts, Sizes, commonStyles } from "../constants/styles";
-import { View, StyleSheet, Platform, TouchableOpacity, BackHandler, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Platform,
+  TouchableOpacity,
+  BackHandler,
+  Text,
+} from "react-native";
 import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -9,12 +16,7 @@ import PostJourney from "../screens/journey/postJourneyForm";
 import Profile from "../screens/profile/profilePage";
 import LocationPickerScreen from "../screens/journey/locationPicker";
 
-
-
-
-
 const Tab = createBottomTabNavigator();
-
 
 const BottomNavigationBar = ({ navigation }) => {
   const [backClickCount, setBackClickCount] = useState(0);
@@ -30,17 +32,16 @@ const BottomNavigationBar = ({ navigation }) => {
     }
   };
 
-useFocusEffect(
-  useCallback(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
+  useFocusEffect(
+    useCallback(() => {
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+      );
 
-    return () => backHandler.remove(); 
-  }, [backClickCount])
-);
-
+      return () => backHandler.remove();
+    }, [backClickCount])
+  );
 
   function _spring() {
     setBackClickCount(1);
@@ -57,12 +58,12 @@ useFocusEffect(
           tabBarInactiveTintColor: Colors.lightGrayColor,
           tabBarHideOnKeyboard: true,
           headerShown: false,
-          
-          tabBarShowLabel: true, 
+
+          tabBarShowLabel: true,
           tabBarLabelStyle: {
-            fontSize: 10, 
-            marginTop: 4, 
-            fontWeight: '400', 
+            fontSize: 10,
+            marginTop: 4,
+            fontWeight: "400",
           },
           tabBarStyle: styles.tabBarStyle,
           tabBarIconStyle: { alignSelf: "center" },
@@ -79,64 +80,82 @@ useFocusEffect(
                 color={focused ? Colors.primaryColor : Colors.grayColor}
               />
             ),
-            tabBarLabel: 'Home', 
+            tabBarLabel: "Home",
           }}
-        
         />
-<Tab.Screen
-  name="LocationPickerScreen"
-  component={LocationPickerScreen}
-  options={({ navigation, route }) => ({
-    tabBarButton: (props) => {
-      const isFocused = navigation.getState().index === 1; // Index 1 is 'PostJourney' in tab order
+        <Tab.Screen
+          name="LocationPickerScreen"
+          component={LocationPickerScreen}
+          options={({ navigation, route }) => ({
+            tabBarButton: (props) => {
+              const isFocused = navigation.getState().index === 1; // Index 1 is 'PostJourney' in tab order
 
-      return (
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            width: 60,
-            height: 80,
-            position: "absolute",
-            bottom: 20,
-            left: "50%",
-            marginLeft: -30,
-          }}
-        >
-          <TouchableOpacity
-            {...props}
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              width: 60,
-              height: 60,
-              borderRadius: 40,
-              borderColor: Colors.primaryColor,
-              borderWidth: 1,
-              backgroundColor: isFocused
-                ? Colors.primaryColor
-                : Colors.whiteColor,
-              shadowColor: Colors.primaryColor,
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.4,
-              shadowRadius: 5,
-              elevation: 8,
-            }}
-          >
-            <Ionicons
-              name="add"
-              size={35}
-              color={isFocused ? Colors.whiteColor : Colors.primaryColor}
-            />
-          </TouchableOpacity>
-        </View>
-      );
-    },
-  })}
-/>
-
-
-
+              return (
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: 60,
+                    height: 80,
+                    position: "absolute",
+                    bottom: 20,
+                    left: "50%",
+                    marginLeft: -30,
+                  }}
+                >
+                  <TouchableOpacity
+                    {...props}
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: 60,
+                      height: 60,
+                      borderRadius: 40,
+                      borderColor: Colors.primaryColor,
+                      borderWidth: 1,
+                      backgroundColor: isFocused
+                        ? Colors.primaryColor
+                        : Colors.whiteColor,
+                      shadowColor: Colors.primaryColor,
+                      shadowOffset: { width: 0, height: 4 },
+                      shadowOpacity: 0.4,
+                      shadowRadius: 5,
+                      elevation: 8,
+                    }}
+                  >
+                    <Ionicons
+                      name="add"
+                      size={35}
+                      color={
+                        isFocused ? Colors.whiteColor : Colors.primaryColor
+                      }
+                    />
+                  </TouchableOpacity>
+                  <View
+                    style={{
+                      width: 80,
+                      // backgroundColor: "cyan",
+                      bottom:-20,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 10,
+                        fontWeight: "700",
+                        textAlign: "center",
+                        color:  isFocused ? Colors.primaryColor : Colors.grayColor
+                      }}
+                    >
+                      Post Journey
+                    </Text>
+                  </View>
+                </View>
+              );
+            },
+          })}
+        />
         <Tab.Screen
           name="Profile"
           component={Profile}
@@ -148,7 +167,7 @@ useFocusEffect(
                 color={focused ? Colors.primaryColor : Colors.grayColor}
               />
             ),
-            tabBarLabel: 'Profile', 
+            tabBarLabel: "Profile",
           }}
         />
       </Tab.Navigator>

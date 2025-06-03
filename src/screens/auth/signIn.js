@@ -37,13 +37,14 @@ const SignInScreen = ({ navigation }) => {
     }
   };
   const handleSignIn = async () => {
-    setIsLoading(true);
+   
     const data = {
       emailOrPhone: emailOrPhone,
       password: password,
       role: "driver",
     };
     const validationError = validateForm(data);
+
     if (validationError) {
       console.log("error catched");
       await dispatch(
@@ -51,7 +52,7 @@ const SignInScreen = ({ navigation }) => {
       );
       return;
     }
-
+ setIsLoading(true);
     try {
       const response = await dispatch(signIn(data));
       if (signIn.fulfilled.match(response)) {

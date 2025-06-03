@@ -122,6 +122,8 @@ export function ButtonWithLoader(name, loadingName, isLoading, method) {
     </TouchableOpacity>
   );
 }
+
+
 export const renderImageBox = (
   label,
   setter,

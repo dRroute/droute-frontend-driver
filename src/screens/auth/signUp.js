@@ -65,7 +65,7 @@ const SignUpScreen = ({ navigation }) => {
 
   const handleSignUp = async () => {
  
-    setIsLoading(true);
+   
     const data = {
       fullName: fullName,
       email: email,
@@ -82,6 +82,7 @@ const SignUpScreen = ({ navigation }) => {
       );
       return;
     }
+     setIsLoading(true);
     //Calling.. OTP thunk
    try{
     const response = await dispatch(sendOTP({ email: data.email }));

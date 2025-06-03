@@ -18,7 +18,7 @@ const loadUserData = async () => {
   try {
     const driver_id = await AsyncStorage.getItem("driver_id");
     // const accessToken = await AsyncStorage.getItem("accessToken");
-    console.log("user key in store", driver_id);
+    console.log("Driver Id in store", driver_id);
     // console.log("Access token in store", accessToken);
     // if (driver_id && accessToken) {
     if (driver_id) {
@@ -27,7 +27,7 @@ const loadUserData = async () => {
   } catch (error) {
     console.log("Error loading user data:", error);
     store.dispatch(
-      showSnackbar({ message: "Logged-In failed. Try again", type: "error" })
+      showSnackbar({ message: error?.message || "Logged-In failed. Try again", type: "error", time: 3000 })
     );
   }
 };

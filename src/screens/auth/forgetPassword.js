@@ -69,7 +69,7 @@ const ForgetPassword = ({ navigation }) => {
 
   const sendOtp = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setIsLoading(true);
+    
     if (!emailRegex.test(email)) {
       showSnackbar({
         message: "Invalid Email Entered",
@@ -78,6 +78,7 @@ const ForgetPassword = ({ navigation }) => {
       });
       return;
     }
+    setIsLoading(true);
     try {
       const response = await dispatch(sendOTP({ email }));
       console.log("response = ", response?.payload?.data);

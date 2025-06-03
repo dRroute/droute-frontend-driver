@@ -30,6 +30,8 @@ import {
   fetchImageForCity as fetchRandomImage,
   getUserLocation,
 } from "../../utils/commonMethods";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/selector/authSelector";
 
 const COLORS = {
   green: "#4CAF50",
@@ -106,6 +108,8 @@ const Home = ({ navigation }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [errorMessage, setErrorMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const user = useSelector(selectUser);
   const backgroundSource = imageRef?.current
   ? { uri: imageRef.current }
   : require('../../../assets/images/homeBg.png');
@@ -193,9 +197,9 @@ const Home = ({ navigation }) => {
           </View>
           <View style={styles.welcomeContainer}>
             <Text style={styles.welcomeText}>WELCOME</Text>
-            <Text style={styles.driverName}>Alok Singh</Text>
-            <Text style={styles.driverInfo}>Driver ID: 12345678</Text>
-            <Text style={styles.driverInfo}>Vehicle Number: HR07FXP1234</Text>
+            <Text style={styles.driverName}>{user?.fullName}</Text>
+            <Text style={styles.driverInfo}>Vehicle Name:{" "}{user?.vehicleName}</Text>
+            <Text style={styles.driverInfo}>Vehicle Number:{""}{user?.vehicleNumber}</Text>
           </View>
         </View>
       </ImageBackground>

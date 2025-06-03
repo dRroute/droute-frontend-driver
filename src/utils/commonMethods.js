@@ -143,7 +143,7 @@ export const openCamera = async (
       );
       console.log("Google Drive URI =", googleDriveURI);
 
-      currentImageSetter(googleDriveURI);
+          currentImageSetter(googleDriveURI+"&t="+Date.now());
       return imageUri;
     }
   } catch (error) {
@@ -289,7 +289,7 @@ export const fetchAddressComponent = async (latitude, longitude) => {
 
 export const fetchImageForCity = async ({ city }) => {
   const response = await fetch(
-    `https://api.unsplash.com/photos/random?query=${city}&orientation=landscape&client_id=${Key.unsplashApiKey}`
+    `https://api.unsplash.com/photos/random?query=mountain&orientation=landscape&client_id=${Key.unsplashApiKey}`
   );
   const data = await response.json();
   // console.log("image data",data?.urls?.regular);
