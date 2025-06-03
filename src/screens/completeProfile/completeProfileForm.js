@@ -20,8 +20,7 @@ import { circularLoader, commonAppBar, commonLabel, fullImageContainer, ImageBot
 import { showFullImageFunction } from "../../utils/commonMethods";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../redux/selector/authSelector";
-const image = "https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_1280.jpg";
-
+const image = `https://drive.google.com/uc?export=view&id=...&t=${Date.now()}`;
 
 const CompleteProfileForm = () => {
 
@@ -47,7 +46,15 @@ const user= useSelector(selectUser);
   const[RCnumber,setRCNumber] = useState(null);
   const[RCimageURI,setRCImageURI] = useState(image);
   // console.log("this is user id",user.driverId);
-  const handleSubmit = async () => {};
+
+
+
+
+  const handleSubmit = async () => {
+
+
+
+  };
 
   const selectOnMap = () => {
     navigation.push("PickLocation", {

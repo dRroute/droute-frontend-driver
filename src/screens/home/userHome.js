@@ -30,24 +30,10 @@ import {
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-const COLORS = {
-  green: "#4CAF50",
-  darkBlue: "#101942",
-  lightOrange: "#FFA726",
-  textDark: "#333333",
-  textLight: "#757575",
-  iconBgOrange: "rgba(255, 138, 101, 0.1)",
-  iconBgPurple: "rgba(254, 212, 234, 0.56)",
-  iconBgGreen: "rgba(76, 175, 80, 0.1)",
-  iconBgPink: "rgba(144, 139, 245, 0.1)",
-  iconBgLightOrange: "rgba(255, 167, 38, 0.1)",
-};
+
 
 const UserHome = ({ navigation }) => {
    const scrollY = useRef(new Animated.Value(0)).current;
-
-
-
      const animatedTopContainerStyle = {
   
     borderBottomLeftRadius: scrollY.interpolate({
@@ -55,6 +41,8 @@ const UserHome = ({ navigation }) => {
       outputRange: [100, 30],
       extrapolate: "clamp",
     }),
+
+     
   
   };
 const animatedBottomContainerStyle = {
@@ -116,9 +104,9 @@ const animatedBottomContainerStyle = {
       scrollEventThrottle={16}
       showsVerticalScrollIndicator={false}
     >
+      <View style={{ height: 200, backgroundColor: "teal", marginBottom: 2 }} />
       <View style={{ height: 200, backgroundColor: "cyan", marginBottom: 2 }} />
-      <View style={{ height: 200, backgroundColor: "cyan", marginBottom: 2 }} />
-      <View style={{ height: 200, backgroundColor: "cyan", marginBottom: 2 }} />
+      <View style={{ height: 200, backgroundColor: "teal", marginBottom: 2 }} />
       <View style={{ height: 200, backgroundColor: "cyan", marginBottom: 2 }} />
     </Animated.ScrollView>
   </Animated.View>

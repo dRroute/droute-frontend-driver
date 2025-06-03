@@ -94,8 +94,8 @@ export const openGallery = async (
         user,
         dispatch
       );
-      console.log("google Drive URI ", googleDriveURI);
-      currentImageSetter(googleDriveURI);
+      console.log("google Drive URI ", googleDriveURI+"&t="+Date.now());//to make unique url , to replace cache data
+      currentImageSetter(googleDriveURI+"&t="+Date.now());
       return imageUri;
     }
   } catch (error) {

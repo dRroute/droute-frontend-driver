@@ -64,6 +64,7 @@ function AppNavigator() {
             </>
           ) : user.profileStatus === 'PENDING_COMPLETION' ? (
             <>
+            {/* <Stack.Screen name="UserHome" component={UserHome} /> */}
               <Stack.Screen name="InstructionToComplete" component={InstructionToComplete} />
               <Stack.Screen name="CompleteProfileForm" component={CompleteProfileForm} />
               <Stack.Screen name="HelpScreen" component={HelpScreen} />
