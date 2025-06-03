@@ -35,9 +35,17 @@ export const sendOtpAPI = (data) =>
     content_type: "application/json",
     data: data,
   });
+
 export const resetPasswordAPI = (data) =>
   apiPutRequest({
     apiUrl: `${DRIVER_API_URL}/reset-password`,
+    content_type: "application/json",
+    data: data,
+  });
+
+export const completeProfileAPI = (data) =>
+  apiPutRequest({
+    apiUrl: `${DRIVER_API_URL}/profile-complete`,
     content_type: "application/json",
     data: data,
   });

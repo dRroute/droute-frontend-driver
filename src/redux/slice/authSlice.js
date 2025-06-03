@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createSlice } from "@reduxjs/toolkit";
-import { register, signIn, getDriverByDriverId } from "../thunk/authThunk";
+import { register, signIn, getDriverByDriverId, completeProfile } from "../thunk/authThunk";
 
 const initialState = {
   user: null,
@@ -66,6 +66,20 @@ const authSlice = createSlice({
         state.user = action?.payload?.data;
       })
       .addCase(getDriverByDriverId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.message;
+      })
+      // Complete Profile
+      .addCase(completeProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(completeProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        console.log("User = ", action.payload);
+        state.user = action?.payload?.data;
+      })
+      .addCase(completeProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.message;
       });

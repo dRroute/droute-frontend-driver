@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getDriverByDriverIdAPI, resetPasswordAPI, signInAPI } from "../../utils/api/authApi";
+import { completeProfileAPI, getDriverByDriverIdAPI, resetPasswordAPI, signInAPI } from "../../utils/api/authApi";
 import { registerAPI } from "../../utils/api/authApi";
 import { sendOtpAPI } from "../../utils/api/authApi";
 import axios from "axios";
@@ -75,6 +75,28 @@ export const resetPassword = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await resetPasswordAPI(data);
+     console.log("this is response.status == "+response?.status);
+      if (response?.status === 200 || response?.status === 201) {
+        return response?.data;
+      } else {
+        return rejectWithValue(
+          response?.data?.message || "Failed to update Password"
+        );
+      }
+    } catch (error) {
+      
+      return rejectWithValue(handleAxiosError(error));
+    }
+  }
+);
+
+
+//Complete-Profile Thunk
+export const completeProfile = createAsyncThunk(
+  "auth/completeProfile",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await completeProfileAPI(data);
      console.log("this is response.status == "+response?.status);
       if (response?.status === 200 || response?.status === 201) {
         return response?.data;
