@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import MyStatusBar from "../../components/myStatusBar";
 import {
+  ButtonWithLoader,
   commonAppBar,
   inputBox,
   reUsableBottomSheet,
@@ -19,6 +20,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Colors, commonStyles, Sizes } from "../../constants/styles";
 import { FlatList, Pressable, TextInput } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/slice/snackbarSlice";
 const suggestionStateList = [
   "Andhra Pradesh",
   "Arunachal Pradesh",
@@ -52,7 +55,8 @@ const suggestionStateList = [
 ];
 
 const PostJourney = ({ route, navigation }) => {
-  const { data } = route?.params;
+  const { data } ="dfghjkj ah "
+  // route?.params;
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selectedForm, setSelectedForm] = useState("locationDetail");
   const [selectedField, setSelectedField] = useState(null);
@@ -68,6 +72,54 @@ const PostJourney = ({ route, navigation }) => {
   const [stateList, setStateList] = useState([]);
   const showPicker = () => setPickerVisible(true);
   const hidePicker = () => setPickerVisible(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+ console.log("date time is ",departureDateTime)
+  const handleSubmit = async () => {
+    if (
+      !departureDateTime ||
+      !arrivalDateTime ||
+      !weight ||
+      !height ||
+      !width ||
+      !length ||
+      !lengthUnit ||
+      !weightUnit ||
+      stateList.length === 0
+    ) {
+      await dispatch(
+        showSnackbar({
+          message: "Please Fill all The Details First",
+          type: "error",
+          time: 3000,
+        })
+      );
+      return;
+    }
+
+    const journeyData = {
+      sourceAddress: data?.sourceAddress,
+      destinationAddress: data?.destinationAddress,
+      states: stateList,
+      departureDateTime,
+      arrivalDateTime,
+      weight,
+      weightUnit,
+      length,
+      height,
+      width,
+      lengthUnit,
+    };
+    setIsLoading(true);
+ try{}
+ catch(e){}
+ finally{
+  setIsLoading(false);
+ }
+    // Dispatch your action here, e.g.:
+    // dispatch(postJourney(journeyData));
+    console.log("Prepared journey data:", journeyData);
+  };
 
   const toggleState = (state) => {
     if (stateList.includes(state)) {
@@ -139,16 +191,14 @@ const PostJourney = ({ route, navigation }) => {
       {locationDetail?.()}
       {additionalDetail?.()}
 
-      <TouchableOpacity
+      <View
         style={{
-          ...commonStyles.button,
           marginHorizontal: 10,
           marginVertical: 50,
         }}
-        onPress={() => {}}
       >
-        <Text style={{ ...commonStyles.buttonText }}>Submit</Text>
-      </TouchableOpacity>
+        {ButtonWithLoader("Submit", "Processing..", isLoading, handleSubmit)}
+      </View>
     </ScrollView>
   );
 
@@ -161,8 +211,16 @@ const PostJourney = ({ route, navigation }) => {
           if (dropdownVisible) setDropdownVisible(false);
         }}
       >
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Location Detail</Text>
+         <View style={styles.card}>
+          <View style={{flexDirection:"row",justifyContent:"space-between"}}>
+             <Text style={styles.sectionTitle}>Location Detail</Text>
+          <Ionicons
+            name={selectedForm === "locationDetail"?"caret-back-outline":"caret-down-outline"}
+            size={18}
+            color={Colors.primaryColor}
+          />
+          </View>
+         
           {selectedForm === "locationDetail" && (
             <>
               <View style={styles.routeContainer}>
@@ -174,11 +232,11 @@ const PostJourney = ({ route, navigation }) => {
 
                 <View style={styles.addressesContainer}>
                   <Text style={styles.addressText}>
-                    {trimText(data.sourceAddress, 45)}
+                    {trimText(data?.sourceAddress, 45)}
                   </Text>
                   <View style={{ height: 25 }} />
                   <Text style={styles.addressText}>
-                    {trimText(data.destinationAddress, 45)}
+                    {trimText(data?.destinationAddress, 45)}
                   </Text>
                 </View>
               </View>
@@ -259,7 +317,14 @@ const PostJourney = ({ route, navigation }) => {
         onPress={() => handleVisibility("additionalDetail")}
       >
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Additional Detail</Text>
+         <View style={{flexDirection:"row",justifyContent:"space-between"}}>
+             <Text style={styles.sectionTitle}>Additional Detail</Text>
+          <Ionicons
+            name={selectedForm === "additionalDetail"?"caret-back-outline":"caret-down-outline"}
+            size={18}
+            color={Colors.primaryColor}
+          />
+          </View>
           {selectedForm === "additionalDetail" && (
             <>
               {dateTimeInfo?.()}
@@ -270,7 +335,6 @@ const PostJourney = ({ route, navigation }) => {
       </TouchableOpacity>
     );
   }
-
   function dateTimeInfo() {
     return (
       <>
@@ -449,7 +513,7 @@ const styles = StyleSheet.create({
   },
   timeInput: {
     borderWidth: 1,
-    borderColor: "#e0e0e0",
+    borderColor: Colors.primaryColor,
     borderRadius: 8,
     padding: 10,
     fontSize: 12,

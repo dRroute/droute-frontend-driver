@@ -98,7 +98,7 @@ const BottomNavigationBar = ({ navigation }) => {
                     width: 60,
                     height: 80,
                     position: "absolute",
-                    bottom: 20,
+                    bottom: 15,
                     left: "50%",
                     marginLeft: -30,
                   }}
@@ -135,7 +135,7 @@ const BottomNavigationBar = ({ navigation }) => {
                     style={{
                       width: 80,
                       // backgroundColor: "cyan",
-                      bottom:-20,
+                      bottom:-16,
                       justifyContent: "center",
                       alignItems: "center",
                     }}
