@@ -21,6 +21,8 @@ import { commonAppBar } from "../../components/commonComponents";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import MyStatusBar from "../../components/myStatusBar";
 import { JourneyCard, LoadingJourneyCard } from "../../components/journeyCard";
+import { useSelector } from "react-redux";
+import { selectJourney } from "../../redux/selector/authSelector";
 
 
 const JOURNEYS = [
@@ -89,17 +91,21 @@ const JOURNEYS = [
 
 const CurrentJourney = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
- const handleCardClick =()=>{
+ const handleCardClick =(item)=>{
   navigation.navigate("JourneyManagement")
  }
   const renderJourneyCard = ({ item }) => (
     <JourneyCard journey={item} method={handleCardClick} />
   );
 
+
+
+ 
+
   return (
     <SafeAreaView style={styles.container}>
       <MyStatusBar />
-      {commonAppBar("Current List", navigation)}
+      {commonAppBar("Current Journey List", navigation)}
       {isLoading ? (
         <LoadingJourneyCard count={5} />
       ) : (

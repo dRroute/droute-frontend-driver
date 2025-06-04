@@ -46,6 +46,7 @@ function AppNavigator() {
     console.log('User changed:', user);
   }, [user]);
 
+  
   return (
       <NavigationContainer>
         <Stack.Navigator
@@ -77,7 +78,7 @@ function AppNavigator() {
           ) : user.profileStatus === 'ACTIVE' ? (
              <>
               <Stack.Screen name="BottomNavigationBar" component={BottomNavigationBar} />
-               <Stack.Screen name="Home" component={Home} />
+              <Stack.Screen name="Home" component={Home} />
               <Stack.Screen name="JourneyManagement" component={JourneyManagement} />
               <Stack.Screen name="PostJourney" component={PostJourney} />
               <Stack.Screen name="AllJourneyList" component={AllJourneyList} />
