@@ -27,7 +27,7 @@ export const JourneyCard = ({ journey ,method}) => {
           <View style={styles.fromContainer}>
             <Text style={styles.label}>From:</Text>
             <Text style={styles.descriptionText}>
-              {journey.from.address}
+              {journey?.from.address}
             </Text>
           </View>
         </View>

@@ -22,7 +22,7 @@ export const getAllJourneyByDriverId = createAsyncThunk(
   async (driverId, { rejectWithValue }) => {
     try {
       const response = await getAllJourneyByDriverIdAPI(driverId);
-      console.log('response = ', response?.data);
+  
       return response?.data;
     } catch (error) {
       console.log("Error in getAllJourneyByDriverId:", error);
