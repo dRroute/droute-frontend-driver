@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
@@ -8,71 +8,114 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-} from 'react-native';
-import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
-import { actionOverlay, commonAppBar } from '../../components/commonComponents';
-import MyStatusBar from '../../components/myStatusBar';
-import { Colors, commonStyles, Fonts } from '../../constants/styles';
-import SwipeableTabs from '../../components/swipeableTabs';
-import { ParcelCard, ParcelLoadingCard } from '../../components/parcelCard';
-import { FlatList } from 'react-native-gesture-handler';
-import RequestDetailScreen from '../orders/requestDetailScreen';
-import PendingRequests from '../orders/pendingRequests';
+} from "react-native";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { actionOverlay, commonAppBar } from "../../components/commonComponents";
+import MyStatusBar from "../../components/myStatusBar";
+import { Colors, commonStyles, Fonts } from "../../constants/styles";
+import SwipeableTabs from "../../components/swipeableTabs";
+import { ParcelCard, ParcelLoadingCard } from "../../components/parcelCard";
+import { FlatList } from "react-native-gesture-handler";
+import RequestDetailScreen from "../orders/requestDetailScreen";
+import PendingRequests from "../orders/pendingRequests";
 
 const { width } = Dimensions.get("window");
 const PACKAGES = [
-{
-  id: "PCL2025",
-  image: "https://images.unsplash.com/photo-1701615004837-40d8573b6652?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHVzZXJ8ZW58MHx8MHx8fDA%3D", 
-  phone: "9876543210",
-  pickup: {
-    address: "101 Alpha Street nksn njsnn njnsj bbdj jdjne jndjn nnd jnjsj",
+  {
+    id: "PCL2025",
+    image:
+      "https://images.unsplash.com/photo-1701615004837-40d8573b6652?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHVzZXJ8ZW58MHx8MHx8fDA%3D",
+    phone: "9876543210",
+    pickup: {
+      address: "101 Alpha Street nksn njsnn njnsj bbdj jdjne jndjn nnd jnjsj",
+    },
+    delivery: {
+      address:
+        "202 Beta Avenue nsnj njsnjn njsnj jbsjb jbsjb bjs njsnjns njsnj",
+    },
+    status: "Cancelled",
   },
-  delivery: {
-    address: "202 Beta Avenue nsnj njsnjn njsnj jbsjb jbsjb bjs njsnjns njsnj",
+  {
+    id: "PCL202s5",
+    image:
+      "https://images.unsplash.com/photo-1701615004837-40d8573b6652?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHVzZXJ8ZW58MHx8MHx8fDA%3D",
+    phone: "9876543210",
+    pickup: {
+      address: "101 Alpha Street nksn njsnn njnsj bbdj jdjne jndjn nnd jnjsj",
+    },
+    delivery: {
+      address:
+        "202 Beta Avenue nsnj njsnjn njsnj jbsjb jbsjb bjs njsnjns njsnj",
+    },
+    status: "Delivered",
   },
-  status:"Cancelled"
-},
-{
-  id: "PCL202s5",
-  image: "https://images.unsplash.com/photo-1701615004837-40d8573b6652?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHVzZXJ8ZW58MHx8MHx8fDA%3D", 
-  phone: "9876543210",
-  pickup: {
-    address: "101 Alpha Street nksn njsnn njnsj bbdj jdjne jndjn nnd jnjsj",
+  {
+    id: "PCL20255",
+    image: null,
+    phone: "9876543210",
+    pickup: {
+      address: "101 Alpha Street nksn njsnn njnsj bbdj jdjne jndjn nnd jnjsj",
+    },
+    delivery: {
+      address:
+        "202 Beta Avenue nsnj njsnjn njsnj jbsjb jbsjb bjs njsnjns njsnj",
+    },
+    status: "Ongoing",
   },
-  delivery: {
-    address: "202 Beta Avenue nsnj njsnjn njsnj jbsjb jbsjb bjs njsnjns njsnj",
-  },
-  status:"Delivered"
-},
-{
-  id: "PCL20255",
-  image: null, 
-  phone: "9876543210",
-  pickup: {
-    address: "101 Alpha Street nksn njsnn njnsj bbdj jdjne jndjn nnd jnjsj",
-  },
-  delivery: {
-    address: "202 Beta Avenue nsnj njsnjn njsnj jbsjb jbsjb bjs njsnjns njsnj",
-  },
-  status:"Ongoing"
-}
 ];
-const JourneyManagement = ({ navigation }) => {
+const JourneyManagement = ({ navigation, route }) => {
+  const { journey } = route.params;
   const [isAcceptModalVisible, setAcceptModalVisible] = useState(false);
   const [isRejectModalVisible, setRejectModalVisible] = useState(false);
-const [isLoading,setIsLoading]=useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const handleUpdate = () => {};
   const handleCancel = () => {};
-
+  // Journey =  [
+  //   {
+  //     "journeyId": 1,
+  //     "driverId": 1,
+  //     "journeySource": {
+  //       "locationId": 2,
+  //       "longitude": "77.0941087",
+  //       "latitude": "28.4921191",
+  //       "address": "U-46/24, Gali Number 5 NATHUPURA, 25, U Block, U Block, DLF Phase 3, Sector 24, Gurugram, Haryana 122022, India",
+  //       "city": "Gurugram",
+  //       "pinCode": null,
+  //       "country": "India"
+  //     },
+  //     "journeyDestination": {
+  //       "locationId": 1,
+  //       "longitude": "84.0188781",
+  //       "latitude": "24.9560393",
+  //       "address": "Sasaram Junction, Dilia, Sasaram, Bihar 821115, India",
+  //       "city": "Sasaram",
+  //       "pinCode": null,
+  //       "country": "India"
+  //     },
+  //     "visitedStateDuringJourney": "Bihar,Delhi,Haryana,Uttar Pradesh",
+  //     "availableLength": 5,
+  //     "availableWidth": 3,
+  //     "availableHeight": 3,
+  //     "availableSpaceMeasurementType": "METERS",
+  //     "availableWeight": 500,
+  //     "availableWeightMeasurementType": "KILOGRAMS",
+  //     "status": "NOT_STARTED",
+  //     "expectedDepartureDateTime": "2025-06-08T00:38:00",
+  //     "expectedArrivalDateTime": "2025-06-10T00:38:00"
+  //   }
   const JourneyDetailTab = () => {
     return (
       <>
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          
           <View style={styles.locationsContainer}>
-            <LocationItem title="Source Address" address="Vadgaon Bk Pune 411041 Vadgaon Bk Pune 411041 Vadgaon Bk Pune 411041 Vadgaon Bk Pune 411041" />
-            <LocationItem title="Destination Address" address="Vadgaon Bk Pune 411041 411041 Vadgaon Bk Pune 411041" />
+            <LocationItem
+              title="Source Address"
+              address={journey?.journeySource.address}
+            />
+            <LocationItem
+              title="Destination Address"
+              address={journey?.journeyDestination.address}
+            />
           </View>
 
           <View style={styles.section}>
@@ -80,10 +123,38 @@ const [isLoading,setIsLoading]=useState(false);
             <Text style={styles.sectionTitle}>Vehicle Capacity:</Text>
             <View style={styles.divider} />
             <View style={{ marginTop: 8 }}>
-              <DetailRow label="Height" value="20 m" />
-              <DetailRow label="Width" value="10 m" />
-              <DetailRow label="Length" value="19 m" />
-              <DetailRow label="Weight" value="20 Kg" />
+              <DetailRow
+                label="Height"
+                value={
+                  journey?.availableHeight +
+                  " " +
+                  journey?.availableSpaceMeasurementType
+                }
+              />
+              <DetailRow
+                label="Width"
+                value={
+                  journey?.availableWidth +
+                  " " +
+                  journey?.availableSpaceMeasurementType
+                }
+              />
+              <DetailRow
+                label="Length"
+                value={
+                  journey?.availableLength +
+                  " " +
+                  journey?.availableSpaceMeasurementType
+                }
+              />
+              <DetailRow
+                label="Weight"
+                value={
+                  journey?.availableWeight +
+                  " " +
+                  journey?.availableWeightMeasurementType
+                }
+              />
             </View>
           </View>
 
@@ -110,28 +181,33 @@ const [isLoading,setIsLoading]=useState(false);
     );
   };
 
-const OrdersDetail = () => {
-const renderPackageCard = ({ item }) => <ParcelCard  parcelItem={item} />;
-    return <>
-    {isLoading?(<ParcelLoadingCard count={3} />):(
-      <FlatList
-        data={PACKAGES}
-        renderItem={renderPackageCard}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContainer}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <FontAwesome
-              name="cube"
-              size={60}
-              color={Colors.extraLightGrayColor}
-            />
-            <Text style={styles.emptyText}>No Parcels found</Text>
-          </View>
-        }
-      />)}
-    </>;
+  const OrdersDetail = () => {
+    const renderPackageCard = ({ item }) => <ParcelCard parcelItem={item} />;
+    return (
+      <>
+        {isLoading ? (
+          <ParcelLoadingCard count={3} />
+        ) : (
+          <FlatList
+            data={PACKAGES}
+            renderItem={renderPackageCard}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.listContainer}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <FontAwesome
+                  name="cube"
+                  size={60}
+                  color={Colors.extraLightGrayColor}
+                />
+                <Text style={styles.emptyText}>No Parcels found</Text>
+              </View>
+            }
+          />
+        )}
+      </>
+    );
   };
 
   const LocationItem = ({ title, address }) => {
@@ -140,8 +216,10 @@ const renderPackageCard = ({ item }) => <ParcelCard  parcelItem={item} />;
         <View style={styles.locationMarker}>
           <MaterialIcons name="location-on" size={20} color="teal" />
         </View>
-         <View style={styles.locationInfo}>
-          <Text style={{ ...Fonts.blackColor14Bold, marginBottom: 4 }}>{title}</Text>
+        <View style={styles.locationInfo}>
+          <Text style={{ ...Fonts.blackColor14Bold, marginBottom: 4 }}>
+            {title}
+          </Text>
           <Text style={Fonts.grayColor12Medium}>{address}</Text>
         </View>
       </View>
@@ -162,19 +240,30 @@ const renderPackageCard = ({ item }) => <ParcelCard  parcelItem={item} />;
       <MyStatusBar />
       {commonAppBar("Manage Journey", navigation)}
       <SwipeableTabs
-        titles={['Journey Detail',"New Requests",'Confirmed Orders',]}
-        components={[<JourneyDetailTab />,<PendingRequests />, <OrdersDetail />]}
+        titles={["Journey Detail", "New Requests", "Confirmed Orders"]}
+        components={[
+          <JourneyDetailTab />,
+          <PendingRequests />,
+          <OrdersDetail />,
+        ]}
       />
-      {actionOverlay(handleUpdate, isAcceptModalVisible, setAcceptModalVisible, "Do You Want to Update ?", Colors.primaryColor)}
-      {actionOverlay(handleCancel, isRejectModalVisible, setRejectModalVisible, "Do You Want to Delete Journey ?", Colors.darkOrangeColor)}
+      {actionOverlay(
+        handleUpdate,
+        isAcceptModalVisible,
+        setAcceptModalVisible,
+        "Do You Want to Update ?",
+        Colors.primaryColor
+      )}
+      {actionOverlay(
+        handleCancel,
+        isRejectModalVisible,
+        setRejectModalVisible,
+        "Do You Want to Delete Journey ?",
+        Colors.darkOrangeColor
+      )}
     </SafeAreaView>
   );
-
-
-
 };
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -185,19 +274,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   userContainer: {
-  ...commonStyles.rowSpaceBetween,
+    ...commonStyles.rowSpaceBetween,
     padding: 16,
   },
   userInfo: {
-   ...commonStyles.rowAlignCenter
+    ...commonStyles.rowAlignCenter,
   },
   userImagePlaceholder: {
     width: 45,
     height: 45,
     borderRadius: 25,
     backgroundColor: Colors.extraLightGrayColor,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   userImage: {
     width: 50,
@@ -213,7 +302,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   chatIcon: {
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
   },
   divider: {
     height: 1,
@@ -223,7 +312,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   sectionTitle: {
-   ...Fonts.blackColor14Bold,
+    ...Fonts.blackColor14Bold,
     marginVertical: 8,
   },
   locationsContainer: {
@@ -231,30 +320,30 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   locationItem: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 16,
   },
   locationMarker: {
     width: 24,
-    alignItems: 'center',
+    alignItems: "center",
   },
-  
+
   locationInfo: {
     flex: 1,
     marginLeft: 8,
   },
- 
+
   bottomButtons: {
-    flexDirection: 'row',
+    flexDirection: "row",
     padding: 16,
     borderTopWidth: 1,
-    gap:10,
+    gap: 10,
     borderTopColor: Colors.extraLightGrayColor,
   },
- 
+
   listContainer: {
     padding: 5,
-     flexGrow:1,
+    flexGrow: 1,
   },
   emptyContainer: {
     flex: 1,
@@ -262,7 +351,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 60,
   },
-
 });
 
 export default JourneyManagement;

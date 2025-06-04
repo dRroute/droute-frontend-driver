@@ -304,3 +304,15 @@ export const trimText = (text, maxLength) => {
   if (typeof text !== "string") return "";
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 };
+export const formatDateTime = (isoString) => {
+  const date = new Date(isoString);
+  return date.toLocaleString("en-US", {
+    weekday: "long",    // e.g., Sunday
+    year: "numeric",    // e.g., 2025
+    month: "long",      // e.g., June
+    day: "numeric",     // e.g., 8
+    hour: "numeric",    // e.g., 12
+    minute: "2-digit",  // e.g., 38
+    hour12: true,       // AM/PM format
+  });
+};

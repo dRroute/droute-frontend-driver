@@ -21,7 +21,11 @@ import { commonAppBar } from "../../components/commonComponents";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import MyStatusBar from "../../components/myStatusBar";
 import { JourneyCard, LoadingJourneyCard } from "../../components/journeyCard";
-import { selectAuthloader, selectJourney, selectUser } from "../../redux/selector/authSelector";
+import {
+  selectAuthloader,
+  selectJourney,
+  selectUser,
+} from "../../redux/selector/authSelector";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllJourneyByDriverId } from "../../redux/thunk/journeyThunk";
 
@@ -111,25 +115,60 @@ const JOURNEYS = [
 const AllJourneyList = ({ navigation }) => {
   // const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  
+
   const handleCardClick = () => {
     navigation.navigate("JourneyManagement");
   };
 
-  const dispatch=useDispatch();
-  const user =useSelector(selectUser);
-  const selectLoader =useSelector(selectAuthloader);
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const selectLoader = useSelector(selectAuthloader);
 
-  const journey = useSelector(selectJourney);
-  console.log("Journey = ", JSON.stringify(journey, null, 2));
+  const journeys = useSelector(selectJourney);
+  console.log("Journey = ", JSON.stringify(journeys, null, 2));
 
+  useEffect(() => {
+    const fetchJourneys = async () => {
+      try {
+        const response = await dispatch(
+          getAllJourneyByDriverId(user?.driverId)
+        );
+        if (getAllJourneyByDriverId.fulfilled.match(response)) {
+          await dispatch(
+            showSnackbar({
+              message: response?.payload?.message,
+              type: "success",
+              time: 1000,
+            })
+          );
+        } else {
+          await dispatch(
+            showSnackbar({
+              message: response?.payload?.message || "Failed to load journeys.",
+              type: "error",
+              time: 3000,
+            })
+          );
+        }
+      } catch (e) {
+        await dispatch(
+          showSnackbar({
+            message: e.message || "An error occurred while loading journeys.",
+            type: "error",
+            time: 3000,
+          })
+        );
+      }
+    };
 
-useEffect(() => {
-  const fetchJourneys = async () => {
+    fetchJourneys();
+  }, []);
+
+  const handleRefresh = async () => {
     try {
       const response = await dispatch(getAllJourneyByDriverId(user?.driverId));
       if (getAllJourneyByDriverId.fulfilled.match(response)) {
-       await dispatch(
+        await dispatch(
           showSnackbar({
             message: response?.payload?.message,
             type: "success",
@@ -139,9 +178,7 @@ useEffect(() => {
       } else {
         await dispatch(
           showSnackbar({
-            message:
-              response?.payload?.message ||
-              "Failed to load journeys.",
+            message: response?.payload?.message || "Failed to load journeys.",
             type: "error",
             time: 3000,
           })
@@ -150,7 +187,7 @@ useEffect(() => {
     } catch (e) {
       await dispatch(
         showSnackbar({
-          message: e.message ||"An error occurred while loading journeys.",
+          message: e.message || "An error occurred while loading journeys.",
           type: "error",
           time: 3000,
         })
@@ -158,47 +195,13 @@ useEffect(() => {
     }
   };
 
-  fetchJourneys();
-}, []);
-
-
-const handleRefresh = async () => {
-    try {
-      const response = await dispatch(getAllJourneyByDriverId(user?.driverId));
-      if (getAllJourneyByDriverId.fulfilled.match(response)) {
-        await dispatch(
-          showSnackbar({
-            message: response?.payload?.message,
-            type: "success",
-            time: 1000,
-          })
-        );
-      } else {
-        await dispatch(
-          showSnackbar({
-            message:
-              response?.payload?.message ||
-              "Failed to load journeys.",
-            type: "error",
-            time: 3000,
-          })
-        );
-      }
-    } catch (e) {
-      await dispatch(
-        showSnackbar({
-          message: e.message ||"An error occurred while loading journeys.",
-          type: "error",
-          time: 3000,
-        })
-      );
-    }
-
-  }
-   
-   
   const renderJourneyCard = ({ item }) => (
-    <JourneyCard journey={item} method={handleCardClick} />
+    <TouchableOpacity
+      onPress={() => navigation.navigate("JourneyManagement",{journey:item})}
+      activeOpacity={0.7}
+    >
+      <JourneyCard journey={item} />
+    </TouchableOpacity>
   );
   return (
     <SafeAreaView style={styles.container}>
@@ -210,7 +213,7 @@ const handleRefresh = async () => {
         <FlatList
           refreshing={refreshing}
           onRefresh={handleRefresh}
-          data={journey}
+          data={journeys}
           renderItem={renderJourneyCard}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ flexGrow: 1 }}
