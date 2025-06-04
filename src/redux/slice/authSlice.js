@@ -109,7 +109,7 @@ const authSlice = createSlice({
       .addCase(getAllJourneyByDriverId.fulfilled, (state, action) => {
         state.loading = false;
         // console.log("User = ", action.payload);
-        state.user = action?.payload?.data;
+        state.journey = action?.payload?.data;
       })
       .addCase(getAllJourneyByDriverId.rejected, (state, action) => {
         state.loading = false;

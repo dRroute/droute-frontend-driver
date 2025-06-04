@@ -129,7 +129,7 @@ useEffect(() => {
     try {
       const response = await dispatch(getAllJourneyByDriverId(user?.driverId));
       if (getAllJourneyByDriverId.fulfilled.match(response)) {
-        dispatch(
+       await dispatch(
           showSnackbar({
             message: response?.payload?.message,
             type: "success",
@@ -137,7 +137,7 @@ useEffect(() => {
           })
         );
       } else {
-        dispatch(
+        await dispatch(
           showSnackbar({
             message:
               response?.payload?.message ||
@@ -148,7 +148,7 @@ useEffect(() => {
         );
       }
     } catch (e) {
-      dispatch(
+      await dispatch(
         showSnackbar({
           message: e.message ||"An error occurred while loading journeys.",
           type: "error",
@@ -166,7 +166,7 @@ const handleRefresh = async () => {
     try {
       const response = await dispatch(getAllJourneyByDriverId(user?.driverId));
       if (getAllJourneyByDriverId.fulfilled.match(response)) {
-        dispatch(
+        await dispatch(
           showSnackbar({
             message: response?.payload?.message,
             type: "success",
@@ -174,7 +174,7 @@ const handleRefresh = async () => {
           })
         );
       } else {
-        dispatch(
+        await dispatch(
           showSnackbar({
             message:
               response?.payload?.message ||
@@ -185,7 +185,7 @@ const handleRefresh = async () => {
         );
       }
     } catch (e) {
-      dispatch(
+      await dispatch(
         showSnackbar({
           message: e.message ||"An error occurred while loading journeys.",
           type: "error",

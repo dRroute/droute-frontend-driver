@@ -22,6 +22,5 @@ export const getAllJourneyByDriverIdAPI = (driverId) =>
   apiGetRequest({
     apiUrl: `${DRIVER_API_URL}/journey-details/driver/${driverId}`,     
     content_type: "application/json",
-    data: data,
     accessToken: null,
 }); 
