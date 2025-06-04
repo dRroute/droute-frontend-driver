@@ -80,9 +80,9 @@ const PostJourney = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
   const user = useSelector(selectUser);
-  console.log("date time is ", departureDateTime);
+  // console.log("date time is ", departureDateTime);
 
-  console.log("Data to be submitted:", data);
+  // console.log("Data to be submitted:", data);
 
   const handleSubmit = async () => {
     // Validate required fields
@@ -112,26 +112,33 @@ const PostJourney = ({ route, navigation }) => {
       if (!dateTimeStr) return null;
 
       try {
-        const [datePart, timePart] = dateTimeStr.split(', ');
-        const [day, month, year] = datePart.split('/');
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${timePart}:00`;
+        const [datePart, timePart] = dateTimeStr.split(", ");
+        const [day, month, year] = datePart.split("/");
+        return `${year}-${month.padStart(2, "0")}-${day.padStart(
+          2,
+          "0"
+        )}T${timePart}:00`;
       } catch (error) {
         console.error("Error formatting date:", error);
         return null;
       }
     };
 
-
     // Prepare the data object
 
-    const journeySource = await fetchAddressComponent(data?.sourceCoordinate?.latitude, data?.sourceCoordinate?.latitude);
-    const journeyDestination = await fetchAddressComponent(data?.destinationCoordinate?.latitude, data?.destinationCoordinate?.latitude);
-    
-    const journeyData = {
+    const journeySource = await fetchAddressComponent(
+      data?.sourceCoordinate?.latitude,
+      data?.sourceCoordinate?.longitude
+    );
+    const journeyDestination = await fetchAddressComponent(
+      data?.destinationCoordinate?.latitude,
+      data?.destinationCoordinate?.longitude
+    );
 
+    const journeyData = {
       driverId: user?.driverId,
-      journeySource,
-      journeyDestination,
+      journeySource: journeySource,
+      journeyDestination: journeyDestination,
       visitedStateDuringJourney: stateList,
 
       availableLength: length,
@@ -143,13 +150,15 @@ const PostJourney = ({ route, navigation }) => {
       availableWeightMeasurementType: weightUnit,
       expectedDepartureDateTime: formatDateTime(departureDateTime),
       expectedArrivalDateTime: formatDateTime(arrivalDateTime),
-
     };
 
     setIsLoading(true);
 
     try {
-      console.log("Formatted Journey data to be submitted:", JSON.stringify(journeyData, null, 2));
+      console.log(
+        "Formatted Journey data to be submitted:",
+        JSON.stringify(journeyData, null, 2)
+      );
 
       // Here you would typically make your API call
       // Example: await api.post('/journeys', journeyData);
@@ -165,7 +174,6 @@ const PostJourney = ({ route, navigation }) => {
 
       // Optionally reset form or navigate away
       // resetForm();
-
     } catch (error) {
       console.error("Submission error:", error);
       await dispatch(
@@ -214,11 +222,82 @@ const PostJourney = ({ route, navigation }) => {
       setSelectedForm(formKey);
     }
   };
+
+  const CapacitySection = ({
+    weightUnit,
+    setWeightUnit,
+    lengthUnit,
+    setLengthUnit,
+    weight,
+    setWeight,
+    length,
+    setLength,
+    height,
+    setHeight,
+    width,
+    setWidth,
+  }) => (
+    <>
+      <View style={styles.section}>
+        {typeSection(weightUnit, setWeightUnit, "Select Weight Unit", false, [
+          { label: "Ton", value: "Ton" },
+          { label: "kg", value: "Kg" },
+        ])}
+      </View>
+
+      <View style={styles.section}>
+        {typeSection(lengthUnit, setLengthUnit, "Select Length Unit", false, [
+          { label: "meter", value: "m" },
+          { label: "foot", value: "f" },
+          { label: "Centimeter", value: "cm" },
+        ])}
+      </View>
+
+      <View style={[styles.section, commonStyles.rowSpaceBetween]}>
+        <LabeledInput
+          label={`Weight (${weightUnit})`}
+          placeholder="Enter Weight Capacity"
+          value={weight}
+          setter={setWeight}
+          required
+          style={{ marginRight: 8 }}
+        />
+        <LabeledInput
+          label={`Length (${lengthUnit})`}
+          placeholder="Enter Length"
+          value={length}
+          setter={setLength}
+          required
+          style={{ marginLeft: 8 }}
+        />
+      </View>
+
+      <View style={[styles.section, commonStyles.rowSpaceBetween]}>
+        <LabeledInput
+          label={`Height (${lengthUnit})`}
+          placeholder="Enter Height"
+          value={height}
+          setter={setHeight}
+          required
+          style={{ marginRight: 8 }}
+        />
+        <LabeledInput
+          label={`Width (${lengthUnit})`}
+          placeholder="Enter Width"
+          value={width}
+          setter={setWidth}
+          required
+          style={{ marginLeft: 8 }}
+        />
+      </View>
+    </>
+  );
+
   const LabeledInput = ({
     label,
     placeholder,
     value,
-    onChangeText,
+    setter,
     required = false,
     style,
   }) => {
@@ -234,7 +313,7 @@ const PostJourney = ({ route, navigation }) => {
           style={styles.input}
           placeholder={placeholder}
           value={value}
-          onChangeText={onChangeText}
+          onChangeText={(text) => setter(text)}
           maxLength={80}
           keyboardType="numeric"
         />
@@ -270,10 +349,16 @@ const PostJourney = ({ route, navigation }) => {
         }}
       >
         <View style={styles.card}>
-          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
             <Text style={styles.sectionTitle}>Location Detail</Text>
             <Ionicons
-              name={selectedForm === "locationDetail" ? "caret-back-outline" : "caret-down-outline"}
+              name={
+                selectedForm === "locationDetail"
+                  ? "caret-back-outline"
+                  : "caret-down-outline"
+              }
               size={18}
               color={Colors.primaryColor}
             />
@@ -375,10 +460,16 @@ const PostJourney = ({ route, navigation }) => {
         onPress={() => handleVisibility("additionalDetail")}
       >
         <View style={styles.card}>
-          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
             <Text style={styles.sectionTitle}>Additional Detail</Text>
             <Ionicons
-              name={selectedForm === "additionalDetail" ? "caret-back-outline" : "caret-down-outline"}
+              name={
+                selectedForm === "additionalDetail"
+                  ? "caret-back-outline"
+                  : "caret-down-outline"
+              }
               size={18}
               color={Colors.primaryColor}
             />
@@ -386,7 +477,20 @@ const PostJourney = ({ route, navigation }) => {
           {selectedForm === "additionalDetail" && (
             <>
               {dateTimeInfo?.()}
-              {capacitySection?.()}
+              <CapacitySection
+                weightUnit={weightUnit}
+                setWeightUnit={setWeightUnit}
+                lengthUnit={lengthUnit}
+                setLengthUnit={setLengthUnit}
+                weight={weight}
+                setWeight={setWeight}
+                length={length}
+                setLength={setLength}
+                height={height}
+                setHeight={setHeight}
+                width={width}
+                setWidth={setWidth}
+              />
             </>
           )}
         </View>
@@ -431,62 +535,6 @@ const PostJourney = ({ route, navigation }) => {
           onConfirm={handleDatePick}
           onCancel={hidePicker}
         />
-      </>
-    );
-  }
-  function capacitySection() {
-    return (
-      <>
-        <View style={[styles.section, {}]}>
-          {typeSection(weightUnit, setWeightUnit, "Select Weight Unit", false, [
-            { label: "Ton", value: "Ton" },
-            { label: "kg", value: "Kg" },
-          ])}
-        </View>
-        <View style={[styles.section, {}]}>
-          {typeSection(lengthUnit, setLengthUnit, "Select Length Unit", false, [
-            { label: "meter", value: "m" },
-            { label: "foot", value: "f" },
-            { label: "Centimeter", value: "cm" },
-          ])}
-        </View>
-        <View style={[styles.section, commonStyles.rowSpaceBetween]}>
-          <LabeledInput
-            label={`Weight (${weightUnit})`}
-            placeholder="Enter Weight Capacity"
-            value={weight}
-            onChangeText={setWeight}
-            required
-            style={{ marginRight: 8 }}
-          />
-          <LabeledInput
-            label={`Length (${lengthUnit})`}
-            placeholder="Enter Length"
-            value={length}
-            onChangeText={setLength}
-            required
-            style={{ marginLeft: 8 }}
-          />
-        </View>
-
-        <View style={[styles.section, commonStyles.rowSpaceBetween]}>
-          <LabeledInput
-            label={`Height (${lengthUnit})`}
-            placeholder="Enter Height"
-            value={height}
-            onChangeText={setHeight}
-            required
-            style={{ marginRight: 8 }}
-          />
-          <LabeledInput
-            label={`Width (${lengthUnit})`}
-            placeholder="Enter Width"
-            value={width}
-            onChangeText={setWidth}
-            required
-            style={{ marginLeft: 8 }}
-          />
-        </View>
       </>
     );
   }
