@@ -16,6 +16,8 @@ import { Colors, commonStyles, Fonts } from '../../constants/styles';
 import SwipeableTabs from '../../components/swipeableTabs';
 import { ParcelCard, ParcelLoadingCard } from '../../components/parcelCard';
 import { FlatList } from 'react-native-gesture-handler';
+import RequestDetailScreen from '../orders/requestDetailScreen';
+import PendingRequests from '../orders/pendingRequests';
 
 const { width } = Dimensions.get("window");
 const PACKAGES = [
@@ -160,8 +162,8 @@ const renderPackageCard = ({ item }) => <ParcelCard  parcelItem={item} />;
       <MyStatusBar />
       {commonAppBar("Manage Journey", navigation)}
       <SwipeableTabs
-        titles={['Journey Detail', 'Order Detail']}
-        components={[<JourneyDetailTab />, <OrdersDetail />]}
+        titles={['Journey Detail',"New Requests",'Confirmed Orders',]}
+        components={[<JourneyDetailTab />,<PendingRequests />, <OrdersDetail />]}
       />
       {actionOverlay(handleUpdate, isAcceptModalVisible, setAcceptModalVisible, "Do You Want to Update ?", Colors.primaryColor)}
       {actionOverlay(handleCancel, isRejectModalVisible, setRejectModalVisible, "Do You Want to Delete Journey ?", Colors.darkOrangeColor)}

@@ -91,16 +91,15 @@ const JOURNEYS = [
 
 const CurrentJourney = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
- const handleCardClick =(item)=>{
-  navigation.navigate("JourneyManagement")
- }
+
+
+
+
   const renderJourneyCard = ({ item }) => (
-    <JourneyCard journey={item} method={handleCardClick} />
+    <TouchableOpacity onPress={()=>navigation.navigate("JourneyManagement",item)} activeOpacity={0.7}>
+     <JourneyCard journey={item}  />
+    </TouchableOpacity>
   );
-
-
-
- 
 
   return (
     <SafeAreaView style={styles.container}>

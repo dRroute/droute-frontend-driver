@@ -20,7 +20,7 @@ import {
 
 export const JourneyCard = ({ journey ,method}) => {
   return (
-    <TouchableOpacity activeOpacity={0.7} onPress={method} style={styles.card}>
+    <View  style={styles.card}>
       <View style={styles.routeContainer}>
         <View style={styles.locationContainer}>
           <MaterialIcons name="location-on" size={20} color={Colors.primaryColor} />
@@ -87,7 +87,7 @@ export const JourneyCard = ({ journey ,method}) => {
           <Text style={{...Fonts.primaryColor12SemiBold ,fontWeight:"700",color:"green"}}>Completed</Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
