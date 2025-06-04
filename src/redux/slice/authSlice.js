@@ -33,7 +33,7 @@ const authSlice = createSlice({
       })
       .addCase(signIn.fulfilled, (state, action) => {
         state.loading = false;
-        console.log("User = ", action.payload);
+        // console.log("User = ", action.payload);
         state.user = action?.payload?.data;
       })
       .addCase(signIn.rejected, (state, action) => {
@@ -48,7 +48,7 @@ const authSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
-        console.log("User = ", action.payload);
+        // console.log("User = ", action.payload);
         state.user = action?.payload?.data;
       })
       .addCase(register.rejected, (state, action) => {
@@ -62,7 +62,7 @@ const authSlice = createSlice({
       })
       .addCase(getDriverByDriverId.fulfilled, (state, action) => {
         state.loading = false;
-        console.log("User = ", action.payload);
+        // console.log("User = ", action.payload);
         state.user = action?.payload?.data;
       })
       .addCase(getDriverByDriverId.rejected, (state, action) => {
@@ -76,7 +76,7 @@ const authSlice = createSlice({
       })
       .addCase(completeProfile.fulfilled, (state, action) => {
         state.loading = false;
-        console.log("User = ", action.payload);
+        // console.log("User = ", action.payload);
         state.user = action?.payload?.data;
       })
       .addCase(completeProfile.rejected, (state, action) => {

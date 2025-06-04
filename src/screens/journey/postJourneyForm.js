@@ -16,7 +16,7 @@ import {
   reUsableBottomSheet,
   typeSection,
 } from "../../components/commonComponents";
-import { trimText } from "../../utils/commonMethods";
+import { fetchAddressComponent, trimText } from "../../utils/commonMethods";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Colors, commonStyles, Sizes } from "../../constants/styles";
 import { FlatList, Pressable } from "react-native-gesture-handler";
@@ -82,92 +82,103 @@ const PostJourney = ({ route, navigation }) => {
   const user = useSelector(selectUser);
   console.log("date time is ", departureDateTime);
 
+  console.log("Data to be submitted:", data);
 
   const handleSubmit = async () => {
-  // Validate required fields
-  if (
-    !departureDateTime ||
-    !arrivalDateTime ||
-    !weight ||
-    !height ||
-    !width ||
-    !length ||
-    !lengthUnit ||
-    !weightUnit ||
-    stateList.length === 0
-  ) {
-    await dispatch(
-      showSnackbar({
-        message: "Please Fill all The Details First",
-        type: "error",
-        time: 3000,
-      })
-    );
-    return;
-  }
+    // Validate required fields
+    if (
+      !departureDateTime ||
+      !arrivalDateTime ||
+      !weight ||
+      !height ||
+      !width ||
+      !length ||
+      !lengthUnit ||
+      !weightUnit ||
+      stateList.length === 0
+    ) {
+      await dispatch(
+        showSnackbar({
+          message: "Please Fill all The Details First",
+          type: "error",
+          time: 3000,
+        })
+      );
+      return;
+    }
 
-  // Date formatting function
-  const formatDateTime = (dateTimeStr) => {
-    if (!dateTimeStr) return null;
+    // Date formatting function
+    const formatDateTime = (dateTimeStr) => {
+      if (!dateTimeStr) return null;
+
+      try {
+        const [datePart, timePart] = dateTimeStr.split(', ');
+        const [day, month, year] = datePart.split('/');
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${timePart}:00`;
+      } catch (error) {
+        console.error("Error formatting date:", error);
+        return null;
+      }
+    };
+
+
+    // Prepare the data object
+
+    const journeySource = await fetchAddressComponent(data?.sourceCoordinate?.latitude, data?.sourceCoordinate?.latitude);
+    const journeyDestination = await fetchAddressComponent(data?.destinationCoordinate?.latitude, data?.destinationCoordinate?.latitude);
     
+    const journeyData = {
+
+      driverId: user?.driverId,
+      journeySource,
+      journeyDestination,
+      visitedStateDuringJourney: stateList,
+
+      availableLength: length,
+      availableWidth: width,
+      availableHeight: height,
+      availableSpaceMeasurementType: lengthUnit,
+
+      availableWeight: weight,
+      availableWeightMeasurementType: weightUnit,
+      expectedDepartureDateTime: formatDateTime(departureDateTime),
+      expectedArrivalDateTime: formatDateTime(arrivalDateTime),
+
+    };
+
+    setIsLoading(true);
+
     try {
-      const [datePart, timePart] = dateTimeStr.split(', ');
-      const [day, month, year] = datePart.split('/');
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${timePart}:00`;
+      console.log("Formatted Journey data to be submitted:", JSON.stringify(journeyData, null, 2));
+
+      // Here you would typically make your API call
+      // Example: await api.post('/journeys', journeyData);
+
+      // Show success message
+      await dispatch(
+        showSnackbar({
+          message: "Journey created successfully!",
+          type: "success",
+          time: 3000,
+        })
+      );
+
+      // Optionally reset form or navigate away
+      // resetForm();
+
     } catch (error) {
-      console.error("Error formatting date:", error);
-      return null;
+      console.error("Submission error:", error);
+      await dispatch(
+        showSnackbar({
+          message: "Failed to create journey. Please try again.",
+          type: "error",
+          time: 3000,
+        })
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  // Prepare the data object
-  const journeyData = {
-    sourceAddress: data?.sourceAddress || '',
-    destinationAddress: data?.destinationAddress || '',
-    states: stateList,
-    departureDateTime: formatDateTime(departureDateTime),
-    arrivalDateTime: formatDateTime(arrivalDateTime),
-    weight: weight,
-    weightUnit: weightUnit,
-    length: length,
-    height: height,
-    width: width,
-    lengthUnit: lengthUnit,
-  };
-
-  setIsLoading(true);
-  
-  try {
-    console.log("Formatted Journey data to be submitted:", journeyData);
-    
-    // Here you would typically make your API call
-    // Example: await api.post('/journeys', journeyData);
-    
-    // Show success message
-    await dispatch(
-      showSnackbar({
-        message: "Journey created successfully!",
-        type: "success",
-        time: 3000,
-      })
-    );
-    
-    // Optionally reset form or navigate away
-    // resetForm();
-    
-  } catch (error) {
-    console.error("Submission error:", error);
-    await dispatch(
-      showSnackbar({
-        message: "Failed to create journey. Please try again.",
-        type: "error",
-        time: 3000,
-      })
-    );
-  } finally {
-    setIsLoading(false);
-  }
-};
   const toggleState = (state) => {
     if (stateList.includes(state)) {
       setStateList(stateList.filter((s) => s !== state));
