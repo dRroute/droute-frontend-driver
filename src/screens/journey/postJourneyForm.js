@@ -25,6 +25,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "../../redux/slice/snackbarSlice";
 import { selectUser } from "../../redux/selector/authSelector";
+import { postJourney } from "../../redux/thunk/journeyThunk";
 const suggestionStateList = [
   "Andhra Pradesh",
   "Arunachal Pradesh",
@@ -139,7 +140,7 @@ const PostJourney = ({ route, navigation }) => {
       driverId: user?.driverId,
       journeySource: journeySource,
       journeyDestination: journeyDestination,
-      visitedStateDuringJourney: stateList,
+      visitedStateDuringJourney: stateList.join(','),
 
       availableLength: length,
       availableWidth: width,
@@ -160,20 +161,34 @@ const PostJourney = ({ route, navigation }) => {
         JSON.stringify(journeyData, null, 2)
       );
 
-      // Here you would typically make your API call
-      // Example: await api.post('/journeys', journeyData);
+      const response = await dispatch(postJourney(journeyData));
 
-      // Show success message
-      await dispatch(
-        showSnackbar({
-          message: "Journey created successfully!",
-          type: "success",
-          time: 3000,
-        })
-      );
+      if (postJourney.fulfilled.match(response)) {
+        console.log("Journey created successfully:", response.payload);
 
-      // Optionally reset form or navigate away
-      // resetForm();
+        await dispatch(
+          showSnackbar({
+            message: response?.payload?.message || "Journey created successfully.",
+            type: "success",
+            time: 3000,
+          })
+        );
+
+
+
+      } else {
+        console.error("Failed to create journey:", response.payload);
+        await dispatch(
+          showSnackbar({
+            message: response?.payload?.message || "Failed to create journey.",
+            type: "error",
+            time: 3000,
+          })
+        );
+
+        return;
+       
+      }
     } catch (error) {
       console.error("Submission error:", error);
       await dispatch(

@@ -281,7 +281,7 @@ export const fetchAddressComponent = async (latitude, longitude) => {
       pinCode: pinCode ? pinCode.long_name : "",
       country: country ? country.long_name : "",
     };
-    console.log("address data in fetchAddress ", addressData);
+    // console.log("address data in fetchAddress ", addressData);    
     return addressData;
   } catch (error) {
     console.log("Error fetching address:", error);

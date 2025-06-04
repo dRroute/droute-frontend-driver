@@ -1,9 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createSlice } from "@reduxjs/toolkit";
 import { register, signIn, getDriverByDriverId, completeProfile } from "../thunk/authThunk";
+import { postJourney } from "../thunk/journeyThunk";
 
 const initialState = {
   user: null,
+  journey: [],
   loading: false,
   errorMessage: null,
   //   accessToken: null,
@@ -83,6 +85,24 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload.message;
       });
+
+    // Post Journey
+    // This handles the postJourney thunk
+      builder
+      .addCase(postJourney.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(postJourney.fulfilled, (state, action) => {
+        state.loading = false;
+        // console.log("Journey = ", action.payload);
+        state.journey = action?.payload?.data;
+      })
+      .addCase(postJourney.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.message;
+      });
+
   },
 });
 
