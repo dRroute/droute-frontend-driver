@@ -41,7 +41,7 @@ const JOURNEYS = [
     to: "prayagraj up",
     departure: {
       date: "20 Feb",
-      time: "05:00 PM",
+      time: "05:00 PM", 
     },
     arrival: {
       date: "20 Feb",

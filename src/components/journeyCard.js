@@ -12,7 +12,7 @@ import {
   MaterialCommunityIcons,
   FontAwesome,
 } from "@expo/vector-icons";
-import { formatDateTime } from "../utils/commonMethods";
+import { formatDateTime, getDimensionUnitAbbreviation, getWeightUnitAbbreviation } from "../utils/commonMethods";
 // Journey =  [
 //   {
 //     "journeyId": 1,
@@ -118,21 +118,21 @@ export const JourneyCard = ({ journey }) => {
           <FontAwesome name="cube" size={18} color={Colors.blackColor} />
           <View style={styles.spaceTextContainer}>
             <Text style={styles.label}>Available Space:</Text>
-            <Text style={styles.descriptionText}>{journey?.availableLength*journey?.availableWidth*journey?.availableHeight}{" "}{journey?.availableSpaceMeasurementType}^3</Text>
+            <Text style={styles.descriptionText}>{journey?.availableLength*journey?.availableWidth*journey?.availableHeight}{" "}{getDimensionUnitAbbreviation(journey?.availableSpaceMeasurementType)}^3</Text>
           </View>
         </View>
         <View style={{ ...commonStyles.rowSpaceBetween }}>
           <FontAwesome name="balance-scale" size={18} color={Colors.blackColor} />
           <View style={styles.spaceTextContainer}>
             <Text style={styles.label}>Weight Capacity:</Text>
-            <Text style={styles.descriptionText}>{journey?.availableWeight}{" "}{journey?.availableWeightMeasurementType}</Text>
+            <Text style={styles.descriptionText}>{journey?.availableWeight}{" "}{getWeightUnitAbbreviation(journey?.availableWeightMeasurementType)}</Text>
           </View>
         </View>
       </View>
 
       <View style={styles.bottomContainer}>
         <View style={styles.packagesButton}>
-          <Text style={styles.packagesText}>Orders: 25</Text>
+          <Text style={styles.packagesText}>Total Orders: {journey?.totalConfirmedPackages || 0}</Text>
         </View>
 
         <View>
