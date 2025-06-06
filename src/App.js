@@ -58,8 +58,7 @@ function AppNavigator() {
         >
           {!user ? (
             <>
-             <Stack.Screen name="JourneyManagement" component={JourneyManagement} />
-              <Stack.Screen name="OrderDetailScreen" component={OrderDetailScreen} />
+            
               <Stack.Screen name="Onboarding" component={OnboardingScreen} />
               <Stack.Screen name="SignInScreen" component={SignInScreen} />
               <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
