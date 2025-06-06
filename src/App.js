@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { Provider, useDispatch, useSelector } from "react-redux";
@@ -116,11 +117,30 @@ function AppNavigator() {
 export default function App() {
   return (
     <Provider store={store}>
-        <Snackbar />
-         <View style={{ flex: 1 }}>
-         <MyStatusBar/>
-       <AppNavigator />
-      </View>
+      <SafeAreaProvider>
+        <MyStatusBar />
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+        >
+          <SafeAreaView style={styles.safeArea} edges={["top", "left", "right", "bottom"]}>
+            <View style={styles.container}>
+              <Snackbar />
+              <AppNavigator />
+            </View>
+          </SafeAreaView>
+        </KeyboardAvoidingView>
+      </SafeAreaProvider>
     </Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  container: {
+    flex: 1,
+  },
+});

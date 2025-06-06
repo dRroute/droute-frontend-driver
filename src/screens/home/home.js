@@ -32,6 +32,7 @@ import {
 } from "../../utils/commonMethods";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/selector/authSelector";
+import MyStatusBar from "../../components/myStatusBar";
 
 const COLORS = {
   green: "#4CAF50",
@@ -171,11 +172,7 @@ const Home = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar
-        translucent
-        backgroundColor="transparent"
-        barStyle="light-content"
-      />
+      <MyStatusBar/>
       <ImageBackground
         source={backgroundSource}
         style={styles.headerBackground}
