@@ -35,6 +35,7 @@ import JourneyManagement from './screens/journey/journeyManagement';
 import PreviousJourneyDetail from './screens/journey/previousJourneyDetail';
 import UserHome from './screens/home/userHome';
 import { selectUser } from './redux/selector/authSelector';
+import OrderDetailScreen from './screens/orders/orderDetailScreen';
 
 const Stack = createStackNavigator();
 
@@ -46,7 +47,7 @@ function AppNavigator() {
     console.log('User changed:', user);
   }, [user]);
 
-  
+
   return (
       <NavigationContainer>
         <Stack.Navigator
@@ -57,6 +58,8 @@ function AppNavigator() {
         >
           {!user ? (
             <>
+             <Stack.Screen name="JourneyManagement" component={JourneyManagement} />
+              <Stack.Screen name="OrderDetailScreen" component={OrderDetailScreen} />
               <Stack.Screen name="Onboarding" component={OnboardingScreen} />
               <Stack.Screen name="SignInScreen" component={SignInScreen} />
               <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
@@ -65,21 +68,24 @@ function AppNavigator() {
             </>
           ) : user.profileStatus === 'PENDING_COMPLETION' ? (
             <>
-            {/* <Stack.Screen name="UserHome" component={UserHome} /> */}
+         
               <Stack.Screen name="InstructionToComplete" component={InstructionToComplete} />
               <Stack.Screen name="CompleteProfileForm" component={CompleteProfileForm} />
               <Stack.Screen name="HelpScreen" component={HelpScreen} />
             </>
           ) : user.profileStatus === 'PENDING_VERIFICATION' || user.profileStatus === 'PENDING_APPROVAL' ? (
             <>
+             
               <Stack.Screen name="PendingForApprovalScreen" component={PendingForApprovalScreen} />
               <Stack.Screen name="HelpScreen" component={HelpScreen} />
             </>
           ) : user.profileStatus === 'ACTIVE' ? (
              <>
+              
               <Stack.Screen name="BottomNavigationBar" component={BottomNavigationBar} />
               <Stack.Screen name="Home" component={Home} />
               <Stack.Screen name="JourneyManagement" component={JourneyManagement} />
+              <Stack.Screen name="OrderDetailScreen" component={OrderDetailScreen} />
               <Stack.Screen name="PostJourney" component={PostJourney} />
               <Stack.Screen name="AllJourneyList" component={AllJourneyList} />
               <Stack.Screen name="PreviousJourneyDetail" component={PreviousJourneyDetail} />

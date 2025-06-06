@@ -13,13 +13,13 @@ import { Feather } from "@expo/vector-icons";
 import { Colors, screenWidth } from "../constants/styles";
 import { trimText } from "../utils/commonMethods";
 
-export const ParcelCard = ({ parcelItem, onViewDetails }) => {
-  const handleCall = () => {
-    Linking.openURL(`tel:${parcelItem.phone.replace(/\s/g, "")}`);
+export const ParcelCard = ({ parcelItem, isSelected, onAddRemove }) => {
+  const handleAddRemove = () => {
+    onAddRemove(parcelItem);
   };
 
   return (
-    <TouchableOpacity activeOpacity={0.7} style={styles.card}>
+    <View activeOpacity={0.7} style={styles.card}>
       <View style={styles.cardContent}>
         <View style={styles.imageContainer}>
           {parcelItem.image ? (
@@ -67,21 +67,23 @@ export const ParcelCard = ({ parcelItem, onViewDetails }) => {
       </View>
 
       <View style={styles.cardFooter}>
-        <TouchableOpacity style={styles.callButton} onPress={handleCall}>
+        <TouchableOpacity style={[styles.callButton,{backgroundColor:isSelected? Colors.darkOrangeColor:Colors.primaryColor}]} onPress={handleAddRemove}>
           <Feather
-            name="phone"
-            size={16}
+            name={isSelected ? "minus" : "plus"}
+            size={14}
             color={Colors.whiteColor}
             style={styles.phoneIcon}
           />
-          <Text style={styles.callButtonText}>{parcelItem.phone}</Text>
+          <Text style={styles.callButtonText}>
+            {isSelected ? "Remove" : "Add Stop"}
+          </Text>
         </TouchableOpacity>
 
         <View>
           <Text style={[styles.statusText, { color: "teal" }]}>Delivered</Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -256,9 +258,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   callButton: {
-    backgroundColor: Colors.primaryColor,
-    paddingVertical: 4,
-    paddingHorizontal: 6,
+    
+    paddingVertical: 6,
+    paddingHorizontal: 8,
     borderRadius: 20,
     flexDirection: "row",
     alignItems: "center",

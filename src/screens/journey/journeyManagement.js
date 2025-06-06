@@ -24,28 +24,36 @@ const PACKAGES = [
   {
     id: "PCL2025",
     image:
-      "https://images.unsplash.com/photo-1701615004837-40d8573b6652?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHVzZXJ8ZW58MHx8MHx8fDA%3D",
+      "https://thumbs.dreamstime.com/b/delivery-man-blue-uniform-handing-parcel-box-to-recipient-courier-service-concept-84275323.jpg?w=768",
     phone: "9876543210",
     pickup: {
       address: "101 Alpha Street nksn njsnn njnsj bbdj jdjne jndjn nnd jnjsj",
+      latitude: 28.6139,
+      longitude: 77.209,
     },
     delivery: {
       address:
         "202 Beta Avenue nsnj njsnjn njsnj jbsjb jbsjb bjs njsnjns njsnj",
+      latitude: 19.076,
+      longitude: 72.8777,
     },
     status: "Cancelled",
   },
   {
     id: "PCL202s5",
     image:
-      "https://images.unsplash.com/photo-1701615004837-40d8573b6652?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHVzZXJ8ZW58MHx8MHx8fDA%3D",
+      "https://thumbs.dreamstime.com/b/delivery-man-blue-uniform-handing-parcel-box-to-recipient-courier-service-concept-84275323.jpg?w=768",
     phone: "9876543210",
     pickup: {
       address: "101 Alpha Street nksn njsnn njnsj bbdj jdjne jndjn nnd jnjsj",
+      latitude: 12.9716,
+      longitude: 77.5946,
     },
     delivery: {
       address:
         "202 Beta Avenue nsnj njsnjn njsnj jbsjb jbsjb bjs njsnjns njsnj",
+      latitude: 13.0827,
+      longitude: 80.2707,
     },
     status: "Delivered",
   },
@@ -55,19 +63,38 @@ const PACKAGES = [
     phone: "9876543210",
     pickup: {
       address: "101 Alpha Street nksn njsnn njnsj bbdj jdjne jndjn nnd jnjsj",
+      latitude: 22.5726,
+      longitude: 88.3639,
     },
     delivery: {
       address:
         "202 Beta Avenue nsnj njsnjn njsnj jbsjb jbsjb bjs njsnjns njsnj",
+      latitude: 23.0225,
+      longitude: 72.5714,
     },
     status: "Ongoing",
   },
 ];
+
 const JourneyManagement = ({ navigation, route }) => {
-  const { journey } = route.params;
+  const { journey } = "nnsa";
+  // route.params;
   const [isAcceptModalVisible, setAcceptModalVisible] = useState(false);
   const [isRejectModalVisible, setRejectModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedParcels, setSelectedParcels] = useState([]);
+
+  const handleAddRemoveParcel = (parcel) => {
+    setSelectedParcels((prev) => {
+      const exists = prev.some((p) => p.id === parcel.id);
+      if (exists) {
+        return prev.filter((p) => p.id !== parcel.id); // remove
+      } else {
+        return [...prev, parcel]; // add
+      }
+    });
+  };
+
   const handleUpdate = () => {};
   const handleCancel = () => {};
   // Journey =  [
@@ -182,7 +209,17 @@ const JourneyManagement = ({ navigation, route }) => {
   };
 
   const OrdersDetail = () => {
-    const renderPackageCard = ({ item }) => <ParcelCard parcelItem={item} />;
+    const renderPackageCard = ({ item }) => (
+      <TouchableOpacity
+        onPress={() => navigation.navigate("OrderDetailScreen")}
+      >
+        <ParcelCard
+          parcelItem={item}
+          isSelected={selectedParcels.some((p) => p.id === item.id)}
+          onAddRemove={handleAddRemoveParcel}
+        />
+      </TouchableOpacity>
+    );
     return (
       <>
         {isLoading ? (
@@ -206,6 +243,15 @@ const JourneyManagement = ({ navigation, route }) => {
             }
           />
         )}
+        <View style={styles.bottomButtons}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setAcceptModalVisible(true)}
+            style={{ ...commonStyles.button, flex: 1 }}
+          >
+            <Text style={commonStyles.buttonText}>Start Journey</Text>
+          </TouchableOpacity>
+        </View>
       </>
     );
   };

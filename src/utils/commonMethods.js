@@ -1,6 +1,6 @@
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
-import { Alert } from "react-native";
+import { Alert, Linking, Platform } from "react-native";
 import Key from "../constants/key";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/selector/authSelector";
@@ -344,4 +344,13 @@ const dimensionUnitAbbreviations = {
 
 export const getDimensionUnitAbbreviation = (enumName) => {
   return dimensionUnitAbbreviations[enumName] || enumName;
+};
+
+export  const openGoogleMaps = (latitude, longitude, label = 'dRoute Service') => {
+  const encodedLabel = encodeURIComponent(label);
+  const url = Platform.select({
+    ios: `maps://?q=${encodedLabel}&ll=${latitude},${longitude}`,
+    android: `geo:${latitude},${longitude}?q=${latitude},${longitude}(${encodedLabel})`,
+  });
+  Linking.openURL(url);
 };
