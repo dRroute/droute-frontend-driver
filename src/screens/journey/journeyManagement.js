@@ -77,8 +77,7 @@ const PACKAGES = [
 ];
 
 const JourneyManagement = ({ navigation, route }) => {
-  const { journey } = "nnsa";
-  // route.params;
+  const { journey } = route.params;
   const [isAcceptModalVisible, setAcceptModalVisible] = useState(false);
   const [isRejectModalVisible, setRejectModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -97,39 +96,43 @@ const JourneyManagement = ({ navigation, route }) => {
 
   const handleUpdate = () => {};
   const handleCancel = () => {};
-  // Journey =  [
-  //   {
-  //     "journeyId": 1,
-  //     "driverId": 1,
-  //     "journeySource": {
-  //       "locationId": 2,
-  //       "longitude": "77.0941087",
-  //       "latitude": "28.4921191",
-  //       "address": "U-46/24, Gali Number 5 NATHUPURA, 25, U Block, U Block, DLF Phase 3, Sector 24, Gurugram, Haryana 122022, India",
-  //       "city": "Gurugram",
-  //       "pinCode": null,
-  //       "country": "India"
-  //     },
-  //     "journeyDestination": {
-  //       "locationId": 1,
-  //       "longitude": "84.0188781",
-  //       "latitude": "24.9560393",
-  //       "address": "Sasaram Junction, Dilia, Sasaram, Bihar 821115, India",
-  //       "city": "Sasaram",
-  //       "pinCode": null,
-  //       "country": "India"
-  //     },
-  //     "visitedStateDuringJourney": "Bihar,Delhi,Haryana,Uttar Pradesh",
-  //     "availableLength": 5,
-  //     "availableWidth": 3,
-  //     "availableHeight": 3,
-  //     "availableSpaceMeasurementType": "METERS",
-  //     "availableWeight": 500,
-  //     "availableWeightMeasurementType": "KILOGRAMS",
-  //     "status": "NOT_STARTED",
-  //     "expectedDepartureDateTime": "2025-06-08T00:38:00",
-  //     "expectedArrivalDateTime": "2025-06-10T00:38:00"
-  //   }
+// Journey =  [
+//   {
+//     "journeyId": 1,
+//     "driverId": 4,
+//     "journeySource": {
+//       "locationId": 2,
+//       "longitude": "73.8347712",
+//       "latitude": "18.4663579",
+//       "address": "FR8M+HVG, Sinhgad College Rd, Vadgaon Budruk, Pune, Maharashtra 411041, India",
+//       "city": "Pune",
+//       "pinCode": "411041",
+//       "state": null,
+//       "country": "India"
+//     },
+//     "journeyDestination": {
+//       "locationId": 1,
+//       "longitude": "77.1149472",
+//       "latitude": "28.6109026",
+//       "address": "J467+9X8, Kirby Place, Delhi Cantonment, New Delhi, Delhi 110010, India",
+//       "city": "New Delhi",
+//       "pinCode": "110010",
+//       "state": null,
+//       "country": "India"
+//     },
+//     "visitedStateDuringJourney": "Madhya Pradesh,Maharashtra,Delhi",
+//     "availableLength": 5,
+//     "availableWidth": 5,
+//     "availableHeight": 5,
+//     "availableSpaceMeasurementType": "METERS",
+//     "availableWeight": 500,
+//     "availableWeightMeasurementType": "KILOGRAMS",
+//     "status": "NOT_STARTED",
+//     "totalConfirmedPackages": 0,
+//     "expectedDepartureDateTime": "2025-10-06T04:35:00",
+//     "expectedArrivalDateTime": "2025-11-06T16:35:00"
+//   }
+// ]
   const JourneyDetailTab = () => {
     return (
       <>
@@ -137,11 +140,11 @@ const JourneyManagement = ({ navigation, route }) => {
           <View style={styles.locationsContainer}>
             <LocationItem
               title="Source Address"
-              address={journey?.journeySource.address}
+              address={journey?.journeySource?.address}
             />
             <LocationItem
               title="Destination Address"
-              address={journey?.journeyDestination.address}
+              address={journey?.journeyDestination?.address}
             />
           </View>
 
