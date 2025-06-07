@@ -238,7 +238,7 @@ const Profile = ({ navigation }) => {
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => {
-                  dispatch(logoutUserr());
+                  dispatch(logoutUser());
                   setshowLogoutSheet(false);
                   console.log(
                     "User logged out successfully in profileScreen and navigating to Signin"

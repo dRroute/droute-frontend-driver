@@ -81,7 +81,7 @@ const PostJourney = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
   const user = useSelector(selectUser);
-  // console.log("date time is ", departureDateTime);
+  console.log("date time is ", departureDateTime);
 
   // console.log("Data to be submitted:", data);
 
@@ -109,21 +109,34 @@ const PostJourney = ({ route, navigation }) => {
     }
 
     // Date formatting function
-    const formatDateTime = (dateTimeStr) => {
-      if (!dateTimeStr) return null;
+ const formatDateTime = (dateTimeStr) => {
+  if (!dateTimeStr) return null;
 
-      try {
-        const [datePart, timePart] = dateTimeStr.split(", ");
-        const [day, month, year] = datePart.split("/");
-        return `${year}-${month.padStart(2, "0")}-${day.padStart(
-          2,
-          "0"
-        )}T${timePart}:00`;
-      } catch (error) {
-        console.error("Error formatting date:", error);
-        return null;
-      }
-    };
+  try {
+    const [datePart, timePartWithMeridiemRaw] = dateTimeStr.split(", ");
+    const [day, month, year] = datePart.split("/");
+
+    // Replace non-breaking spaces (Unicode \u202F or \u00A0) with regular space
+    const timePartWithMeridiem = timePartWithMeridiemRaw.replace(/\u202F|\u00A0/g, " ");
+    const [time, meridiem] = timePartWithMeridiem.split(" ");
+    let [hours, minutes] = time.split(":").map(Number);
+
+    if (meridiem.toLowerCase() === "pm" && hours !== 12) {
+      hours += 12;
+    } else if (meridiem.toLowerCase() === "am" && hours === 12) {
+      hours = 0;
+    }
+
+    const hourStr = String(hours).padStart(2, "0");
+    const minuteStr = String(minutes).padStart(2, "0");
+
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T${hourStr}:${minuteStr}:00`;
+  } catch (error) {
+    console.error("Error formatting date:", error);
+    return null;
+  }
+};
+
 
     // Prepare the data object
 
