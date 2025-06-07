@@ -1,7 +1,10 @@
-const APP_BACKEND_API = 'https://e8dd-2409-40d0-2b7-699f-bc1e-42d7-b70c-be3c.ngrok-free.app';
+
+const APP_BACKEND_API = process.env.EXPO_PUBLIC_API_URL;
+
+// const APP_BACKEND_API = 'https://e8dd-2409-40d0-2b7-699f-bc1e-42d7-b70c-be3c.ngrok-free.app';
 const DRIVER_API_URL = APP_BACKEND_API + "/api/driver";
 const USER_API_URL = APP_BACKEND_API + "/api/user";
-
+console.log("api url by env=",APP_BACKEND_API);
 export const Key = {
     APP_BACKEND_API,
     DRIVER_API_URL,

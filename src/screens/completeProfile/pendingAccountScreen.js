@@ -12,10 +12,11 @@ import { useSelector, useDispatch } from "react-redux";
 import MyStatusBar from "../../components/myStatusBar";
 import { Colors } from "../../constants/styles";
 import { selectUser } from "../../redux/selector/authSelector";
+import { logoutUser } from "../../redux/slice/authSlice";
 
 const PendingAccountScreen = ({ navigation }) => {
   const user = useSelector (selectUser);
-//   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   return (
     <View style={styles.container}>
         <MyStatusBar/>
@@ -44,7 +45,7 @@ const PendingAccountScreen = ({ navigation }) => {
         <Text style={styles.buttonText}>Contact Support</Text>
       </TouchableOpacity>
       <TouchableOpacity 
-      //   onPress={() => dispatch(logoutUser())}
+        onPress={() => dispatch(logoutUser())}
       >
         <Text style={styles.goBackText}>Log out</Text>
       </TouchableOpacity>
