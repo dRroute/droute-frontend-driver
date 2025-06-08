@@ -109,9 +109,10 @@ const Home = ({ navigation }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [errorMessage, setErrorMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  
 
   const user = useSelector(selectUser);
-  const backgroundSource = imageRef?.current
+  const backgroundSource = imageRef?.current  
   ? { uri: imageRef.current }
   : require('../../../assets/images/homeBg.png');
 
