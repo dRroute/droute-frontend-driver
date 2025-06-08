@@ -34,8 +34,8 @@ const PendingRequests = ({ navigation, orders }) => {
   // const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const isLoading = useSelector(selectAuthloader);
-  const pendingOrders = orders.filter(
-    (data) => data?.order?.orderStatus === "PENDING"
+  const pendingOrders = orders?.filter(
+    (data) => data?.order?.status === "PENDING"
   );
   // const requestedUsers= pendingOrders.map(order => order.courier?.user).filter(Boolean);
   // console.log(

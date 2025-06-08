@@ -16,9 +16,14 @@ import {
   getDimensionUnitAbbreviation,
   getWeightUnitAbbreviation,
 } from "../../utils/commonMethods";
+import { useDispatch } from "react-redux";
+import { updateOrderRequestStatus } from "../../redux/thunk/orderThunk";
+import { showSnackbar } from "../../redux/slice/snackbarSlice";
 
 const RequestDetailScreen = ({ navigation, route }) => {
   const { pendingOrder } = route.params || {};
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     console.log("This is pendingOrder:", pendingOrder);
@@ -29,8 +34,84 @@ const RequestDetailScreen = ({ navigation, route }) => {
   const image = null;
 
   // console.log("this is pendingOrder courier",pendingOrder)
-  const handleAccept = () => {};
-  const handleReject = () => {};
+  const handleAccept = async () => {
+
+    const data = {
+      orderId: pendingOrder?.order?.id,
+      status: "ACCEPTED"
+    }
+
+    console.log('data to be submitted ', data)
+
+    try {
+      const response = await dispatch(updateOrderRequestStatus(data));
+
+      if (updateOrderRequestStatus.fulfilled?.match(response)) {
+        await dispatch(showSnackbar(
+          {
+            message: 'Order request accepted',
+            type: 'success',
+            time: 2000
+          }
+        ));
+      } else {
+        await dispatch(showSnackbar(
+          {
+            message: response?.payload?.message || 'Failed to update request. Please try again',
+            type: 'success',
+            time: 2000
+          }
+        ));
+      }
+    } catch (error) {
+      await dispatch(showSnackbar(
+        {
+          message: error?.message || response?.payload?.message || 'Failed to update request. Please try again',
+          type: 'success',
+          time: 2000
+        }
+      ));
+    }
+  };
+  const handleReject = async () => {
+
+    const data = {
+      orderId: pendingOrder?.order?.id,
+      status: "REJECTED"
+    }
+
+    console.log('data to be sumbitted', data);
+
+    try {
+      const response = await dispatch(updateOrderRequestStatus(data));
+
+      if (updateOrderRequestStatus.fulfilled?.match(response)) {
+        await dispatch(showSnackbar(
+          {
+            message: 'Order request accepted',
+            type: 'success',
+            time: 2000
+          }
+        ));
+      } else {
+        await dispatch(showSnackbar(
+          {
+            message: response?.payload?.message || 'Failed to update request. Please try again',
+            type: 'success',
+            time: 2000
+          }
+        ));
+      }
+    } catch (error) {
+      await dispatch(showSnackbar(
+        {
+          message: error?.message || response?.payload?.message || 'Failed to update request. Please try again',
+          type: 'success',
+          time: 2000
+        }
+      ));
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -88,35 +169,31 @@ const RequestDetailScreen = ({ navigation, route }) => {
           <View style={{ marginTop: 8 }}>
             <DetailRow
               label={"Height"}
-              value={`${
-                pendingOrder?.courier?.courierHeight ?? "Na"
-              } ${getDimensionUnitAbbreviation(
-                pendingOrder?.courier?.courierDimensionUnit
-              )}`}
+              value={`${pendingOrder?.courier?.courierHeight ?? "Na"
+                } ${getDimensionUnitAbbreviation(
+                  pendingOrder?.courier?.courierDimensionUnit
+                )}`}
             />
             <DetailRow
               label={"Width"}
-              value={`${
-                pendingOrder?.courier?.courierWidth ?? "Na"
-              } ${getDimensionUnitAbbreviation(
-                pendingOrder?.courier?.courierDimensionUnit
-              )}`}
+              value={`${pendingOrder?.courier?.courierWidth ?? "Na"
+                } ${getDimensionUnitAbbreviation(
+                  pendingOrder?.courier?.courierDimensionUnit
+                )}`}
             />
             <DetailRow
               label={"Length"}
-              value={`${
-                pendingOrder?.courier?.courierLength ?? "Na"
-              } ${getDimensionUnitAbbreviation(
-                pendingOrder?.courier?.courierDimensionUnit
-              )}`}
+              value={`${pendingOrder?.courier?.courierLength ?? "Na"
+                } ${getDimensionUnitAbbreviation(
+                  pendingOrder?.courier?.courierDimensionUnit
+                )}`}
             />
             <DetailRow
               label={"Weight"}
-              value={`${
-                pendingOrder?.courier?.courierWeight ?? "Na"
-              } ${getWeightUnitAbbreviation(
-                pendingOrder?.courier?.courierWeightUnit
-              )}`}
+              value={`${pendingOrder?.courier?.courierWeight ?? "Na"
+                } ${getWeightUnitAbbreviation(
+                  pendingOrder?.courier?.courierWeightUnit
+                )}`}
             />
             <DetailRow
               label={"Expected Value"}
