@@ -324,7 +324,7 @@ const weightUnitAbbreviations = {
   POUNDS: "lb",
   OUNCES: "oz",
   MILLIGRAMS: "mg",
-  TONNES: "t",
+  TONNES: "Ton",
 };
 
 
@@ -354,3 +354,6 @@ export  const openGoogleMaps = (latitude, longitude, label = 'dRoute Service') =
   });
   Linking.openURL(url);
 };
+
+
+

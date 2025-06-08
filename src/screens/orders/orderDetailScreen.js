@@ -26,7 +26,12 @@ import { Colors, commonStyles, Fonts } from "../../constants/styles";
 import SwipeableTabs from "../../components/swipeableTabs";
 import { ParcelCard, ParcelLoadingCard } from "../../components/parcelCard";
 import { FlatList, TextInput } from "react-native-gesture-handler";
-import { openGoogleMaps, showFullImageFunction } from "../../utils/commonMethods";
+import {
+  getDimensionUnitAbbreviation,
+  getWeightUnitAbbreviation,
+  openGoogleMaps,
+  showFullImageFunction,
+} from "../../utils/commonMethods";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../redux/selector/authSelector";
 import LottieView from "lottie-react-native";
@@ -36,8 +41,10 @@ import {
   LottieFaiure,
   LottieSuccess,
 } from "../../components/lottieLoader/loaderView";
-const OrderDetailScreen = ({ navigation }) => {
+const OrderDetailScreen = ({ navigation, route }) => {
   //image start
+
+  const { item } = route?.params;
   const [imageloading, setImageLoading] = useState("");
   const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
   const [currentImageSetter, setCurrentImageSetter] = useState(null);
@@ -98,9 +105,11 @@ const OrderDetailScreen = ({ navigation }) => {
                 </View>
               )}
               <View style={styles.userDetails}>
-                <Text style={styles.userName}>Alok</Text>
+                <Text style={styles.userName}>
+                  {item?.courier?.user?.fullName}
+                </Text>
                 <Text style={{ ...Fonts.grayColor12Medium }}>
-                  +91 9708571269
+                  +91 {item?.courier?.user?.contactNo}
                 </Text>
               </View>
             </View>
@@ -115,11 +124,11 @@ const OrderDetailScreen = ({ navigation }) => {
           <View style={styles.locationsContainer}>
             <LocationItem
               title="Sender Address"
-              address="Vadgaon Bk Pune 411041 Vadgaon Bk Pune 411041 Vadgaon Bk Pune 411041 Vadgaon Bk Pune 411041"
+              address={item?.courier?.courierSourceAddress}
             />
             <LocationItem
               title="Landmark"
-              address="Vadgaon Bk Pune 411041 411041 Vadgaon Bk Pune 411041"
+              address={item?.order?.senderLandmarkAddress}
             />
           </View>
 
@@ -128,11 +137,46 @@ const OrderDetailScreen = ({ navigation }) => {
             <Text style={styles.sectionTitle}>Parcel Detail:</Text>
             <View style={styles.divider} />
             <View style={{ marginTop: 8 }}>
-              <DetailRow label="Height" value="20 m" />
-              <DetailRow label="Width" value="10 m" />
-              <DetailRow label="Length" value="19 m" />
-              <DetailRow label="Weight" value="20 Kg" />
-              <DetailRow label="Value" value="200 ₹" />
+              <DetailRow
+                label="Height"
+                value={`${
+                  item?.courier?.courierHeight
+                } ${getDimensionUnitAbbreviation(
+                  item?.courier?.courierDimensionUnit
+                )}}`}
+              />
+              <DetailRow
+                label="Width"
+                value={`${
+                  item?.courier?.courierHeight
+                } ${getDimensionUnitAbbreviation(
+                  item?.courier?.courierDimensionUnit
+                )}}`}
+              />
+              <DetailRow
+                label="Length"
+                value={`${
+                  item?.courier?.courierLength
+                } ${getDimensionUnitAbbreviation(
+                  item?.courier?.courierDimensionUnit
+                )}}`}
+              />
+              <DetailRow
+                label="Weight"
+                value={`${
+                  item?.courier?.courierWeight
+                } ${getWeightUnitAbbreviation(
+                  item?.courier?.courierWeightUnit
+                )}}`}
+              />
+              <DetailRow
+                label="Value"
+                value={`${
+                  item?.courier?.courierValue
+                } ${getDimensionUnitAbbreviation(
+                  item?.courier?.courierDimensionUnit
+                )}}`}
+              />
             </View>
           </View>
           <View style={styles.section}>
@@ -140,11 +184,14 @@ const OrderDetailScreen = ({ navigation }) => {
             <Text style={styles.sectionTitle}>Payment Detail :</Text>
             <View style={styles.divider} />
             <View style={{ marginTop: 8 }}>
-              <DetailRow label="Delivery Charge" value="299 ₹" />
-              <DetailRow label="Insurance Charge" value="9 ₹" />
-              <DetailRow label="GST" value="2 ₹" />
-              <DetailRow label="Platform & Handeling Charge" value="19 ₹" />
-              <DetailRow label="Total" value="343 ₹" />
+              <DetailRow label="Delivery Charge" value={`${amount} ₹`} />
+              <DetailRow
+                label="Insurance Charge"
+                value={`${insuranceCharge.toFixed(2)} ₹`}
+              />
+              <DetailRow label="GST" value={`${gst.toFixed(2)} ₹`} />
+              <DetailRow label="Platform & Handeling Charge" value="5%" />
+              <DetailRow label="Total" value={`${total.toFixed(2)} ₹`} />
             </View>
           </View>
           <View style={styles.divider} />
@@ -152,11 +199,22 @@ const OrderDetailScreen = ({ navigation }) => {
         <View style={styles.bottomButtons}>
           <TouchableOpacity
             activeOpacity={0.6}
-            onPress={()=>openGoogleMaps(18.4713216,73.8295808,"Sender Name's Location")}
+            onPress={() => {
+              const [latitude, longitude] =
+                item?.courier?.courierSourceCoordinate?.split(",") || [];
+              if (latitude && longitude) {
+                openGoogleMaps(
+                  latitude.trim(),
+                  longitude.trim(),
+                  `${item?.order?.senderName}'s Location`
+                );
+              }
+            }}
             style={{ ...commonStyles.outlinedButton, flex: 1 }}
           >
             <Text style={commonStyles.outlinedButtonText}>Sender Location</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={() => setPickupOtpVisible(true)}
@@ -176,9 +234,9 @@ const OrderDetailScreen = ({ navigation }) => {
           <View style={styles.userContainer}>
             <View style={styles.userInfo}>
               <View style={styles.userDetails}>
-                <Text style={styles.userName}>Reciever Name</Text>
+                <Text style={styles.userName}>{item?.order?.recieverName}</Text>
                 <Text style={{ ...Fonts.grayColor12Medium }}>
-                  +91 9708571269
+                  +91 {item?.order?.recieverContactNo}
                 </Text>
               </View>
             </View>
@@ -186,11 +244,11 @@ const OrderDetailScreen = ({ navigation }) => {
           <View style={styles.locationsContainer}>
             <LocationItem
               title="Delivery Address"
-              address="Vadgaon Bk Pune 411041 Vadgaon Bk Pune 411041 Vadgaon Bk Pune 411041 Vadgaon Bk Pune 411041"
+              address={item?.courier?.courierDestinationAddress}
             />
             <LocationItem
               title="Landmark"
-              address="Vadgaon Bk Pune 411041 411041 Vadgaon Bk Pune 411041"
+              address={item?.order?.recieverLandmarkAddress}
             />
           </View>
 
@@ -199,12 +257,20 @@ const OrderDetailScreen = ({ navigation }) => {
         <View style={styles.bottomButtons}>
           <TouchableOpacity
             activeOpacity={0.6}
-            onPress={()=>openGoogleMaps(18.4713216,73.8295808,"Reciever Name's Location")}
+            onPress={() => {
+              const [latitude, longitude] =
+                item?.courier?.courierDestinationCoordinate?.split(",") || [];
+              if (latitude && longitude) {
+                openGoogleMaps(
+                  latitude.trim(),
+                  longitude.trim(),
+                  `${item?.order?.recieverName}'s Location`
+                );
+              }
+            }}
             style={{ ...commonStyles.outlinedButton, flex: 1 }}
           >
-            <Text style={commonStyles.outlinedButtonText}>
-              Reciever Location
-            </Text>
+            <Text style={commonStyles.outlinedButtonText}>Reciever Location</Text>
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.7}

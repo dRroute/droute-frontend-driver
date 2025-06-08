@@ -215,7 +215,7 @@ const AllJourneyList = ({ navigation }) => {
           onRefresh={handleRefresh}
           data={journeys}
           renderItem={renderJourneyCard}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.journeyId}
           contentContainerStyle={{ flexGrow: 1 }}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={

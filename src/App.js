@@ -92,7 +92,7 @@ function AppNavigator() {
               <Stack.Screen name="PrivacyPolicyScreen" component={PrivacyPolicyScreen} />
               <Stack.Screen name="TermsAndConditionsScreen" component={TermsAndConditionsScreen} />
               <Stack.Screen name="ChangePassword" component={ChangePassword} />
-              <Stack.Screen name="EditProfile" component={EditProfile} />
+                   <Stack.Screen name="EditProfile" component={EditProfile} />
               <Stack.Screen name="ChatScreen" component={ChatScreen} />
               <Stack.Screen name="PendingRequests" component={PendingRequests} />
               <Stack.Screen name="AllParcelsInJourney" component={AllParcelsInJourney} />

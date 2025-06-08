@@ -24,7 +24,7 @@ export const ParcelCard = ({ parcelItem, isSelected, onAddRemove }) => {
         <View style={styles.imageContainer}>
           {parcelItem.image ? (
             <Image
-              source={{ uri: parcelItem.image }}
+              source={{ uri: parcelItem?.order?.courierImageUrl1 }}
               style={styles.parcelImage}
             />
           ) : (
@@ -44,7 +44,7 @@ export const ParcelCard = ({ parcelItem, isSelected, onAddRemove }) => {
         </View>
 
         <View style={styles.infoContainer}>
-          <Text style={styles.parcelId}>#{parcelItem.id}</Text>
+          <Text style={styles.parcelId}>#{parcelItem?.courier?.courierId}</Text>
 
           <View style={styles.routeContainer}>
             <View style={styles.timeline}>
@@ -55,11 +55,11 @@ export const ParcelCard = ({ parcelItem, isSelected, onAddRemove }) => {
 
             <View style={styles.addressesContainer}>
               <Text style={styles.addressText}>
-                {trimText(parcelItem.pickup.address, 50)}
+                {trimText(parcelItem?.courier?.courierSourceAddress, 50)}
               </Text>
               <View style={{ height: 15 }} />
               <Text style={styles.addressText}>
-                {trimText(parcelItem.delivery.address, 50)}
+                {trimText(parcelItem?.courier?.courierDestinationAddress, 50)}
               </Text>
             </View>
           </View>
@@ -80,7 +80,7 @@ export const ParcelCard = ({ parcelItem, isSelected, onAddRemove }) => {
         </TouchableOpacity>
 
         <View>
-          <Text style={[styles.statusText, { color: "teal" }]}>Delivered</Text>
+          <Text style={[styles.statusText, { color: "teal" }]}>{parcelItem?.order?.status}</Text>
         </View>
       </View>
     </View>

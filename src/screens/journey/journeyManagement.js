@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -18,6 +18,9 @@ import { ParcelCard, ParcelLoadingCard } from "../../components/parcelCard";
 import { FlatList } from "react-native-gesture-handler";
 import RequestDetailScreen from "../orders/requestDetailScreen";
 import PendingRequests from "../orders/pendingRequests";
+import { useDispatch } from "react-redux";
+import { getAllJourneyOrders } from "../../redux/thunk/orderThunk";
+import { extractJourneyOrderCourierData, getDimensionUnitAbbreviation, getWeightUnitAbbreviation } from "../../utils/commonMethods";
 
 const { width } = Dimensions.get("window");
 const PACKAGES = [
@@ -82,7 +85,16 @@ const JourneyManagement = ({ navigation, route }) => {
   const [isRejectModalVisible, setRejectModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedParcels, setSelectedParcels] = useState([]);
+  // const [journey, setJourney] = useState(null);
+  const [driver, setDriver] = useState(null);
+  const [averageDriverRating, setAverageDriverRating] = useState(null);
+  // const [order, setOrder] = useState(null);
+  const [payment, setPayment] = useState(null);
+  const [courier, setCourier] = useState(null);
+  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
 
+  const [orders, setOrders] = useState([]);
   const handleAddRemoveParcel = (parcel) => {
     setSelectedParcels((prev) => {
       const exists = prev.some((p) => p.id === parcel.id);
@@ -93,46 +105,49 @@ const JourneyManagement = ({ navigation, route }) => {
       }
     });
   };
+ 
+  useEffect(() => {
+    const fetchJourneys = async () => {
+      try {
+        const response = await dispatch(
+          getAllJourneyOrders(journey?.journeyId)
+        );
+        if (getAllJourneyOrders.fulfilled.match(response)) {
+            setOrders(...orders, response?.payload?.data);
+         console.log("this is orders in j management request",response?.payload?.data);
+          await dispatch(
+            showSnackbar({
+              message: response?.payload?.message,
+              type: "success",
+              time: 1000,
+            })
+          );
+        } else {
+          await dispatch(
+            showSnackbar({
+              message: response?.payload?.message || "Failed to load journey.",
+              type: "error",
+              time: 3000,
+            })
+          );
+        }
+      } catch (e) {
+        await dispatch(
+          showSnackbar({
+            message: e.message || "An error occurred while loading journeys.",
+            type: "error",
+            time: 3000,
+          })
+        );
+      }
+    };
+
+    fetchJourneys();
+  }, []);
 
   const handleUpdate = () => {};
   const handleCancel = () => {};
-// Journey =  [
-//   {
-//     "journeyId": 1,
-//     "driverId": 4,
-//     "journeySource": {
-//       "locationId": 2,
-//       "longitude": "73.8347712",
-//       "latitude": "18.4663579",
-//       "address": "FR8M+HVG, Sinhgad College Rd, Vadgaon Budruk, Pune, Maharashtra 411041, India",
-//       "city": "Pune",
-//       "pinCode": "411041",
-//       "state": null,
-//       "country": "India"
-//     },
-//     "journeyDestination": {
-//       "locationId": 1,
-//       "longitude": "77.1149472",
-//       "latitude": "28.6109026",
-//       "address": "J467+9X8, Kirby Place, Delhi Cantonment, New Delhi, Delhi 110010, India",
-//       "city": "New Delhi",
-//       "pinCode": "110010",
-//       "state": null,
-//       "country": "India"
-//     },
-//     "visitedStateDuringJourney": "Madhya Pradesh,Maharashtra,Delhi",
-//     "availableLength": 5,
-//     "availableWidth": 5,
-//     "availableHeight": 5,
-//     "availableSpaceMeasurementType": "METERS",
-//     "availableWeight": 500,
-//     "availableWeightMeasurementType": "KILOGRAMS",
-//     "status": "NOT_STARTED",
-//     "totalConfirmedPackages": 0,
-//     "expectedDepartureDateTime": "2025-10-06T04:35:00",
-//     "expectedArrivalDateTime": "2025-11-06T16:35:00"
-//   }
-// ]
+
   const JourneyDetailTab = () => {
     return (
       <>
@@ -152,40 +167,41 @@ const JourneyManagement = ({ navigation, route }) => {
             <View style={styles.divider} />
             <Text style={styles.sectionTitle}>Vehicle Capacity:</Text>
             <View style={styles.divider} />
-            <View style={{ marginTop: 8 }}>
-              <DetailRow
-                label="Height"
-                value={
-                  journey?.availableHeight +
-                  " " +
-                  journey?.availableSpaceMeasurementType
-                }
-              />
-              <DetailRow
-                label="Width"
-                value={
-                  journey?.availableWidth +
-                  " " +
-                  journey?.availableSpaceMeasurementType
-                }
-              />
-              <DetailRow
-                label="Length"
-                value={
-                  journey?.availableLength +
-                  " " +
-                  journey?.availableSpaceMeasurementType
-                }
-              />
-              <DetailRow
-                label="Weight"
-                value={
-                  journey?.availableWeight +
-                  " " +
-                  journey?.availableWeightMeasurementType
-                }
-              />
-            </View>
+           <View style={{ marginTop: 8 }}>
+  <DetailRow
+    label="Height"
+    value={
+      journey?.availableHeight +
+      " " +
+      getDimensionUnitAbbreviation(journey?.availableSpaceMeasurementType)
+    }
+  />
+  <DetailRow
+    label="Width"
+    value={
+      journey?.availableWidth +
+      " " +
+      getDimensionUnitAbbreviation(journey?.availableSpaceMeasurementType)
+    }
+  />
+  <DetailRow
+    label="Length"
+    value={
+      journey?.availableLength +
+      " " +
+      getDimensionUnitAbbreviation(journey?.availableSpaceMeasurementType)
+    }
+  />
+  <DetailRow
+    label="Weight"
+    value={
+      journey?.availableWeight +
+      " " +
+      getWeightUnitAbbreviation(journey?.availableWeightMeasurementType)
+    }
+  />
+</View>
+
           </View>
 
           <View style={styles.divider} />
@@ -211,10 +227,12 @@ const JourneyManagement = ({ navigation, route }) => {
     );
   };
 
-  const OrdersDetail = () => {
+  const OrdersDetail = ({orders}) => {
+    //Filter confirmed order from all orders
+    const confirmedOrder = orders.filter(order => order?.order?.status === 'ACCEPTED');
     const renderPackageCard = ({ item }) => (
       <TouchableOpacity
-        onPress={() => navigation.navigate("OrderDetailScreen")}
+        onPress={() => navigation.navigate("OrderDetailScreen", {item})}
       >
         <ParcelCard
           parcelItem={item}
@@ -229,9 +247,9 @@ const JourneyManagement = ({ navigation, route }) => {
           <ParcelLoadingCard count={3} />
         ) : (
           <FlatList
-            data={PACKAGES}
+            data={confirmedOrder}
             renderItem={renderPackageCard}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item?.order?.id}
             contentContainerStyle={styles.listContainer}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={
@@ -292,8 +310,8 @@ const JourneyManagement = ({ navigation, route }) => {
         titles={["Journey Detail", "New Requests", "Confirmed Orders"]}
         components={[
           <JourneyDetailTab />,
-          <PendingRequests />,
-          <OrdersDetail />,
+          <PendingRequests orders={orders} navigation={navigation} />,
+          <OrdersDetail orders={orders}/>,
         ]}
       />
       {actionOverlay(

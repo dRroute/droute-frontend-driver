@@ -47,38 +47,38 @@ const COLORS = {
   iconBgLightOrange: "rgba(255, 167, 38, 0.1)",
 };
 const menuItems = [
+  // {
+  //   id: 1,
+  //   title: "Pending Requests",
+  //   screen: "PendingRequests",
+  //   icon: (
+  //     <Ionicons
+  //       name="notifications-outline"
+  //       size={24}
+  //       color={Colors.orangeColor}
+  //     />
+  //   ),
+  //   bgColor: COLORS.iconBgOrange,
+  //   description: "Review and take action on new order requests from users.",
+  // },
+  // {
+  //   id: 2,
+  //   title: "All Journeys",
+  //   screen:"AllJourneyList",
+  //   icon: <MaterialIcons name="route" size={24} color={Colors.primaryColor} />,
+  //   bgColor: COLORS.iconBgPurple,
+  //   description: "View all your current and past journeys in one place.",
+  // },
   {
-    id: 1,
-    title: "Pending Requests",
-    screen: "PendingRequests",
-    icon: (
-      <Ionicons
-        name="notifications-outline"
-        size={24}
-        color={Colors.orangeColor}
-      />
-    ),
-    bgColor: COLORS.iconBgOrange,
-    description: "Review and take action on new order requests from users.",
-  },
-  {
-    id: 2,
-    title: "All Journeys",
-    screen:"AllJourneyList",
-    icon: <MaterialIcons name="route" size={24} color={Colors.primaryColor} />,
-    bgColor: COLORS.iconBgPurple,
-    description: "View all your current and past journeys in one place.",
-  },
-  {
-    id: 3,
+    id:1,
     title: "Manage Journey",
-    screen:"CurrentJourney",
+    screen:"AllJourneyList",
     icon: <Ionicons name="map-outline" size={24} color={COLORS.green} />, // updated for clarity
     bgColor: COLORS.iconBgGreen,
     description: "Manage your ongoing journey with real-time updates.",
   },
   {
-    id: 4,
+    id: 2,
     title: "Support",
     screen:"HelpScreen",
     icon: (
@@ -87,19 +87,19 @@ const menuItems = [
     bgColor: COLORS.iconBgPink,
     description: "Access 24/7 support for any assistance you need.",
   },
-  {
-    id: 5,
-    title: "All Orders",
-    icon: (
-      <MaterialCommunityIcons
-        name="clipboard-list-outline"
-        size={24}
-        color={COLORS.lightOrange}
-      />
-    ), // more fitting than message-text
-    bgColor: COLORS.iconBgLightOrange,
-    description: "Track all your ongoing and past orders efficiently.",
-  },
+  // {
+  //   id: 5,
+  //   title: "All Orders",
+  //   icon: (
+  //     <MaterialCommunityIcons
+  //       name="clipboard-list-outline"
+  //       size={24}
+  //       color={COLORS.lightOrange}
+  //     />
+  //   ), // more fitting than message-text
+  //   bgColor: COLORS.iconBgLightOrange,
+  //   description: "Track all your ongoing and past orders efficiently.",
+  // },
 ];
 const Home = ({ navigation }) => {
   const mapRef = useRef(null);
