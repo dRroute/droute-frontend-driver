@@ -59,103 +59,103 @@ const suggestionStateList = [
   "Jammu and Kashmir",
 ];
 
-  const CapacitySection = ({
-    weightUnit,
-    setWeightUnit,
-    lengthUnit,
-    setLengthUnit,
-    weight,
-    setWeight,
-    length,
-    setLength,
-    height,
-    setHeight,
-    width,
-    setWidth,
-  }) => (
-    <>
-      <View style={styles.section}>
-        {typeSection(weightUnit, setWeightUnit, "Select Weight Unit", false, [
-          { label: "Ton", value: "Ton" },
-          { label: "kg", value: "Kg" },
-        ])}
-      </View>
+const CapacitySection = ({
+  weightUnit,
+  setWeightUnit,
+  lengthUnit,
+  setLengthUnit,
+  weight,
+  setWeight,
+  length,
+  setLength,
+  height,
+  setHeight,
+  width,
+  setWidth,
+}) => (
+  <>
+    <View style={styles.section}>
+      {typeSection(weightUnit, setWeightUnit, "Select Weight Unit", false, [
+        { label: "Ton", value: "Ton" },
+        { label: "kg", value: "Kg" },
+      ])}
+    </View>
 
-      <View style={styles.section}>
-        {typeSection(lengthUnit, setLengthUnit, "Select Length Unit", false, [
-          { label: "meter", value: "m" },
-          { label: "foot", value: "ft" },
-          { label: "Centimeter", value: "cm" },
-        ])}
-      </View>
+    <View style={styles.section}>
+      {typeSection(lengthUnit, setLengthUnit, "Select Length Unit", false, [
+        { label: "meter", value: "m" },
+        { label: "foot", value: "ft" },
+        { label: "Centimeter", value: "cm" },
+      ])}
+    </View>
 
-      <View style={[styles.section, commonStyles.rowSpaceBetween]}>
-        <LabeledInput
-          label={`Weight (${weightUnit})`}
-          placeholder="Enter Weight Capacity"
-          value={weight}
-          setter={setWeight}
-          required
-          style={{ marginRight: 8 }}
-        />
-        <LabeledInput
-          label={`Length (${lengthUnit})`}
-          placeholder="Enter Length"
-          value={length}
-          setter={setLength}
-          required
-          style={{ marginLeft: 8 }}
-        />
-      </View>
+    <View style={[styles.section, commonStyles.rowSpaceBetween]}>
+      <LabeledInput
+        label={`Weight (${weightUnit})`}
+        placeholder="Enter Weight Capacity"
+        value={weight}
+        setter={setWeight}
+        required
+        style={{ marginRight: 8 }}
+      />
+      <LabeledInput
+        label={`Length (${lengthUnit})`}
+        placeholder="Enter Length"
+        value={length}
+        setter={setLength}
+        required
+        style={{ marginLeft: 8 }}
+      />
+    </View>
 
-      <View style={[styles.section, commonStyles.rowSpaceBetween]}>
-        <LabeledInput
-          label={`Height (${lengthUnit})`}
-          placeholder="Enter Height"
-          value={height}
-          setter={setHeight}
-          required
-          style={{ marginRight: 8 }}
-        />
-        <LabeledInput
-          label={`Width (${lengthUnit})`}
-          placeholder="Enter Width"
-          value={width}
-          setter={setWidth}
-          required
-          style={{ marginLeft: 8 }}
-        />
-      </View>
-    </>
+    <View style={[styles.section, commonStyles.rowSpaceBetween]}>
+      <LabeledInput
+        label={`Height (${lengthUnit})`}
+        placeholder="Enter Height"
+        value={height}
+        setter={setHeight}
+        required
+        style={{ marginRight: 8 }}
+      />
+      <LabeledInput
+        label={`Width (${lengthUnit})`}
+        placeholder="Enter Width"
+        value={width}
+        setter={setWidth}
+        required
+        style={{ marginLeft: 8 }}
+      />
+    </View>
+  </>
+);
+
+const LabeledInput = ({
+  label,
+  placeholder,
+  value,
+  setter,
+  required = false,
+  style,
+}) => {
+  return (
+    <View style={[{ flex: 1 }, style]}>
+      <Text style={styles.sectionLabel}>
+        {label}
+        {required && (
+          <Text style={{ color: Colors.darkOrangeColor }}> *</Text>
+        )}
+      </Text>
+      <TextInput
+        style={styles.input}
+        placeholder={placeholder}
+        value={value}
+        onChangeText={(text) => setter(text)}
+        maxLength={80}
+        keyboardType="numeric"
+      />
+    </View>
   );
-
-  const LabeledInput = ({
-    label,
-    placeholder,
-    value,
-    setter,
-    required = false,
-    style,
-  }) => {
-    return (
-      <View style={[{ flex: 1 }, style]}>
-        <Text style={styles.sectionLabel}>
-          {label}
-          {required && (
-            <Text style={{ color: Colors.darkOrangeColor }}> *</Text>
-          )}
-        </Text>
-        <TextInput
-          style={styles.input}
-          placeholder={placeholder}
-          value={value}
-          onChangeText={(text) => setter(text)}
-          maxLength={80}
-          keyboardType="numeric"
-        />
-      </View>
-    );
-  };
+};
 const PostJourney = ({ route, navigation }) => {
   const { data } = route?.params;
   // route?.params;
@@ -206,30 +206,35 @@ const PostJourney = ({ route, navigation }) => {
     }
 
     // Date formatting function
-const formatDateTime = (dateTimeStr) => {
-  if (!dateTimeStr) return null;
+    const formatDateTime = (dateTimeStr) => {
+      if (!dateTimeStr) return null;
 
-  try {
-    const [datePart, timePartWithMeridiemRaw] = dateTimeStr.split(", ");
-    const [month, day, year] = datePart.split("/");
+      try {
+        const [datePart, timePartWithMeridiemRaw] = dateTimeStr.split(", ");
+        const [month, day, year] = datePart.split("/");
 
-    const timePartWithMeridiem = timePartWithMeridiemRaw.replace(/\u202F|\u00A0/g, " ");
-    const [time, meridiem] = timePartWithMeridiem.split(" ");
-    let [hours, minutes] = time.split(":").map(Number);
+        // Use regex to split time and meridiem robustly
+        const match = timePartWithMeridiemRaw.match(/(\d{1,2}:\d{2})\s*([APMapm]{2})/);
+        if (!match) {
+          console.error("Unexpected time format:", timePartWithMeridiemRaw);
+          return null;
+        }
+        const [, time, meridiemRaw] = match;
+        let [hours, minutes] = time.split(":").map(Number);
+        const meridiem = meridiemRaw.toLowerCase();
 
-    if (meridiem.toLowerCase() === "pm" && hours !== 12) {
-      hours += 12;
-    } else if (meridiem.toLowerCase() === "am" && hours === 12) {
-      hours = 0;
-    }
+        if (meridiem === "pm" && hours !== 12) {
+          hours += 12;
+        } else if (meridiem === "am" && hours === 12) {
+          hours = 0;
+        }
 
-    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:00`;
-  } catch (error) {
-    console.error("Error formatting date:", error);
-    return null;
-  }
-};
-
+        return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:00`;
+      } catch (error) {
+        console.error("Error formatting date:", error, dateTimeStr);
+        return null;
+      }
+    };
 
     // Prepare the data object
 
@@ -280,7 +285,7 @@ const formatDateTime = (dateTimeStr) => {
           })
         );
 
-      navigation.navigate("BottomNavigationBar");
+        navigation.navigate("BottomNavigationBar");
 
       } else {
         console.error("Failed to create journey:", response.payload);
@@ -293,7 +298,7 @@ const formatDateTime = (dateTimeStr) => {
         );
 
         return;
-       
+
       }
     } catch (error) {
       console.error("Submission error:", error);

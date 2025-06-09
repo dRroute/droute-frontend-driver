@@ -25,10 +25,10 @@ const PendingAccountScreen = ({ navigation }) => {
         style={styles.image}
       />
 
-      {user?.status ? (
+      {user?.profileStatus ? (
         <Text style={styles.title}>
           Oops! Your account is currently{" "}
-          {(user?.status || "On Hold").toLowerCase()}
+          {(user?.profileStatus || "On Hold").toLowerCase()}
         </Text>
       ) : (
         <Text style={styles.title}>Unexpected Error Uccured</Text>
