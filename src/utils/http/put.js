@@ -8,10 +8,10 @@ export const apiPutRequest = async (request) => {
             Authorization: `Bearer ${request.accessToken}`, // Add Bearer token here
 
         };
-        console.log("request in apiPatchRequest", JSON.stringify(request, null, 2));
+        console.log("request in apiPutRequest", JSON.stringify(request, null, 2));
 
         const response = await axios.put(request.apiUrl, request.data, { headers });
-        console.log("response in apiPatchRequest", response.data);
+        console.log("response in apiPutRequest", response.data);
         return response;
     
 };
